@@ -1,14 +1,11 @@
 { config, pkgs, ... }:
 
-{ systemd.mounts = [
-    { options = "bind";
-      what = "/home/anders/devel/insane-noises";
-      where = "/var/lib/containers/overtone/home/anders";
-      wantedBy = [ "default.target" ];
-    }
-  ];
-
-  containers.overtone = {
+{ containers.overtone = {
+    bindMounts = [ { hostPath   = "/home/anders/devel/insane-noises";
+                     mountPoint = "/home/anders/devel/insane-noises";
+                     isReadOnly = false;
+                   }
+                 ];
     config =
       { config, pkgs, ... }:
       { users.extraUsers.anders = {
@@ -44,7 +41,6 @@
             wantedBy = [ "default.target" ];
           }
         ];
-
 
         environment = {
           systemPackages = with pkgs; [
