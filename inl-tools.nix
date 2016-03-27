@@ -2,7 +2,17 @@
 
 with pkgs;
 
-let browser = writeScriptBin "browser" ''
+let smart-ghc-mod = writeScriptBin "ghc-mod" ''
+        #! ${bash}/bin/bash
+        MYROOT=$( ${haskellPackages.ghc-mod}/bin/ghc-mod root )
+        if [ -e "$MYROOT/shell.drv" ];
+        then
+            exec nix-shell-wrapper "$MYROOT/shell.drv" ghc-mod "$@"
+        else
+            exec ${haskellPackages.ghc-mod}/bin/ghc-mod "$@"
+        fi
+      '';
+    browser = writeScriptBin "browser" ''
         #! ${bash}/bin/bash
         URL=file:///dev/null
         [[ -z "$1" ]] || URL=http://$1
@@ -97,6 +107,7 @@ let browser = writeScriptBin "browser" ''
 
 in
 { environment.systemPackages = [
+    smart-ghc-mod
     browser starcraft2
     toggle-invert global-toggle-invert
     status-bar
