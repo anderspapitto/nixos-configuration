@@ -4,6 +4,7 @@
     (python.buildEnv.override { extraLibs = [ pythonPackages.ipython ]; })
     cabal-install
     cabal2nix
+    cargo
     cmake
     gcc
     gdb
@@ -15,6 +16,7 @@
     nixops
     nodePackages.coffee-script
     patchelf
+    rustc
     sqlite
     valgrind
     z3

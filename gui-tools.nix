@@ -18,8 +18,7 @@
     pavucontrol
     pianobar
     qjackctl
-    kde4.quasselClientWithoutKDE
-#    kf513Packages.quasselClient
+    kde5.quasselClient
     rxvt_unicode_with-plugins
     samba # provides ntlm_auth, which wine stuff needs
     steam

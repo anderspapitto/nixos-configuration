@@ -16,6 +16,7 @@
     ./printing.nix
     ./sysadmin.nix
     ./uefi.nix
+    ./utility-scripts.nix
     ./virtualization.nix
     ./x.nix
 
