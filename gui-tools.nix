@@ -2,7 +2,6 @@
 
 { environment.systemPackages = with pkgs; [
     arandr
-#    audacious
     chromium
     clementine
     dmenu
@@ -12,20 +11,20 @@
     i3lock
     i3status
     imagemagick
-    jmtpfs # for mtp file transfer to android
+    jmtpfs
+    kde5.quasselClient
     libnotify
     pass
     pavucontrol
     pianobar
     qjackctl
-    kde5.quasselClient
+    rosegarden
     rxvt_unicode_with-plugins
     samba # provides ntlm_auth, which wine stuff needs
     steam
     supercollider
     vlc
     wineStaging
-#    winetricks
     xdotool
     xlibs.xev
     xsane
