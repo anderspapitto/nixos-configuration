@@ -10,8 +10,6 @@
     logind.extraConfig = ''
       HoldoffTimeoutSec=0
     '';
-
-    xserver.startGnuPGAgent = true;
   };
 
   systemd.user.services.battery_check = {
