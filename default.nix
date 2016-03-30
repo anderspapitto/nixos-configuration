@@ -15,6 +15,7 @@
     ./nixpkgs.nix
     ./printing.nix
     ./sysadmin.nix
+    ./syncthing.nix
     ./uefi.nix
     ./utility-scripts.nix
     ./virtualization.nix

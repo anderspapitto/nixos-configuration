@@ -14,6 +14,7 @@
     jmtpfs
     kde5.quasselClient
     libnotify
+    lmms
     pass
     pavucontrol
     pianobar
