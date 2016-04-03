@@ -38,10 +38,9 @@ let smart-ghc-mod = writeScriptBin "ghc-mod" ''
     global-toggle-invert = writeScriptBin "global-toggle-invert" ''
         #! ${bash}/bin/bash
 
-        if systemctl --user is-active compton;
-        then systemctl --user start compton-night
-        elif systemctl --user is-active compton-night;
+        if systemctl --user is-active compton-night
         then systemctl --user start compton
+        else systemctl --user start compton-night
         fi
 
         ZATHURA=$HOME/config-issue/zathura/.config/zathura

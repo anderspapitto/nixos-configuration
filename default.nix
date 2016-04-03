@@ -14,6 +14,7 @@
     ./nix.nix
     ./nixpkgs.nix
     ./printing.nix
+    ./rulemak.nix
     ./sysadmin.nix
     ./syncthing.nix
     ./uefi.nix
