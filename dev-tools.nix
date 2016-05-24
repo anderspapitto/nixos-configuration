@@ -16,9 +16,10 @@
     nixops
     nodePackages.coffee-script
     patchelf
-    rustc
     sqlite
     valgrind
     z3
   ];
+
+  imports = [ ./rust-nightly.nix ];
 }

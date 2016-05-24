@@ -40,7 +40,6 @@
 
     unclutter = {
       enable = true;
-      arguments = "-idle 4 -grab";
     };
 
   };
@@ -53,7 +52,6 @@
         ExecStart = "${pkgs.compton}/bin/compton -cCG --config /home/anders/config-issue/compton/noninverted-compton.conf";
         Restart = "always";
       };
-      wantedBy = [ "default.target" ];
     };
 
     compton-night = {

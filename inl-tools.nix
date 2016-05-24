@@ -22,7 +22,7 @@ let smart-ghc-mod = writeScriptBin "ghc-mod" ''
       '';
     starcraft2 = writeScriptBin "starcraft2" ''
         #! ${bash}/bin/bash
-        ${wineStaging}/bin/wine "$HOME/.wine/drive_c/Program Files/StarCraft II/StarCraft II.exe"
+        ${wineStaging}/bin/wine "$HOME/.wine/drive_c/Program Files/StarCraft II/Support/SC2Switcher.exe"
       '';
     toggle-invert = writeScriptBin "toggle-invert" ''
         #! ${bash}/bin/bash

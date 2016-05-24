@@ -13,6 +13,7 @@
     ./networking.nix
     ./nix.nix
     ./nixpkgs.nix
+    ./containers/overtone.nix
     ./printing.nix
     ./rulemak.nix
     ./sysadmin.nix

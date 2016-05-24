@@ -5,12 +5,13 @@ let
     (with pkgs.emacsPackagesNg; [
       ag
       async
-#      clojure-mode
-#      coffee-mode
+      cargo
+      clojure-mode
       company
       flycheck
+      flycheck-rust
       git-commit
-      git-rebase
+#      git-rebase
       go-mode
       ghc-mod
       haskell-mode
@@ -21,12 +22,11 @@ let
       magit-popup
       markdown-mode
       multiple-cursors
-#      org-journal
       projectile
       rtags
       rust-mode
-#      solarized-theme
       undo-tree
+      web-mode
     ]);
   startEmacsServer = pkgs.writeScript "start-emacs-server"
     ''
