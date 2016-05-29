@@ -50,6 +50,7 @@
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.compton}/bin/compton -cCG --config /home/anders/config-issue/compton/noninverted-compton.conf";
+        RestartSec = 3;
         Restart = "always";
       };
     };
@@ -76,6 +77,7 @@
           . ${config.system.build.setEnvironment}
           exec ${pkgs.dunst}/bin/dunst
         '';
+        RestartSec = 3;
         Restart = "always";
       };
       wantedBy = [ "default.target" ];

@@ -21,6 +21,8 @@ in {
         Type = "oneshot";
         ExecStart = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout us -variant colemak";
         RemainAfterExit = "yes";
+        RestartSec = 3;
+        Restart = "always";
       };
       wantedBy = [ "default.target" ];
     };
