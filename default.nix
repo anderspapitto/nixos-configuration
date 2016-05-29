@@ -17,7 +17,7 @@
     ./printing.nix
     ./rulemak.nix
     ./sysadmin.nix
-    ./syncthing.nix
+    (import ./syncthing.nix { user = "anders"; dataDir = "/home/anders/sync"; })
     ./uefi.nix
     ./utility-scripts.nix
     ./virtualization.nix
