@@ -6,7 +6,6 @@
     clementine
     dmenu
     ghostscriptX
-    gimp
     glxinfo
     i3lock
     i3status
