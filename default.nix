@@ -4,6 +4,7 @@
     ./audio.nix
     ./base.nix
     ./dev-tools.nix
+    ./dropbox.nix
     ./emacs.nix
     ./fonts.nix
     ./gui-tools.nix

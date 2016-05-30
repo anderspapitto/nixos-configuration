@@ -6,6 +6,7 @@ let
       ag
       async
       cargo
+      calfw
       clojure-mode
       company
       flycheck
@@ -16,13 +17,15 @@ let
       ghc-mod
       haskell-mode
       helm
-#      helm-descbinds
+      helm-descbinds
       helm-projectile
       magit
       magit-popup
       markdown-mode
       multiple-cursors
+      org-gcal
       projectile
+      rainbow-delimiters
       rtags
       rust-mode
       undo-tree
