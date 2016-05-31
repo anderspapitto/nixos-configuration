@@ -12,12 +12,10 @@ in {
     support32Bit = true;
   };
 
-  security.pam.loginLimits =
-  [
+  security.pam.loginLimits = [
     { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
-    { domain = "@audio"; item = "rtprio"; type = "-"; value = "99"; }
-    { domain = "@audio"; item = "nofile"; type = "soft"; value = "99999"; }
-    { domain = "@audio"; item = "nofile"; type = "hard"; value = "99999"; }
+    { domain = "@audio"; item = "rtprio";  type = "-"; value = "99"; }
+    { domain = "@audio"; item = "nofile";  type = "-"; value = "99999"; }
   ];
 
   environment.systemPackages = with pkgs; [ jack2Full ];
@@ -34,6 +32,7 @@ in {
            . ${config.system.build.setEnvironment}
 
            ${pkgs.jack2Full}/bin/jack_control start
+           ${pkgs.jack2Full}/bin/jack_control dps device hw:PCH,0
            ${pulse.out}/bin/pacmd set-default-sink jack_out
            ${pulse.out}/bin/pacmd set-default-source jack_in
 
