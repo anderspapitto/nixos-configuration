@@ -106,5 +106,5 @@
         fi
         rsync -aAXHv $HOME/* /mnt
       '')
-  ]
+  ];
 }

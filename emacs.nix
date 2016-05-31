@@ -18,11 +18,13 @@ let
       haskell-mode
       helm
       helm-descbinds
+      helm-nixos-options
       helm-projectile
       magit
       magit-popup
       markdown-mode
       multiple-cursors
+      nixos-options
       org-gcal
       projectile
       rainbow-delimiters
