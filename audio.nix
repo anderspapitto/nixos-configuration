@@ -38,7 +38,7 @@ in {
            ${pulse.out}/bin/pacmd set-default-source jack_in
 
            SINK=$( ${pulse.out}/bin/pacmd list-sinks |
-                   ${pkgs.coreutils}/bin/grep -oE 'alsa_output.*analog-stereo')
+                   ${pkgs.gnugrep}/bin/grep -oE 'alsa_output.*analog-stereo')
            ${pulse.out}/bin/pactl suspend-sink $SINK 1
          '';
          ExecStop = pkgs.writeScript "stop_jack" ''

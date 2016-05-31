@@ -1,8 +1,7 @@
 { config, pkgs, ... }:
 
-with pkgs;
-
-let smart-ghc-mod = writeScriptBin "ghc-mod" ''
+{ environment.systemPackages = with pkgs; [
+    (writeScriptBin "ghc-mod" ''
         #! ${bash}/bin/bash
         MYROOT=$( ${haskellPackages.ghc-mod}/bin/ghc-mod root )
         if [ -e "$MYROOT/shell.drv" ];
@@ -11,20 +10,24 @@ let smart-ghc-mod = writeScriptBin "ghc-mod" ''
         else
             exec ${haskellPackages.ghc-mod}/bin/ghc-mod "$@"
         fi
-      '';
-    browser = writeScriptBin "browser" ''
+      '')
+    (writeScriptBin "browser" ''
         #! ${bash}/bin/bash
         URL=file:///dev/null
         [[ -z "$1" ]] || URL=http://$1
         [[ $1 = http* ]] && URL=$1
         chromium --app=$URL
         exec i3-msg focus tiling
-      '';
-    starcraft2 = writeScriptBin "starcraft2" ''
+      '')
+    (writeScriptBin "starcraft2" ''
         #! ${bash}/bin/bash
         ${wineStaging}/bin/wine "$HOME/.wine/drive_c/Program Files/StarCraft II/Support/SC2Switcher.exe"
-      '';
-    toggle-invert = writeScriptBin "toggle-invert" ''
+      '')
+    (writeScriptBin "flstudio" ''
+        #! ${bash}/bin/bash
+        ${wineStaging}/bin/wine "$HOME/.wine/drive_c/Program Files/Image-Line/FL Studio 12/FL.exe"
+      '')
+    (writeScriptBin "toggle-invert" ''
         #! ${bash}/bin/bash
         FOO=$( ${xdotool}/bin/xdotool getactivewindow getwindowname )
         if [[ $FOO == *" NOINVERT" ]];
@@ -34,8 +37,8 @@ let smart-ghc-mod = writeScriptBin "ghc-mod" ''
             FOO="$FOO NOINVERT";
         fi
         ${xdotool}/bin/xdotool getactivewindow set_window --name "$FOO"
-      '';
-    global-toggle-invert = writeScriptBin "global-toggle-invert" ''
+      '')
+    (writeScriptBin "global-toggle-invert" ''
         #! ${bash}/bin/bash
 
         if systemctl --user is-active compton-night
@@ -52,8 +55,8 @@ let smart-ghc-mod = writeScriptBin "ghc-mod" ''
         done
 
         ${emacs}/bin/emacsclient -e '(toggle-night-color-theme)'
-      '';
-    status-bar = writeScriptBin "status-bar" ''
+      '')
+    (writeScriptBin "status-bar" ''
         #! ${bash}/bin/bash
 
         index_in() {
@@ -74,8 +77,8 @@ let smart-ghc-mod = writeScriptBin "ghc-mod" ''
             formatted_vol="{ \"full_text\": \"''${vol}\" }"
             echo "''${line/[/[''${formatted_vol},}" || exit 1
         done)
-      '';
-    external-drive-mount = writeScriptBin "external-drive-mount" ''
+      '')
+    (writeScriptBin "external-drive-mount" ''
         #! ${bash}/bin/bash
         set -x
         if [[ $EUID -ne 0 ]]; then
@@ -84,8 +87,8 @@ let smart-ghc-mod = writeScriptBin "ghc-mod" ''
         fi
         ${cryptsetup}/bin/cryptsetup --type luks open /dev/sdb external
         mount -t ext4 /dev/mapper/external /mnt
-      '';
-    external-drive-umount = writeScriptBin "external-drive-umount" ''
+      '')
+    (writeScriptBin "external-drive-umount" ''
         #! ${bash}/bin/bash
         set -x
         if [[ $EUID -ne 0 ]]; then
@@ -94,22 +97,14 @@ let smart-ghc-mod = writeScriptBin "ghc-mod" ''
         fi
         umount /mnt
         ${cryptsetup}/bin/cryptsetup close external
-      '';
-    backup-homedir = writeScriptBin "backup-homedir" ''
+      '')
+    (writeScriptBin "backup-homedir" ''
         #! ${bash}/bin/bash
         if [[ $EUID -eq 0 ]]; then
            echo "This script must not be run as root" 1>&2
            exit 1
         fi
         rsync -aAXHv $HOME/* /mnt
-      '';
-
-in
-{ environment.systemPackages = [
-    smart-ghc-mod
-    browser starcraft2
-    toggle-invert global-toggle-invert
-    status-bar
-    external-drive-mount external-drive-umount backup-homedir
-  ];
+      '')
+  ]
 }
