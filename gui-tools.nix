@@ -21,8 +21,7 @@
     rosegarden
     rxvt_unicode_with-plugins
     samba # provides ntlm_auth, which wine stuff needs
-    steam
-    # supercollider
+    # steam
     vlc
     wineStaging
     xdotool

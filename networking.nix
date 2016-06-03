@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
-{ hardware.bluetooth.enable = false;
+{ hardware.bluetooth.enable = true;
 
   networking = {
     dhcpcd.extraConfig = ''

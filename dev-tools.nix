@@ -16,6 +16,7 @@
     nixops
     nodePackages.coffee-script
     patchelf
+    s3cmd
     sqlite
     valgrind
     z3

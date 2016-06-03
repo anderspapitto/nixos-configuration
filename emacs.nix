@@ -28,6 +28,7 @@ let
       org-gcal
       projectile
       rainbow-delimiters
+      real-auto-save
       rtags
       rust-mode
       undo-tree
