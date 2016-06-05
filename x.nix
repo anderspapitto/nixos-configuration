@@ -38,7 +38,7 @@
       temperature.night = 2500;
     };
 
-    unclutter = {
+    xbanish = {
       enable = true;
     };
 
