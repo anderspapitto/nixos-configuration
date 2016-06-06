@@ -44,43 +44,4 @@
 
   };
 
-  systemd.user.services = {
-    compton = {
-      description = "Compton: the lightweight compositing manager";
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.compton}/bin/compton -cCG --config /home/anders/config-issue/compton/noninverted-compton.conf";
-        RestartSec = 3;
-        Restart = "always";
-      };
-    };
-
-    compton-night = {
-      description = "Compton: the lightweight compositing manager";
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.compton}/bin/compton -cCG --config /home/anders/config-issue/compton/inverted-compton.conf";
-        Restart = "always";
-      };
-      conflicts = [ "compton.service" ];
-    };
-
-    dunst = {
-      description = "Lightweight libnotify server";
-      environment = {
-        DISPLAY = ":0";
-      };
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = pkgs.writeScript "dunst" ''
-          #!${pkgs.bash}/bin/bash
-          . ${config.system.build.setEnvironment}
-          exec ${pkgs.dunst}/bin/dunst
-        '';
-        RestartSec = 3;
-        Restart = "always";
-      };
-      wantedBy = [ "default.target" ];
-    };
-  };
 }

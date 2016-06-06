@@ -1,16 +1,6 @@
 { config, pkgs, ... }:
 
 { environment.systemPackages = with pkgs; [
-    (writeScriptBin "ghc-mod" ''
-        #! ${bash}/bin/bash
-        MYROOT=$( ${haskellPackages.ghc-mod}/bin/ghc-mod root )
-        if [ -e "$MYROOT/shell.drv" ];
-        then
-            exec nix-shell-wrapper "$MYROOT/shell.drv" ghc-mod "$@"
-        else
-            exec ${haskellPackages.ghc-mod}/bin/ghc-mod "$@"
-        fi
-      '')
     (writeScriptBin "browser" ''
         #! ${bash}/bin/bash
         URL=file:///dev/null

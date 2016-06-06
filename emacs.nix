@@ -14,7 +14,7 @@ let
       git-commit
 #      git-rebase
       go-mode
-      ghc-mod
+#      ghc-mod
       haskell-mode
       helm
       helm-descbinds

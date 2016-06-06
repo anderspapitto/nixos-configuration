@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 { boot.loader = {
-    gummiboot.enable = true;
+    systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
   };
 }
