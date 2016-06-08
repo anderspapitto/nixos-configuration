@@ -44,6 +44,7 @@
 
   };
 
+  systemd.user.services = {
     dunst = {
       description = "Lightweight libnotify server";
       environment = {
