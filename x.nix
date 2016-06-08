@@ -44,4 +44,22 @@
 
   };
 
+    dunst = {
+      description = "Lightweight libnotify server";
+      environment = {
+        DISPLAY = ":0";
+      };
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = pkgs.writeScript "dunst" ''
+          #!${pkgs.bash}/bin/bash
+          . ${config.system.build.setEnvironment}
+          exec ${pkgs.dunst}/bin/dunst
+        '';
+        RestartSec = 3;
+        Restart = "always";
+      };
+      wantedBy = [ "default.target" ];
+    };
+  };
 }

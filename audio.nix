@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
-let pulse = pkgs.pulseaudioLight.override { jackaudioSupport = true; };
+# let pulse = pkgs.pulseaudioLight.override { jackaudioSupport = true; };
+let pulse = pkgs.pulseaudioFull;
 in {
   boot = {
     kernelModules = [ "snd-seq" "snd-rawmidi" ];
