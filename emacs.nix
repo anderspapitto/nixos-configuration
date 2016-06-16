@@ -10,7 +10,6 @@ let
       clojure-mode
       company
       flycheck
-      flycheck-rust
       git-commit
 #      git-rebase
       go-mode
@@ -18,21 +17,27 @@ let
       haskell-mode
       helm
       helm-descbinds
-      helm-nixos-options
+#      helm-nixos-options
       helm-projectile
       magit
       magit-popup
       markdown-mode
       multiple-cursors
-      nixos-options
+#      nixos-options
       org-gcal
       projectile
       rainbow-delimiters
       real-auto-save
       rtags
-      rust-mode
+      shackle
       undo-tree
       web-mode
+
+      # rust
+      company-racer
+      flycheck-rust
+      racer
+      rust-mode
     ]);
   startEmacsServer = pkgs.writeScript "start-emacs-server"
     ''

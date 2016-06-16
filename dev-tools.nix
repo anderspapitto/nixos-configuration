@@ -17,6 +17,7 @@
     nodePackages.coffee-script
     patchelf
     s3cmd
+    stack
     sqlite
     valgrind
     z3

@@ -22,4 +22,8 @@ let date = "2016-05-15";
         url = "https://static.rust-lang.org/dist/${date}/rustc-nightly-src.tar.gz";
         sha256 = "1072y303fkhvpvrdjcgii1v2ckvxpxval6wkd6rnlnc5wvdfkava";
     };
-in { environment.systemPackages = [ rustcNightly cargoNightly ]; }
+    rustPlatformNightly = pkgs.recurseIntoAttrs (pkgs.makeRustPlatform (cargoNightly // { rustc = rustcNightly; }) rustPlatformNightly);
+    racerNightly  =  pkgs.racerRust.override { rustPlatform = rustPlatformNightly; };
+    racerdNightly = pkgs.racerdRust.override { rustPlatform = rustPlatformNightly; };
+# in { environment.systemPackages = [ rustcNightly cargoNightly racerNightly racerdNightly ]; }
+in { environment.systemPackages = with pkgs; [ rustc cargo racerRust racerdRust ]; }
