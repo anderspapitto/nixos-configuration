@@ -3,12 +3,15 @@
 let
   emacs = pkgs.emacsWithPackages
     (with pkgs.emacsPackagesNg; [
+      ace-jump-mode
       ag
       async
       cargo
       calfw
       clojure-mode
       company
+      evil
+      evil-surround
       flycheck
       git-commit
 #      git-rebase
