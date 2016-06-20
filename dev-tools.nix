@@ -8,7 +8,6 @@
     cmake
     gcc
     gdb
-    git
     go
     gnumake
     jq

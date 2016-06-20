@@ -10,6 +10,7 @@
     dmidecode
     dstat
     file
+    git
     htop
     iftop
     iotop
@@ -22,7 +23,10 @@
     psmisc
     sysdig
     tcpdump
+    tmux
     tree
+    unzip
+    wget
     which
   ];
 

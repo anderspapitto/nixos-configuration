@@ -5,12 +5,6 @@
     kernelPackages = pkgs.linuxPackages_latest;
   };
 
-  environment.systemPackages = with pkgs; [
-    tmux
-    unzip
-    wget
-  ];
-
   networking = {
     firewall = {
       allowPing = true;
@@ -30,7 +24,7 @@
   };
 
   services = {
-    sshd.enable = true;
+    openssh.enable = true;
     nixosManual.showManual = true;
   };
 
