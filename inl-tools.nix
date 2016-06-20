@@ -30,19 +30,12 @@
       '')
     (writeScriptBin "global-toggle-invert" ''
         #! ${bash}/bin/bash
+        . ${config.system.build.setEnvironment}
 
         if systemctl --user is-active compton-night
         then systemctl --user start compton
         else systemctl --user start compton-night
         fi
-
-        ZATHURA=$HOME/config-issue/zathura/.config/zathura
-        current=$(readlink $ZATHURA/zathurarc)
-        for other in $(ls $ZATHURA); do
-            if [[ $current != $other ]];
-               then ln -sf $other $ZATHURA/zathurarc;
-            fi;
-        done
 
         ${emacs}/bin/emacsclient -e '(toggle-night-color-theme)'
       '')
