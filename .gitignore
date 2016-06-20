@@ -1,4 +1,3 @@
 default.nix
 private
-nixops
 hardware-configuration.nix
