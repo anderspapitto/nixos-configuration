@@ -32,7 +32,7 @@
         #! ${bash}/bin/bash
         . ${config.system.build.setEnvironment}
 
-        if systemctl --user is-active compton-night
+        if systemctl --user is-active compton-night > /dev/null
         then systemctl --user start compton
         else systemctl --user start compton-night
         fi
