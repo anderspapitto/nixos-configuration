@@ -89,5 +89,15 @@
         fi
         rsync -aAXHv $HOME/* /mnt
       '')
+    (writeScriptBin "my-pager" ''
+        #! ${bash}/bin/bash
+        if [[ $TERM = dumb ]]; then
+          exec cat "$@"
+        else
+          exec less -R "$@"
+        fi
+      '')
   ];
+
+  environment.variables = { PAGER = "my-pager"; };
 }
