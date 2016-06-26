@@ -10,8 +10,6 @@ let
       calfw
       clojure-mode
       company
-      evil
-      evil-surround
       flycheck
       git-commit
 #      git-rebase
