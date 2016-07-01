@@ -7,10 +7,12 @@
 
   environment.systemPackages = with pkgs; [
     bind # provides `dig`
+    cryptsetup
     dmidecode
     dstat
     file
     git
+    gptfdisk
     htop
     iftop
     iotop
