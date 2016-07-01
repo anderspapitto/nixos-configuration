@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 
 let
-  emacs = pkgs.emacsWithPackages
-    (with pkgs.emacsPackagesNg; [
+  emacs = pkgs.emacs25WithPackages
+    (with pkgs.emacs25PackagesNg; [
       ace-jump-mode
       ag
       async
