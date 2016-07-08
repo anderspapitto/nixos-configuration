@@ -6,6 +6,8 @@
     supportedFilesystems = [ "zfs" ];
   };
 
+  environment.variables = { EDITOR = "emacsclient -c"; };
+
   networking = {
     firewall = {
       allowPing = true;
@@ -15,6 +17,10 @@
   programs = {
     bash = {
       enableCompletion = true;
+      interactiveShellInit = ''
+        HISTCONTROL=ignoreboth:erasedups
+        shopt -s histappend
+      '';
       promptInit = ''
         PS1="\[\033[1;32m\][\u@\h:\w]\n\$\[\033[0m\] "
       '';
