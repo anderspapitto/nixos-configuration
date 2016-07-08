@@ -21,8 +21,8 @@
         };
       };
       windowManager = {
-        i3.enable = true;
-        default = "i3";
+        i3-gaps.enable = true;
+        default = "i3-gaps";
       };
       desktopManager.xterm.enable = false;
       synaptics = {
