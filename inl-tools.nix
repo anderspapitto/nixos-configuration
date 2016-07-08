@@ -32,9 +32,9 @@
         #! ${bash}/bin/bash
         . ${config.system.build.setEnvironment}
 
-        if systemctl --user is-active compton-night > /dev/null
-        then systemctl --user start compton
-        else systemctl --user start compton-night
+        if systemctl is-active compton-night > /dev/null
+        then systemctl start compton
+        else systemctl start compton-night
         fi
 
         ${emacs}/bin/emacsclient -e '(toggle-night-color-theme)'

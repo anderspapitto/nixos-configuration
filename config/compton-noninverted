@@ -1,0 +1,6 @@
+backend = "glx"
+vsync = "opengl"
+
+inactive-opacity = 0.8
+inactive-dim = 0.2
+use-ewmh-active-win = true
