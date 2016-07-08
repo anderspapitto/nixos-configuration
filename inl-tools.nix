@@ -39,28 +39,6 @@
 
         ${emacs}/bin/emacsclient -e '(toggle-night-color-theme)'
       '')
-    (writeScriptBin "status-bar" ''
-        #! ${bash}/bin/bash
-
-        index_in() {
-            sed -n 1p
-        }
-
-        get_vol() {
-            if pactl list sinks | grep 'Mute:' | index_in | grep -q 'yes';
-            then echo -n '(Mute) ';
-            fi
-            pactl list sinks | grep 'Volume: front' | index_in | awk '{print $5}' | tr -d '\n'
-        }
-
-        i3status --config ~/.i3/i3status.conf | (read line && echo $line && read line && echo $line && while :
-        do
-            read line
-            vol=$(get_vol)
-            formatted_vol="{ \"full_text\": \"''${vol}\" }"
-            echo "''${line/[/[''${formatted_vol},}" || exit 1
-        done)
-      '')
     (writeScriptBin "external-drive-mount" ''
         #! ${bash}/bin/bash
         set -x
