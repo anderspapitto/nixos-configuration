@@ -23,18 +23,29 @@
   ];
 
   imports = [ ./rust-nightly.nix ];
-  environment.etc.gitconfig.text = ''
-    [user]
-        email = anderspapitto@gmail.com
-        name = Anders Papitto
-    [pull]
-    	rebase = true
-    [color]
-    	ui = auto
-    [push]
-    	default = simple
-    [merge]
-        conflictstyle = diff3
-  '';
+  environment.etc = {
+    gitconfig.text = ''
+        [user]
+            email = anderspapitto@gmail.com
+            name = Anders Papitto
+        [pull]
+        	rebase = true
+        [color]
+        	ui = auto
+        [push]
+        	default = simple
+        [merge]
+            conflictstyle = diff3
+      '';
+    "stack/config.yaml".text = ''
+        templates:
+          params:
+            author-email: anderspapitto@gmail.com
+            author-name: Anders Papitto
+            github-username: anderspapitto
+        nix:
+          enable: true
+      '';
+    };
 
 }
