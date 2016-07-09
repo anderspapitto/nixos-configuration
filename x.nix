@@ -30,6 +30,13 @@ in {
             ${pkgs.gnupg}/bin/gpg-connect-agent /bye
             export GPG_TTY=$(tty)
           '';
+          configFile = let
+            i3status-conf = builtins.unsafeDiscardStringContext (builtins.toFile
+              "i3status-conf" (builtins.readFile ./config/i3status));
+          in builtins.toFile "i3-config" (pkgs.lib.replaceStrings
+              [ "i3status.conf" ]
+              [ "${i3status-conf}" ]
+              (builtins.readFile ./config/i3));
         };
         default = "i3-gaps";
       };

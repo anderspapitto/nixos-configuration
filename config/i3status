@@ -1,0 +1,60 @@
+general {
+        output_format = i3bar
+        colors = true
+        interval = 3
+}
+
+order += "volume one"
+order += "volume two"
+order += "disk /"
+order += "disk /nix/store"
+order += "disk /home"
+order += "wireless wlp4s0"
+order += "path_exists VPN"
+order += "battery 0"
+order += "tztime local"
+
+volume one {
+        format = "♪: %volume"
+        format_muted = "♪: muted (%volume)"
+        device = "pulse:0"
+}
+
+volume two {
+        format = "♪: %volume"
+        format_muted = "♪: muted (%volume)"
+        device = "pulse:1"
+}
+
+wireless wlp4s0 {
+        format_up = "W: (%quality at %essid) %ip"
+        format_down = "W: down"
+}
+
+path_exists VPN {
+        path = "/proc/sys/net/ipv4/conf/tun0"
+}
+
+disk "/" {
+        format = "%avail"
+}
+
+disk "/nix/store" {
+        format = "%avail"
+}
+
+disk "/home" {
+        format = "%avail"
+}
+
+battery 0 {
+        format = "%status %percentage %remaining"
+        last_full_capacity = true
+        integer_battery_capacity = true
+        low_threshold = 15
+        threshold_type = percentage
+}
+
+tztime local {
+        format = "%Y-%m-%d %H:%M:%S"
+}
