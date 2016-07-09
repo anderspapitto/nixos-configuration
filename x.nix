@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
-{ services = {
+let dunstrc = builtins.toFile "dunstrc" (pkgs.lib.readFile ./config/dunstrc);
+
+in {
+  services = {
     xserver = {
       enable = true;
       layout = "us";
@@ -44,23 +47,20 @@
 
   };
 
-  systemd.user.services = {
+  systemd.services = {
     dunst = {
       description = "Lightweight libnotify server";
-      environment = {
-        DISPLAY = ":0";
-      };
+      environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
       serviceConfig = {
         Type = "simple";
+        User = "anders";
         ExecStart = pkgs.writeScript "dunst" ''
           #!${pkgs.bash}/bin/bash
           . ${config.system.build.setEnvironment}
-          exec ${pkgs.dunst}/bin/dunst
+          exec ${pkgs.dunst}/bin/dunst -config ${dunstrc}
         '';
-        RestartSec = 3;
-        Restart = "always";
       };
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical.target" ];
     };
   };
 }
