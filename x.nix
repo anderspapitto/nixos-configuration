@@ -30,6 +30,7 @@ in {
             ${pkgs.gnupg}/bin/gpg-connect-agent /bye
             export GPG_TTY=$(tty)
           '';
+        };
         default = "i3-gaps";
       };
       desktopManager.xterm.enable = false;
@@ -49,7 +50,6 @@ in {
     xbanish = {
       enable = true;
     };
-
   };
 
   systemd.services = {
