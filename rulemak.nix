@@ -8,29 +8,30 @@ let rulemak = pkgs.fetchFromGitHub {
     };
     toggle-layout = pkgs.writeScriptBin "toggle-layout" ''
         #! ${pkgs.bash}/bin/bash
-        if systemctl --user is-active colemak
-        then systemctl --user start rulemak
-        else systemctl --user start colemak
+        if systemctl is-active colemak
+        then systemctl start rulemak
+        else systemctl start colemak
         fi
       '';
 in {
-  systemd.user.services = {
+  systemd.services = {
     colemak = {
       description = "Colemak layout";
       serviceConfig = {
         Type = "oneshot";
+        User = "anders";
         ExecStart = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout us -variant colemak";
         RemainAfterExit = "yes";
-        RestartSec = 3;
-        Restart = "always";
       };
-      wantedBy = [ "default.target" ];
+      environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
+      wantedBy = [ "graphical.target" ];
     };
 
     rulemak = {
       description = "Rulemak layout";
       serviceConfig = {
         Type = "oneshot";
+        User = "anders";
         ExecStart = pkgs.writeScript "rulemak" ''
             #! ${pkgs.bash}/bin/bash
             set -xe
@@ -39,6 +40,7 @@ in {
           '';
         RemainAfterExit = "yes";
       };
+      environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
       conflicts = [ "colemak.service" ];
     };
 
