@@ -22,7 +22,6 @@
     z3
   ];
 
-  imports = [ ./rust-nightly.nix ];
   environment.etc = {
     gitconfig.text = ''
         [user]
@@ -48,4 +47,5 @@
       '';
     };
 
+  # imports = [ ./rust-nightly.nix ];
 }
