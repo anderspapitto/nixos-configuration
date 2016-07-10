@@ -31,8 +31,4 @@
     wget
     which
   ];
-
-  security = {
-    setuidPrograms = [ "mtr" "sysdig" "csysdig" "iotop" "iftop" "netstat" "tcpdump" ];
-  };
 }
