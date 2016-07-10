@@ -40,11 +40,13 @@ let
       racer
       rust-mode
     ]);
+  init-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/init.el);
+  my-compile-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/my-compile.el);
   startEmacsServer = pkgs.writeScript "start-emacs-server"
     ''
       #!${pkgs.bash}/bin/bash
       . ${config.system.build.setEnvironment}
-      exec ${emacs}/bin/emacs --daemon
+      exec ${emacs}/bin/emacs --daemon -q -l ${init-el} -l ${my-compile-el}
     '';
 in {
   environment.systemPackages = [ emacs ];
