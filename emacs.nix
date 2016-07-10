@@ -64,5 +64,6 @@ in {
       User = "anders";
     };
     wantedBy = [ "default.target" ];
+    restartIfChanged = false;
   };
 }
