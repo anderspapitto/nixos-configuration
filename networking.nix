@@ -3,6 +3,10 @@
 { hardware.bluetooth.enable = true;
 
   networking = {
+    extraHosts = ''
+      104.156.231.205 thufir
+    '';
+
     dhcpcd.extraConfig = ''
       nohook resolv.conf
       noipv4ll
