@@ -5,7 +5,6 @@
     ./base.nix
     ./compton.nix
     ./dev-tools.nix
-    ./dropbox.nix
     ./emacs.nix
     ./fonts.nix
     ./gui-tools.nix
@@ -15,15 +14,11 @@
     ./networking.nix
     ./nix.nix
     ./nixpkgs.nix
-    ./printing.nix
-    ./rulemak.nix
     ./sysadmin.nix
     ./uefi.nix
     ./utility-scripts.nix
     ./virtualization.nix
     ./x.nix
-
-    ./private/default.nix
   ];
 
   networking = {
