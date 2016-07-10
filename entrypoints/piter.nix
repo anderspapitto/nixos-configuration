@@ -27,16 +27,7 @@
   ];
 
   networking = {
-    hostName = "gurney";
-    hostId = "d9ebdbe0";
+    hostName = "piter";
+    hostId = "1f372e1b";
   };
-
-  boot.initrd.luks.devices = [
-    {
-      name = "root";
-      device = "/dev/disk/by-uuid/27cadee9-bc6c-4e62-9494-fa2f789bf98b";
-      preLVM = true;
-      allowDiscards = true;
-    }
-  ];
 }
