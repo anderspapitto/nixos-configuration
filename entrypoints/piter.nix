@@ -15,7 +15,6 @@
     ./nix.nix
     ./nixpkgs.nix
     ./sysadmin.nix
-    ./uefi.nix
     ./utility-scripts.nix
     ./virtualization.nix
     ./x.nix
