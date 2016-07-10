@@ -50,7 +50,7 @@ let
     '';
 in {
   environment.systemPackages = [ emacs ];
-  systemd.user.services.emacs = {
+  systemd.services.emacs = {
     description = "Emacs: the extensible, self-documenting text editor";
     environment = {
       GTK_DATA_PREFIX = config.system.path;
@@ -61,7 +61,7 @@ in {
       Type = "forking";
       ExecStart = "${startEmacsServer}";
       ExecStop = "${emacs}/bin/emacsclient --eval (kill-emacs)";
-      Restart = "always";
+      User = "anders";
     };
     wantedBy = [ "default.target" ];
   };
