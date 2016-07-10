@@ -235,25 +235,22 @@ Entered on %U
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-(setq dark-or-light 'light)
 (setq dark-theme 'wheatgrass)
 (setq light-theme 'adwaita)
-
 (load-theme light-theme t)
-(defun toggle-night-color-theme ()
-  "Switch to/from night color scheme."
+
+(defun enable-dark-theme ()
   (interactive)
-  (if (eq dark-or-light 'light)
-      (progn
-        (setq dark-or-light 'dark)
-        (disable-theme light-theme)
-        (load-theme dark-theme t)
-        (set-face-foreground 'org-hide "#000000"))
-    (progn
-      (setq dark-or-light 'light)
-      (disable-theme dark-theme)
-      (load-theme light-theme t)
-      (set-face-foreground 'org-hide "#EDEDED"))))
+  (progn
+    (disable-theme light-theme)
+    (load-theme dark-theme t)
+    (set-face-foreground 'org-hide "#000000")))
+(defun enable-light-theme ()
+  (interactive)
+  (progn
+    (disable-theme dark-theme)
+    (load-theme light-theme t)
+    (set-face-foreground 'org-hide "#EDEDED")))
 
 (setq magit-last-seen-setup-instructions "1.4.0")
 

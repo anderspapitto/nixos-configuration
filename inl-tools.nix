@@ -33,11 +33,13 @@
         . ${config.system.build.setEnvironment}
 
         if systemctl is-active compton-night > /dev/null
-        then systemctl start compton
-        else systemctl start compton-night
+        then
+            systemctl start compton
+            ${emacs}/bin/emacsclient -e '(enable-light-theme)'
+        else
+            systemctl start compton-night
+            ${emacs}/bin/emacsclient -e '(enable-dark-theme)'
         fi
-
-        ${emacs}/bin/emacsclient -e '(toggle-night-color-theme)'
       '')
     (writeScriptBin "external-drive-mount" ''
         #! ${bash}/bin/bash
