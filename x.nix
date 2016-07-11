@@ -58,7 +58,8 @@ in {
         User = "anders";
         ExecStart = "${pkgs.redshift}/bin/redshift -l 37.7:133.4 -t 5500:2500 -b 1:1";
       };
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "display-manager" ];
+      after = [ "display-manager" ];
     };
 
     xbanish = {
@@ -69,7 +70,8 @@ in {
         User = "anders";
         ExecStart = "${pkgs.xbanish}/bin/xbanish";
       };
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "display-manager" ];
+      after = [ "display-manager" ];
     };
 
     dunst = {
@@ -84,7 +86,8 @@ in {
           exec ${pkgs.dunst}/bin/dunst -config ${dunstrc}
         '';
       };
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "display-manager" ];
+      after = [ "display-manager" ];
     };
   };
 }
