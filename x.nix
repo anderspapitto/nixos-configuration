@@ -47,20 +47,31 @@ in {
         twoFingerScroll = true;
       };
     };
-
-    redshift = {
-      enable = true;
-      latitude = "37.7";
-      longitude = "133.4";
-      temperature.night = 2500;
-    };
-
-    xbanish = {
-      enable = true;
-    };
   };
 
   systemd.services = {
+    redshift = {
+      description = "Redshift colour temperature adjuster";
+      environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
+      serviceConfig = {
+        Type = "simple";
+        User = "anders";
+        ExecStart = "${pkgs.redshift}/bin/redshift -l 37.7:133.4 -t 5500:2500 -b 1:1";
+      };
+      wantedBy = [ "graphical.target" ];
+    };
+
+    xbanish = {
+      description = "xbanish hides the mouse pointer";
+      environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
+      serviceConfig = {
+        Type = "simple";
+        User = "anders";
+        ExecStart = "${pkgs.xbanish}/bin/xbanish";
+      };
+      wantedBy = [ "graphical.target" ];
+    };
+
     dunst = {
       description = "Lightweight libnotify server";
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
