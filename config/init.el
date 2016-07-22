@@ -330,3 +330,6 @@ Entered on %U
 (setq select-enable-clipboard nil)
 
 (setq gdb-display-io-nopopup t)
+
+(defun skip-set-window-dedicated-p (orig-fun &rest args) nil)
+(advice-add 'set-window-dedicated-p :around #'skip-set-window-dedicated-p)
