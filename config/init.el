@@ -303,7 +303,7 @@ Entered on %U
 ;; (add-to-list 'company-backends 'company-nixos-options)
 
 ;; various stuff that I just always want to have open
-(find-file-noselect "~/.config/nixup/init.el")
+(find-file-noselect "/etc/nixos/configuration/config/init.el")
 (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")
 (cfw:open-org-calendar)
 
@@ -327,6 +327,6 @@ Entered on %U
 (shackle-mode)
 (setq shackle-rules '(("\\*input/output of.*\\*" :regexp t :ignore t)))
 
-(setq x-selection-timeout 1000)
+(setq select-enable-clipboard nil)
 
 (setq gdb-display-io-nopopup t)

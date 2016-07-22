@@ -30,6 +30,7 @@
     unzip
     wget
     which
+    wireshark
   ];
 
   security.setuidPrograms = [
