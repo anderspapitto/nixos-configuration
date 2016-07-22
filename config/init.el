@@ -328,6 +328,7 @@ Entered on %U
 (setq shackle-rules '(("\\*input/output of.*\\*" :regexp t :ignore t)))
 
 (setq select-enable-clipboard nil)
+(setq select-enable-primary t)
 
 (setq gdb-display-io-nopopup t)
 
