@@ -27,7 +27,7 @@
       '';
     };
     environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
-    after = [ "display-manager" ];
+    after = [ "display-manager.service" ];
     startAt = "*:00/5";
   };
 

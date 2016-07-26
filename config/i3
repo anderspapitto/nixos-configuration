@@ -217,5 +217,3 @@ assign [class="^Civ5xP$"] 10
 gaps inner 4
 gaps outer 4
 smart_gaps on
-
-exec --no-startup-id feh --bg-scale /home/anders/Downloads/lakeside-landscape.jpg

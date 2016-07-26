@@ -6,19 +6,18 @@ in {
   systemd.services = {
     compton = {
       description = "Compton: the lightweight compositing manager";
-      after = [ "display-manager" ];
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
       serviceConfig = {
         Type = "simple";
         User = "anders";
         ExecStart = "${pkgs.compton}/bin/compton -cCG --config ${compton-noninverted}";
       };
-      wantedBy = [ "display-manager" ];
+      wantedBy = [ "graphical.target" ];
+      after = [ "display-manager.service" ];
     };
 
     compton-night = {
       description = "Compton: the lightweight compositing manager";
-      after = [ "display-manager" ];
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
       serviceConfig = {
         Type = "simple";
@@ -26,6 +25,7 @@ in {
         ExecStart = "${pkgs.compton}/bin/compton -cCG --config ${compton-inverted}";
       };
       conflicts = [ "compton.service" ];
+      after = [ "display-manager.service" ];
     };
   };
 }

@@ -24,8 +24,8 @@ in {
         RemainAfterExit = "yes";
       };
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
-      wantedBy = [ "display-manager" ];
-      after = [ "display-manager" ];
+      wantedBy = [ "graphical.target" ];
+      after = [ "display-manager.service" ];
     };
 
     rulemak = {
@@ -43,7 +43,7 @@ in {
       };
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
       conflicts = [ "colemak.service" ];
-      after = [ "display-manager" ];
+      after = [ "display-manager.service" ];
     };
 
   };
