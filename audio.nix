@@ -77,6 +77,7 @@ in {
         DISPLAY = ":${toString config.services.xserver.display}";
         HOME = "/home/anders";
       };
+      enable = false;
     };
     jackdbus = {
       description = "Runs jack, and points pulseaudio at it";

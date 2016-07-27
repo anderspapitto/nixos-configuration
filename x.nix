@@ -98,7 +98,7 @@ in {
       serviceConfig = {
         Type = "simple";
         User = "anders";
-        ExecStart = "${pkgs.feh}/bin/feh --bg-scale ${background-image}";
+        ExecStart = "${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image}";
       };
       wantedBy = [ "graphical.target" ];
       after = [ "display-manager.service" ];

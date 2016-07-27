@@ -214,6 +214,6 @@ assign [title="^card-game$"] 6
 assign [class="^Steam"] 10
 assign [class="^Civ5xP$"] 10
 
-gaps inner 4
-gaps outer 4
+gaps inner 6
+gaps outer 6
 smart_gaps on
