@@ -9,14 +9,6 @@
         chromium --app=$URL
         exec i3-msg focus tiling
       '')
-    (writeScriptBin "starcraft2" ''
-        #! ${bash}/bin/bash
-        ${wineStaging}/bin/wine "$HOME/.wine/drive_c/Program Files/StarCraft II/Support/SC2Switcher.exe"
-      '')
-    (writeScriptBin "flstudio" ''
-        #! ${bash}/bin/bash
-        ${wineStaging}/bin/wine "$HOME/.wine/drive_c/Program Files/Image-Line/FL Studio 12/FL.exe"
-      '')
     (writeScriptBin "toggle-invert" ''
         #! ${bash}/bin/bash
         FOO=$( ${xdotool}/bin/xdotool getactivewindow getwindowname )

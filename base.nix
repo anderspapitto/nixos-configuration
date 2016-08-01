@@ -3,7 +3,6 @@
 { boot = {
     cleanTmpDir = true;
     kernelPackages = pkgs.linuxPackages_latest;
-    supportedFilesystems = [ "zfs" ];
   };
 
   environment.variables = { EDITOR = "emacsclient -c"; };

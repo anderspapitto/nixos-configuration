@@ -3,7 +3,6 @@
 { environment.systemPackages = with pkgs; [
     arandr
     chromium
-    clementine
     dmenu
     ghostscriptX
     glxinfo
@@ -13,17 +12,11 @@
     jmtpfs
     kde5.quasselClient
     libnotify
-    lmms
     pass
     pavucontrol
     pianobar
-    qjackctl
-    rosegarden
     rxvt_unicode_with-plugins
-    samba # provides ntlm_auth, which wine stuff needs
-    steam
     vlc
-    wineStaging
     xdotool
     xlibs.xev
     xsane
