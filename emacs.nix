@@ -10,6 +10,7 @@ let
       calfw
       clojure-mode
       company
+      elm-mode
       flycheck
       git-commit
 #      git-rebase

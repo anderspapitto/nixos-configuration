@@ -10,7 +10,7 @@
     i3status
     imagemagick
     jmtpfs
-    kde5.quasselClient
+    quassel
     libnotify
     pass
     pavucontrol

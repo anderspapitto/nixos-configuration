@@ -15,7 +15,6 @@
 
   programs = {
     bash = {
-      enableCompletion = true;
       interactiveShellInit = ''
         HISTCONTROL=ignoreboth:erasedups
         shopt -s histappend
