@@ -171,7 +171,7 @@ Entered on %U
 
 ;;; Looks
 
-(setq scroll-bar-mode nil)
+(set-scroll-bar-mode nil)
 (setq tool-bar-mode nil)
 (setq menu-bar-mode nil)
 (setq initial-scratch-message nil)

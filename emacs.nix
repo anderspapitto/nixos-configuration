@@ -1,42 +1,14 @@
 { config, pkgs, ... }:
 
 let
-  emacs = pkgs.emacs25WithPackages
-    (with pkgs.emacs25PackagesNg; [
-      ace-jump-mode
-      async
-      cargo
-      calfw
-      clojure-mode
-      company
-      elm-mode
-      flycheck
-      git-commit
-      go-mode
-      haskell-mode
-      helm
-      helm-descbinds
-      helm-projectile
-      magit
-      magit-popup
-      markdown-mode
-      multiple-cursors
-      org-gcal
-      projectile
-      rainbow-delimiters
-      real-auto-save
-      shackle
-      undo-tree
-      use-package
-    ]);
-  init-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/init.el);
-  my-compile-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/my-compile.el);
-  startEmacsServer = pkgs.writeScript "start-emacs-server"
-    ''
+  emacs = pkgs.emacs25pre;
+  startEmacs = pkgs.writeScript "emacs" ''
       #!${pkgs.bash}/bin/bash
       . ${config.system.build.setEnvironment}
-      exec ${emacs}/bin/emacs --daemon -q -l ${init-el} -l ${my-compile-el}
+      exec ${emacs}/bin/emacs -q -l ${init-el} -l ${my-compile-el} "$@"
     '';
+  init-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/init.el);
+  my-compile-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/my-compile.el);
 in {
   environment.systemPackages = [ emacs ];
   systemd.services.emacs = {
@@ -48,7 +20,7 @@ in {
     };
     serviceConfig = {
       Type = "forking";
-      ExecStart = "${startEmacsServer}";
+      ExecStart = "${startEmacs} --daemon";
       ExecStop = "${emacs}/bin/emacsclient --eval (kill-emacs)";
       User = "anders";
     };
