@@ -31,11 +31,17 @@
   (setq compilation-ask-about-save nil))
 
 (use-package helm
-  :bind (:map helm-map
+  :bind (("M-x" . helm-M-x)
+	 ("C-x C-f" . helm-find-files)
+	 :map helm-map
               ("<tab>" . helm-next-line)
-              ("<backtab>" . helm-previous-line)))
+              ("<backtab>" . helm-previous-line))
+  :config
+  (helm-mode 1))
 
-(use-package helm-descbinds)
+(use-package helm-descbinds
+  :config
+  (helm-descbinds-mode))
 
 (use-package magit
   :config
@@ -55,10 +61,10 @@
 (use-package nix-mode)
 
 (use-package org
-  :bind (("\C-cl" . org-store-link)
-         ("\C-cc" . org-capture)
-         ("\C-ca" . org-agenda)
-         ("\C-cb" . org-iswitchb))
+  :bind (("C-c l" . org-store-link)
+         ("C-c c" . org-capture)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb))
   :init
   (setq org-default-notes-file "~org/notes.org")
   :config
@@ -69,21 +75,13 @@
   (setq org-capture-templates
         '(("t" "Todo" entry
            (file+headline "~/org/todo.org" "Tasks")
-           "* TODO %?
-  %i")
+           "* TODO %?\n  %i")
           ("h" "Habit" entry
            (file+headline "~/org/todo.org" "Tasks")
-           "* TODO %?
-  %i
-  SCHEDULED:
-  :PROPERTIES:
-    :STYLE: habit
-  :END:")
+           "* TODO %?\n  %i\n  SCHEDULED:\n  :PROPERTIES:\n    :STYLE: habit\n  :END:")
           ("j" "Journal" entry
            (file+datetree "~/org/journal.org")
-           "* %?
-Entered on %U
-  %i")
+           "* %?\nEntered on %U\n  %i")
           ("n" "Note" entry
            (file+datetree "~/org/notes.org")
            "* %U %?")))

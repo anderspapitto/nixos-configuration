@@ -32,7 +32,15 @@ in {
             ${pkgs.gnupg}/bin/gpg-connect-agent /bye
             export GPG_TTY=$(tty)
             xrdb ${builtins.toFile "Xresources" (builtins.readFile ./config/xresources)}
+
+	    # bit of a hack. I don't want to have it pulled in by
+	    # display-manager, or it will get restarted everytime if
+	    # i'm toggled to dark mode
+	    systemctl start compton
+
+	    # these two are obviously hacks
             ${pkgs.clipit}/bin/clipit &
+	    systemctl start openvpn-thufir &
           '';
           configFile = let
             i3status-conf = builtins.unsafeDiscardStringContext (builtins.toFile

@@ -36,4 +36,6 @@ in {
       source = "${pulse}/etc/pulse/default.pa";
     }
   ];
+
+  services.mpd.enable = true;
 }
