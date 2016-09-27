@@ -4,7 +4,6 @@ let
   emacs = pkgs.emacs25WithPackages
     (with pkgs.emacs25PackagesNg; [
       ace-jump-mode
-      ag
       async
       cargo
       calfw
@@ -13,33 +12,22 @@ let
       elm-mode
       flycheck
       git-commit
-#      git-rebase
       go-mode
-#      ghc-mod
       haskell-mode
       helm
       helm-descbinds
-#      helm-nixos-options
       helm-projectile
       magit
       magit-popup
       markdown-mode
       multiple-cursors
-#      nixos-options
       org-gcal
       projectile
       rainbow-delimiters
       real-auto-save
-      rtags
       shackle
       undo-tree
-      web-mode
-
-      # rust
-      company-racer
-      flycheck-rust
-      racer
-      rust-mode
+      use-package
     ]);
   init-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/init.el);
   my-compile-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/my-compile.el);

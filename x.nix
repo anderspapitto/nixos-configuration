@@ -32,6 +32,7 @@ in {
             ${pkgs.gnupg}/bin/gpg-connect-agent /bye
             export GPG_TTY=$(tty)
             xrdb ${builtins.toFile "Xresources" (builtins.readFile ./config/xresources)}
+            ${pkgs.clipit}/bin/clipit &
           '';
           configFile = let
             i3status-conf = builtins.unsafeDiscardStringContext (builtins.toFile

@@ -3,6 +3,7 @@
 { environment.systemPackages = with pkgs; [
     arandr
     chromium
+    clipit
     dmenu
     ghostscriptX
     glxinfo
@@ -16,7 +17,9 @@
     pavucontrol
     pianobar
     rxvt_unicode_with-plugins
+    samba # providse ntlm_auth, which wine stuff needs
     vlc
+    wineStaging
     xdotool
     xlibs.xev
     xsane
