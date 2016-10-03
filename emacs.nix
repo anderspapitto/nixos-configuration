@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  emacs = pkgs.emacs25pre;
+  emacs = pkgs.emacs25;
   startEmacs = pkgs.writeScript "emacs" ''
       #!${pkgs.bash}/bin/bash
       . ${config.system.build.setEnvironment}
