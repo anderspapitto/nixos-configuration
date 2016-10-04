@@ -35,7 +35,8 @@ bindsym $mod+Shift+Return exec i3-sensible-terminal
 # kill focused window
 bindsym $mod+Shift+q kill
 
-bindsym $mod+slash exec QUERY="$(dmenu)" && [[ -n "$QUERY" ]] && conkeror --search "google $QUERY"
+bindsym $mod+grave exec toggle-invert
+bindsym $mod+Shift+grave exec global-toggle-invert
 
 # start dmenu (a program launcher)
 bindsym $mod+s exec dmenu_run
