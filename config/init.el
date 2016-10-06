@@ -18,12 +18,13 @@
   (require 'calfw-org)
   (use-package org-gcal)
   (setq org-gcal-down-days 30)
-  (setq org-gcal-up-days 7)
-  )
+  (setq org-gcal-up-days 7))
 
 (use-package company
+  :init
+  (setq company-global-modes '(not shell-mode gud-mode))
   :config
-  (setq company-global-modes '(not shell-mode gud-mode)))
+  (global-company-mode))
 
 (use-package compile
   :config
