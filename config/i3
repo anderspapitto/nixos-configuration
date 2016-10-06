@@ -38,8 +38,8 @@ bindsym $mod+Shift+q kill
 bindsym $mod+grave exec toggle-invert
 bindsym $mod+Shift+grave exec global-toggle-invert
 
-# start dmenu (a program launcher)
-bindsym $mod+s exec dmenu_run
+# start rofi (a program launcher)
+bindsym $mod+s exec rofi -show run
 
 # change focus
 bindsym $mod+n focus left

@@ -16,6 +16,7 @@
     pass
     pavucontrol
     pianobar
+    rofi
     rxvt_unicode_with-plugins
     samba # providse ntlm_auth, which wine stuff needs
     vlc
