@@ -105,7 +105,7 @@ in {
       description = "Set background";
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
       serviceConfig = {
-        Type = "simple";
+        Type = "oneshot";
         User = "anders";
         ExecStart = "${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image}";
       };

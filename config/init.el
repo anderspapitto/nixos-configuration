@@ -14,8 +14,7 @@
 ;;; Actual packages
 
 (use-package avy
-  :bind
-  ("C-i" . avy-goto-char)
+  :bind ("C-t" . avy-goto-char)
   :config
   (setq avy-keys
         (nconc (number-sequence ?a ?z)
@@ -51,6 +50,9 @@
   (add-to-list 'company-backends 'company-elm)
   (add-hook 'elm-mode-hook #'elm-oracle-setup-completion))
 
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
 (use-package flycheck
   :config
   (global-flycheck-mode)
@@ -62,6 +64,9 @@
   (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
 
 (use-package ivy
+  :bind (:map ivy-minibuffer-map
+              ("<tab>" . ivy-next-line)
+              ("<backtab>" . ivy-previous-line))
   :config
   (ivy-mode 1))
 
@@ -159,6 +164,10 @@
   (global-undo-tree-mode)
   (setq undo-tree-auto-save-history t)
   (setq undo-tree-history-directory-alist '(("." . "/tmp/undo-tree"))))
+
+(use-package vimish-fold
+  :config
+  (vimish-fold-global-mode 1))
 
 (use-package whitespace
   :init
