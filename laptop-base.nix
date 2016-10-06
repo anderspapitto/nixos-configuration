@@ -2,6 +2,11 @@
 
 { hardware = {
     opengl.driSupport32Bit = true; # needed for steam and/or wine, i believe
+    pulseaudio = {
+      enable = true;
+      support32Bit = true;
+      package = pkgs.pulseaudioFull;
+    };
   };
 
   services = {
