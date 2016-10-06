@@ -11,7 +11,17 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;;; Acutal packages
+;;; Actual packages
+
+(use-package avy
+  :bind
+  ("C-i" . avy-goto-char)
+  :config
+  (setq avy-keys
+        (nconc (number-sequence ?a ?z)
+               (number-sequence ?A ?Z)
+               (number-sequence ?1 ?9)
+               '(?0))))
 
 (use-package calfw
   :config
@@ -31,18 +41,19 @@
   (setq compilation-always-kill t)
   (setq compilation-ask-about-save nil))
 
-(use-package helm
-  :bind (("M-x" . helm-M-x)
-	 ("C-x C-f" . helm-find-files)
-	 :map helm-map
-              ("<tab>" . helm-next-line)
-              ("<backtab>" . helm-previous-line))
-  :config
-  (helm-mode 1))
+(use-package counsel)
 
-(use-package helm-descbinds
+(use-package elm-mode
+  :init
+  (setq elm-tags-on-save t)
+  (setq elm-sort-imports-on-save t)
+  (setq elm-format-on-save t)
+  (add-to-list 'company-backends 'company-elm)
+  (add-hook 'elm-mode-hook #'elm-oracle-setup-completion))
+
+(use-package ivy
   :config
-  (helm-descbinds-mode))
+  (ivy-mode 1))
 
 (use-package magit
   :config
@@ -109,7 +120,7 @@
   (setq projectile-mode-line ''(:eval (format "Projectile[%s]" default-directory)))
   (setq projectile-switch-project-action 'projectile-vc)
   (setq projectile-use-git-grep t)
-  (setq projectile-completion-system 'helm))
+  (setq projectile-completion-system 'ivy))
 
 (use-package rainbow-delimiters
   :config
@@ -124,6 +135,8 @@
 (use-package subword
   :config
   (global-subword-mode))
+
+(use-package swiper)
 
 (use-package tramp
   :config
@@ -144,6 +157,7 @@
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
 ;;; Miscellaneous
+
 (global-set-key "\C-z" nil)
 (global-set-key (kbd "M-o") 'mode-line-other-buffer)
 (setenv "MANWIDTH" "72")
