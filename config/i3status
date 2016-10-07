@@ -4,8 +4,7 @@ general {
         interval = 3
 }
 
-order += "volume one"
-order += "volume two"
+order += "volume pulse"
 order += "disk /"
 order += "disk /nix/store"
 order += "disk /home"
@@ -14,16 +13,10 @@ order += "path_exists VPN"
 order += "battery 0"
 order += "tztime local"
 
-volume one {
+volume pulse {
         format = "♪: %volume"
         format_muted = "♪: muted (%volume)"
-        device = "pulse:0"
-}
-
-volume two {
-        format = "♪: %volume"
-        format_muted = "♪: muted (%volume)"
-        device = "pulse:1"
+        device = "pulse"
 }
 
 wireless wlp4s0 {
@@ -36,15 +29,15 @@ path_exists VPN {
 }
 
 disk "/" {
-        format = "%avail"
+        format = "/ %avail"
 }
 
 disk "/nix/store" {
-        format = "%avail"
+        format = "/nix/store %avail"
 }
 
 disk "/home" {
-        format = "%avail"
+        format = "/home %avail"
 }
 
 battery 0 {
