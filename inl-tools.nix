@@ -69,6 +69,36 @@
           exec less -R "$@"
         fi
       '')
+    (writeScriptBin "switch-to-bluetooth" ''
+        #! ${bash}/bin/bash
+
+	set -x
+
+	bluetoothctl <<< 'power on'
+
+	sleep 5
+	DEVICE=$(bluetoothctl <<< devices | egrep '^Device' | awk '{ print $2 }')
+	bluetoothctl <<< "connect $DEVICE"
+
+	sleep 5
+        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
+
+	pacmd set-default-sink $TARGET_SINK
+	for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
+	do
+	    pacmd move-sink-input $index $TARGET_SINK
+	done
+      '')
+    (writeScriptBin "switch-to-stereo" ''
+        #! ${bash}/bin/bash
+	bluetoothctl <<< 'power off'
+        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'alsa.*analog-stereo')
+	pacmd set-default-sink $TARGET_SINK
+	for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
+	do
+	    pacmd move-sink-input $index $TARGET_SINK
+	done
+      '')
   ];
 
   environment.variables = { PAGER = "my-pager"; };
