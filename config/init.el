@@ -15,7 +15,7 @@
 
 (use-package avy
   :bind ("C-t" . avy-goto-char)
-  :config
+  :init
   (setq avy-keys
         (nconc (number-sequence ?a ?z)
                (number-sequence ?A ?Z)
@@ -23,11 +23,12 @@
                '(?0))))
 
 (use-package calfw
+  :init
+  (setq org-gcal-down-days 30)
+  (setq org-gcal-up-days 7)
   :config
   (require 'calfw-org)
-  (use-package org-gcal)
-  (setq org-gcal-down-days 30)
-  (setq org-gcal-up-days 7))
+  (use-package org-gcal))
 
 (use-package company
   :init
@@ -36,7 +37,7 @@
   (global-company-mode))
 
 (use-package compile
-  :config
+  :init
   (setq compilation-always-kill t)
   (setq compilation-ask-about-save nil))
 
@@ -44,7 +45,6 @@
 
 (use-package elm-mode
   :init
-  (setq elm-tags-on-save t)
   (setq elm-sort-imports-on-save t)
   (setq elm-format-on-save t)
   (add-to-list 'company-backends 'company-elm)
@@ -54,13 +54,14 @@
   :bind ("C-=" . er/expand-region))
 
 (use-package flycheck
-  :config
-  (global-flycheck-mode)
+  :init
   (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
-  (setq flycheck-emacs-lisp-load-path 'inherit))
+  (setq flycheck-emacs-lisp-load-path 'inherit)
+  :config
+  (global-flycheck-mode))
 
 (use-package flycheck-elm
-  :config
+  :init
   (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
 
 (use-package ivy
@@ -71,7 +72,7 @@
   (ivy-mode 1))
 
 (use-package magit
-  :config
+  :init
   (setq magit-commit-show-diff nil)
   (setq magit-delete-by-moving-to-trash nil)
   (setq magit-diff-expansion-threshold 2.0)
@@ -94,7 +95,6 @@
          ("C-c b" . org-iswitchb))
   :init
   (setq org-default-notes-file "~org/notes.org")
-  :config
   (setq org-agenda-files '("~/org/todo.org" "~/org/schedule.org"))
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-start-on-weekday nil)
@@ -130,21 +130,21 @@
 (use-package projectile
   :init
   (setq projectile-keymap-prefix (kbd "M-t"))
-  :config
-  (projectile-global-mode)
   (setq projectile-mode-line ''(:eval (format "Projectile[%s]" default-directory)))
   (setq projectile-switch-project-action 'projectile-vc)
   (setq projectile-use-git-grep t)
-  (setq projectile-completion-system 'ivy))
+  (setq projectile-completion-system 'ivy)
+  :config
+  (projectile-global-mode))
 
 (use-package rainbow-delimiters
-  :config
+  :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (use-package real-auto-save)
 
 (use-package shackle
-  :config
+  :init
   (setq shackle-rules '(("\\*input/output of.*\\*" :regexp t :ignore t))))
 
 (use-package subword
@@ -154,16 +154,17 @@
 (use-package swiper)
 
 (use-package tramp
-  :config
+  :init
   (add-to-list 'tramp-remote-path "/run/current-system/sw/bin")
   (setq tramp-default-method "ssh")
   (setq tramp-use-ssh-controlmaster-options nil))
 
 (use-package undo-tree
-  :config
-  (global-undo-tree-mode)
+  :init
   (setq undo-tree-auto-save-history t)
-  (setq undo-tree-history-directory-alist '(("." . "/tmp/undo-tree"))))
+  (setq undo-tree-history-directory-alist '(("." . "/tmp/undo-tree")))
+  :config
+  (global-undo-tree-mode))
 
 (use-package vimish-fold
   :config

@@ -99,6 +99,16 @@
 	    pacmd move-sink-input $index $TARGET_SINK
 	done
       '')
+    (writeScriptBin "toggle-suspend-audio" ''
+        #! ${bash}/bin/bash
+        pacmd list-sinks | grep state: | grep -v -q SUSPENDED
+        if [[ $? -eq 0 ]]
+        then
+            pacmd suspend 1
+        else
+            pacmd suspend 0
+        fi
+      '')
   ];
 
   environment.variables = { PAGER = "my-pager"; };
