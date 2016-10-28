@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
 { imports = [
+    ./audio.nix
     ./base.nix
     ./compton.nix
     ./dev-tools.nix

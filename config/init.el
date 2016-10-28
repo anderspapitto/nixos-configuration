@@ -43,9 +43,14 @@
 
 (use-package counsel)
 
+(use-package dirtrack
+  :init
+  (setq dirtrack-list '(".*?:\(.*?\)]" 1))
+  :config
+  (dirtrack-mode 1))
+
 (use-package elm-mode
   :init
-  (setq elm-tags-on-save t)
   (setq elm-sort-imports-on-save t)
   (setq elm-format-on-save t)
   (add-to-list 'company-backends 'company-elm)
@@ -96,7 +101,10 @@
          ("C-c b" . org-iswitchb))
   :init
   (setq org-default-notes-file "~org/notes.org")
-  (setq org-agenda-files '("~/org/todo.org" "~/org/schedule.org"))
+  (setq org-agenda-files
+        '("~/org/todo.org"
+          "~/org/schedule.org"
+          "~/org/orgzly.org"))
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-start-on-weekday nil)
   (setq org-agenda-window-setup 'current-window)
@@ -122,8 +130,19 @@
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
   (setq org-modules
-        '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m))
+        '(org-bbdb
+          org-bibtex
+          org-docview
+          org-gnus
+          org-habit
+          org-info
+          org-irc
+          org-mhe
+          org-rmail
+          org-w3m))
   (setq org-read-date-popup-calendar nil)
+  (setq org-refile-targets
+        '(("todo.org" :maxlevel . 1)))
   (setq org-todo-keywords
         '((sequence "TODO(t!)" "|" "DEFERRED(f!)" "CANCELLED(c!)" "DONE(d!)")
           (sequence "INVESTIGATE(i!)" "APPLY(a!)" "SENT(s!)" "IN-PROGRESS(p!)" "|" "REJECTED(r!)" "OFFER(o!)"))))

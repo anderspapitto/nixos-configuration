@@ -3,6 +3,7 @@
 { environment.systemPackages = with pkgs; [
     arandr
     chromium
+    clerk
     clipit
     dmenu
     ghostscriptX
@@ -11,12 +12,14 @@
     i3status
     imagemagick
     jmtpfs
-    quassel
+    quasselClient
     libnotify
+    ncmpcpp
     pass
     pavucontrol
     pianobar
     rofi
+    rofi-pass
     rxvt_unicode_with-plugins
     samba # providse ntlm_auth, which wine stuff needs
     vlc
