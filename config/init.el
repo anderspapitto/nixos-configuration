@@ -240,8 +240,8 @@
 	       display-buffer-pop-up-frame)
 	 (reusable-frames . t))))
 (advice-add 'display-buffer-pop-up-window :around
-	    (lambda (orig-fun &rest args)
-	      (apply display-buffer-same-window args)))
+	    (lambda (orig-fun buffer alist)
+	      (display-buffer-same-window buffer nil)))
 (advice-add 'set-window-dedicated-p :around
 	    (lambda (orig-fun &rest args) nil))
 
