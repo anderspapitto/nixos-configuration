@@ -3,4 +3,3 @@ vsync = "opengl"
 
 opacity-rule = [ "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ];
 inactive-opacity = 0.7
-use-ewmh-active-win = true
