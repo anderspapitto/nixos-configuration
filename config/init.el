@@ -70,6 +70,14 @@
   :init
   (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
 
+(use-package haskell-mode
+  :init
+  (setq haskell-process-type 'stack-ghci))
+
+(use-package intero
+  :init
+  (add-hook 'haskell-mode-hook 'intero-mode))
+
 (use-package ivy
   :bind (:map ivy-minibuffer-map
               ("<tab>" . ivy-next-line)
@@ -91,6 +99,13 @@
   (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+	 ("C->" . mc/mark-next-like-this)
+	 ("C-<" . mc/mark-previous-like-this)
+	 ("C-c C-<" . mc/mark-all-like-this)))
+
 
 (use-package nix-mode)
 
@@ -196,6 +211,9 @@
   (add-hook 'prog-mode-hook 'whitespace-mode)
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
+(use-package yaml-mode)
+
+
 ;;; Miscellaneous
 
 (global-set-key "\C-z" nil)
@@ -215,12 +233,17 @@
 ;;; Window management
 
 (setq frame-auto-hide-function 'delete-frame)
-(setq help-window-select t)
-(setq pop-up-windows nil)
-(setq same-window-buffer-names '("Calendar"))
-(setq special-display-regexps '("(.*)"))
-(defun skip-set-window-dedicated-p (orig-fun &rest args) nil)
-(advice-add 'set-window-dedicated-p :around #'skip-set-window-dedicated-p)
+(setq display-buffer-alist
+      '(("*shell*" (display-buffer-same-window) ())
+        (".*" (display-buffer-reuse-window
+	       display-buffer-same-window
+	       display-buffer-pop-up-frame)
+	 (reusable-frames . t))))
+(advice-add 'display-buffer-pop-up-window :around
+	    (lambda (orig-fun &rest args)
+	      (apply display-buffer-same-window args)))
+(advice-add 'set-window-dedicated-p :around
+	    (lambda (orig-fun &rest args) nil))
 
 ;;; Looks
 
