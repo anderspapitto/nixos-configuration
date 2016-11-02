@@ -3,10 +3,7 @@
 { environment.systemPackages = with pkgs; [
     (writeScriptBin "browser" ''
         #! ${bash}/bin/bash
-        URL=file:///dev/null
-        [[ -z "$1" ]] || URL=http://$1
-        [[ $1 = http* ]] && URL=$1
-        chromium --app=$URL
+	firefox "$@"
         exec i3-msg focus tiling
       '')
     (writeScriptBin "toggle-invert" ''

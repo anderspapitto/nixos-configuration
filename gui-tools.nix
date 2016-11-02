@@ -6,6 +6,7 @@
     clerk
     clipit
     dmenu
+    firefox
     ghostscriptX
     glxinfo
     i3lock
