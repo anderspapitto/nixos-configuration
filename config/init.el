@@ -63,6 +63,7 @@
   :init
   (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
   (setq flycheck-emacs-lisp-load-path 'inherit)
+  (setq flycheck-display-errors-function 'nil)
   :config
   (global-flycheck-mode))
 
