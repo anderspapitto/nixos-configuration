@@ -4,4 +4,4 @@ vsync = "opengl"
 opacity-rule = [ "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ];
 inactive-opacity = 0.7
 
-invert-color-include = [ "class_g ~?= '(Pavucontrol|Chromium|libprs500|Conkeror|scide|Audacious|Firefox|Tomahawk|KeePassX|Quassel|Clementine)' && name !~?= 'Facebook|Youtube|YouTube - Vimperator$|Card Game|[.]elm$|NOINVERT'" ];
+invert-color-include = [ "class_g ~?= '(Pavucontrol|Chromium|libprs500|Conkeror|scide|Audacious|Firefox|Tomahawk|KeePassX|Quassel|Clementine)' && name !~?= 'Facebook|Youtube|YouTube - Vimperator$|Card Game|[.]elm - Nightly$|NOINVERT'" ];

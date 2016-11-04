@@ -2,7 +2,6 @@
 
 { environment.systemPackages = with pkgs; [
     (python.buildEnv.override { extraLibs = [ pythonPackages.ipython ]; })
-    cabal-install
     cabal2nix
     cargo
     cmake

@@ -59,17 +59,17 @@
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
-(use-package flycheck
-  :init
-  (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
-  (setq flycheck-emacs-lisp-load-path 'inherit)
-  (setq flycheck-display-errors-function 'nil)
-  :config
-  (global-flycheck-mode))
+;; (use-package flycheck
+;;   :init
+;;   (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
+;;   (setq flycheck-emacs-lisp-load-path 'inherit)
+;;   (setq flycheck-display-errors-function 'nil)
+;;   :config
+;;   (global-flycheck-mode))
 
-(use-package flycheck-elm
-  :init
-  (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
+;; (use-package flycheck-elm
+;;   :init
+;;   (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
 
 (use-package haskell-mode
   :init
@@ -103,9 +103,9 @@
 
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
-	 ("C->" . mc/mark-next-like-this)
-	 ("C-<" . mc/mark-previous-like-this)
-	 ("C-c C-<" . mc/mark-all-like-this)))
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
 
 
 (use-package nix-mode)
@@ -163,6 +163,8 @@
         '((sequence "TODO(t!)" "|" "DEFERRED(f!)" "CANCELLED(c!)" "DONE(d!)")
           (sequence "INVESTIGATE(i!)" "APPLY(a!)" "SENT(s!)" "IN-PROGRESS(p!)" "|" "REJECTED(r!)" "OFFER(o!)"))))
 
+(use-package prodigy)
+
 (use-package projectile
   :init
   (setq projectile-keymap-prefix (kbd "M-t"))
@@ -208,9 +210,9 @@
 
 (use-package whitespace
   :init
-  (setq whitespace-style '(face lines-tail))
+  (setq whitespace-style '(face tabs lines-tail))
   (add-hook 'prog-mode-hook 'whitespace-mode)
-  (add-hook 'before-save-hook 'delete-trailing-whitespace))
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)) resnt ierns tierns tierns tie
 
 (use-package yaml-mode)
 
@@ -237,14 +239,14 @@
 (setq display-buffer-alist
       '(("*shell*" (display-buffer-same-window) ())
         (".*" (display-buffer-reuse-window
-	       display-buffer-same-window
-	       display-buffer-pop-up-frame)
-	 (reusable-frames . t))))
+               display-buffer-same-window
+               display-buffer-pop-up-frame)
+         (reusable-frames . t))))
 (advice-add 'display-buffer-pop-up-window :around
-	    (lambda (orig-fun buffer alist)
-	      (display-buffer-same-window buffer nil)))
+            (lambda (orig-fun buffer alist)
+              (display-buffer-same-window buffer nil)))
 (advice-add 'set-window-dedicated-p :around
-	    (lambda (orig-fun &rest args) nil))
+            (lambda (orig-fun &rest args) nil))
 
 ;;; Looks
 
