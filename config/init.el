@@ -59,17 +59,17 @@
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
-;; (use-package flycheck
-;;   :init
-;;   (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
-;;   (setq flycheck-emacs-lisp-load-path 'inherit)
-;;   (setq flycheck-display-errors-function 'nil)
-;;   :config
-;;   (global-flycheck-mode))
+(use-package flycheck
+   :init
+   (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
+   (setq flycheck-emacs-lisp-load-path 'inherit)
+   (setq flycheck-display-errors-function 'nil)
+   :config
+   (global-flycheck-mode))
 
-;; (use-package flycheck-elm
-;;   :init
-;;   (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
+(use-package flycheck-elm
+   :init
+   (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
 
 (use-package haskell-mode
   :init
@@ -212,7 +212,7 @@
   :init
   (setq whitespace-style '(face tabs lines-tail))
   (add-hook 'prog-mode-hook 'whitespace-mode)
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)) resnt ierns tierns tierns tie
+  (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
 (use-package yaml-mode)
 
