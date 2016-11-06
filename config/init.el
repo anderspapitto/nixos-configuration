@@ -283,3 +283,5 @@
     (find-file-noselect "/etc/nixos/configuration/config/init.el")
     (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")
     (cfw:open-org-calendar)))
+
+(ad-deactivate 'compilation-find-file)
