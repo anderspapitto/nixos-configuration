@@ -180,7 +180,8 @@
   (setq projectile-use-git-grep t)
   (setq projectile-completion-system 'ivy)
   :config
-  (projectile-global-mode))
+  (projectile-global-mode)
+  (ad-deactivate 'compilation-find-file))
 
 (use-package rainbow-delimiters
   :init
@@ -266,12 +267,14 @@
 (advice-add 'set-window-dedicated-p :around
             (lambda (orig-fun &rest args) nil))
 
-;;; Looks
+;;; Luddite mode
 
 (set-scroll-bar-mode nil)
 (setq tool-bar-mode nil)
 (setq menu-bar-mode nil)
 (setq initial-scratch-message nil)
+
+;;; Looks
 
 (set-face-attribute 'default nil :height 105)
 (set-face-attribute 'default nil :family "Inconsolata")
@@ -301,5 +304,3 @@
     (find-file-noselect "/etc/nixos/configuration/config/init.el")
     (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")
     (cfw:open-org-calendar)))
-
-(ad-deactivate 'compilation-find-file)
