@@ -3,7 +3,7 @@
 { environment.systemPackages = with pkgs; [
     (writeScriptBin "browser" ''
         #! ${bash}/bin/bash
-	firefox "$@"
+        firefox "$@"
         exec i3-msg focus tiling
       '')
     (writeScriptBin "toggle-invert" ''
@@ -66,35 +66,50 @@
           exec less -R "$@"
         fi
       '')
+    (writeScriptBin "restart-jack" ''
+        #! ${bash}/bin/bash
+        jack_control exit
+        sleep 0.5
+        jack_control start
+        for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
+        do
+            pacmd move-sink-input $index jack_out
+        done
+      '')
     (writeScriptBin "switch-to-bluetooth" ''
         #! ${bash}/bin/bash
 
-	set -x
+        set -x
 
-	bluetoothctl <<< 'power on'
-
-	sleep 5
-	DEVICE=$(bluetoothctl <<< devices | egrep '^Device' | awk '{ print $2 }')
-	bluetoothctl <<< "connect $DEVICE"
-
-	sleep 5
+        DEVICE=$(bluetoothctl <<< devices | egrep '^Device' | awk '{ print $2 }')
+        until bluetoothctl <<< show | grep -q 'Powered: yes'
+        do
+            bluetoothctl <<< 'power on'
+        done
+        until pacmd list-sinks | egrep -q 'name:.*bluez_sink'
+        do
+            bluetoothctl <<< "connect $DEVICE"
+        done
         TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
-
-	pacmd set-default-sink $TARGET_SINK
-	for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
-	do
-	    pacmd move-sink-input $index $TARGET_SINK
-	done
+        pacmd set-default-sink $TARGET_SINK
+        for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
+        do
+            pacmd move-sink-input $index $TARGET_SINK
+        done
       '')
     (writeScriptBin "switch-to-stereo" ''
         #! ${bash}/bin/bash
-	bluetoothctl <<< 'power off'
-        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'alsa.*analog-stereo')
-	pacmd set-default-sink $TARGET_SINK
-	for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
-	do
-	    pacmd move-sink-input $index $TARGET_SINK
-	done
+        TARGET_SINK=jack_out
+        if ! (pacmd list-sinks | grep -q 'name: <jack_out>')
+        then
+            TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'alsa.*analog-stereo')
+        fi
+        pacmd set-default-sink $TARGET_SINK
+        for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
+        do
+            pacmd move-sink-input $index $TARGET_SINK
+        done
+        bluetoothctl <<< 'power off'
       '')
     (writeScriptBin "toggle-suspend-audio" ''
         #! ${bash}/bin/bash
