@@ -58,7 +58,7 @@
   (setq elm-sort-imports-on-save t)
   (setq elm-format-on-save t)
   (add-to-list 'company-backends 'company-elm)
-  (add-hook 'elm-mode-hook #'elm-oracle-setup-completion))
+  (add-hook 'elm-mode-hook 'elm-oracle-setup-completion))
 
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
@@ -76,9 +76,7 @@
    :init
    (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
 
-(use-package haskell-mode
-  :init
-  (setq haskell-process-type 'stack-ghci))
+(use-package haskell-mode)
 
 (use-package intero
   :init
@@ -99,7 +97,7 @@
 
 (use-package man
   :init
-  (setq Man-width 72)
+  (setq Man-width 80)
   (setq Man-notify-method 'pushy))
 
 (use-package markdown-mode
@@ -187,7 +185,7 @@
 
 (use-package rainbow-delimiters
   :init
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package real-auto-save)
 
