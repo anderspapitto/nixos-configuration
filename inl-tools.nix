@@ -71,6 +71,21 @@
         jack_control exit
         sleep 0.5
         jack_control start
+        switch-to-jack
+      '')
+    (writeScriptBin "switch-to-jack" ''
+        #! ${bash}/bin/bash
+
+        set -x
+
+        until pacmd list-sinks | egrep -q 'jack_out'
+        do
+            jack_control start
+        done
+
+        pactl set-sink-volume jack_out 100%
+
+        pacmd set-default-sink jack_out
         for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
         do
             pacmd move-sink-input $index jack_out
@@ -90,7 +105,17 @@
         do
             bluetoothctl <<< "connect $DEVICE"
         done
+
+        TARGET_CARD=$(pacmd list-cards | grep 'name:' | egrep -o 'bluez.*[^>]')
         TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
+
+        until pacmd list-cards | egrep -q 'active profile: <a2dp_sink>'
+        do
+            pacmd set-card-profile $TARGET_CARD a2dp_sink
+        done
+
+
+        pactl set-sink-volume $TARGET_SINK 30%
         pacmd set-default-sink $TARGET_SINK
         for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
         do
@@ -99,17 +124,20 @@
       '')
     (writeScriptBin "switch-to-stereo" ''
         #! ${bash}/bin/bash
-        TARGET_SINK=jack_out
-        if ! (pacmd list-sinks | grep -q 'name: <jack_out>')
-        then
-            TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'alsa.*analog-stereo')
-        fi
+
+        set -x
+
+        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'alsa.*analog-stereo')
+
+        pactl set-sink-volume $TARGET_SINK 50%
+
+        jack_control stop
+
         pacmd set-default-sink $TARGET_SINK
         for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
         do
             pacmd move-sink-input $index $TARGET_SINK
         done
-        bluetoothctl <<< 'power off'
       '')
     (writeScriptBin "toggle-suspend-audio" ''
         #! ${bash}/bin/bash
