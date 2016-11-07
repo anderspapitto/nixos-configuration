@@ -127,11 +127,17 @@
 
         set -x
 
+        switch-to-stereo-no-stop-jack
+        jack_control stop
+      '')
+    (writeScriptBin "switch-to-stereo-no-stop-jack" ''
+        #! ${bash}/bin/bash
+
+        set -x
+
         TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'alsa.*analog-stereo')
 
         pactl set-sink-volume $TARGET_SINK 50%
-
-        jack_control stop
 
         pacmd set-default-sink $TARGET_SINK
         for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')

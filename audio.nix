@@ -52,8 +52,8 @@ in {
   };
 
   systemd.services = {
-    switch-to-jackdbus-for-suspend = {
-      description = "Move all sink-inputs to jack sink before suspend";
+    switch-to-stereo-for-bluetooth-exit = {
+      description = "Move all sink-inputs to stereo sink before suspend";
       environment = {
         DISPLAY = ":${toString config.services.xserver.display}";
         PULSE_RUNTIME_PATH = "/run/user/1000/pulse";
@@ -61,13 +61,14 @@ in {
       serviceConfig = {
         Type = "oneshot";
         User = "anders";
-        ExecStart = pkgs.writeScript "battery_check" ''
+        ExecStart = pkgs.writeScript "switch-to-stereo-for-bluetooth-exit" ''
             #!${pkgs.bash}/bin/bash --login
             . ${config.system.build.setEnvironment}
-            switch-to-jack
+            switch-to-stereo-no-stop-jack
           '';
       };
-      wantedBy = [ "suspend.target" "graphical.target" ];
+      wantedBy = [ "sleep.target" "suspend.target" ];
+      before = [ "sleep.target" "suspend.target" ];
     };
   };
 
