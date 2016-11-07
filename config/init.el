@@ -30,6 +30,10 @@
   (require 'calfw-org)
   (use-package org-gcal))
 
+(use-package column-marker
+  :init
+  (add-hook 'prog-mode-hook (lambda () (column-marker-1 79))))
+
 (use-package company
   :init
   (setq company-global-modes '(not shell-mode gud-mode))
@@ -64,6 +68,7 @@
    (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
    (setq flycheck-emacs-lisp-load-path 'inherit)
    (setq flycheck-display-errors-function 'nil)
+   (setq flycheck-standard-error-navigation 'nil)
    :config
    (global-flycheck-mode))
 
@@ -80,9 +85,9 @@
   (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package ivy
-  :bind (:map ivy-minibuffer-map
-              ("<tab>" . ivy-next-line)
-              ("<backtab>" . ivy-previous-line))
+;;  :bind (:map ivy-minibuffer-map
+;;              ("<tab>" . ivy-next-line)
+;;              ("<backtab>" . ivy-previous-line))
   :config
   (ivy-mode 1))
 
@@ -161,14 +166,16 @@
         '(("todo.org" :maxlevel . 1)))
   (setq org-todo-keywords
         '((sequence "TODO(t!)" "|" "DEFERRED(f!)" "CANCELLED(c!)" "DONE(d!)")
-          (sequence "INVESTIGATE(i!)" "APPLY(a!)" "SENT(s!)" "IN-PROGRESS(p!)" "|" "REJECTED(r!)" "OFFER(o!)"))))
+          (sequence "INVESTIGATE(i!)" "APPLY(a!)" "SENT(s!)" "IN-PROGRESS(p!)"
+                    "|" "REJECTED(r!)" "OFFER(o!)"))))
 
 (use-package prodigy)
 
 (use-package projectile
   :init
   (setq projectile-keymap-prefix (kbd "M-t"))
-  (setq projectile-mode-line ''(:eval (format "Projectile[%s]" default-directory)))
+  (setq projectile-mode-line
+        ''(:eval (format "Projectile[%s]" default-directory)))
   (setq projectile-switch-project-action 'projectile-vc)
   (setq projectile-use-git-grep t)
   (setq projectile-completion-system 'ivy)
@@ -210,7 +217,7 @@
 
 (use-package whitespace
   :init
-  (setq whitespace-style '(face tabs lines-tail))
+  (setq whitespace-style '(face tabs))
   (add-hook 'prog-mode-hook 'whitespace-mode)
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
@@ -226,12 +233,13 @@
 (setq auto-save-file-name-transforms '((".*" "/tmp/" t)))
 (setq backup-directory-alist '((".*" . "/tmp/")))
 (setq gdb-display-io-nopopup t)
-(setq indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 (setq kill-do-not-save-duplicates t)
 (setq recenter-positions '(bottom middle top))
 (setq select-enable-clipboard nil)
 (setq select-enable-primary t)
 (setq view-read-only t)
+(setq dired-auto-revert-buffer t)
 
 ;;; Window management
 
@@ -242,9 +250,19 @@
                display-buffer-same-window
                display-buffer-pop-up-frame)
          (reusable-frames . t))))
-(advice-add 'display-buffer-pop-up-window :around
-            (lambda (orig-fun buffer alist)
-              (display-buffer-same-window buffer nil)))
+(defun anders-same-window-instead
+    (orig-fun buffer alist)
+  (display-buffer-same-window buffer nil))
+(advice-add 'display-buffer-pop-up-window :around 'anders-same-window-instead)
+(defun anders-do-select-frame (orig-fun buffer &rest args)
+  (let* ((old-frame (selected-frame))
+         (window (apply orig-fun buffer args))
+         (frame (window-frame window)))
+    (unless (eq frame old-frame)
+      (select-frame-set-input-focus frame))
+    (select-window window)
+    window))
+(advice-add 'display-buffer :around 'anders-do-select-frame)
 (advice-add 'set-window-dedicated-p :around
             (lambda (orig-fun &rest args) nil))
 
