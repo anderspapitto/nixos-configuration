@@ -293,6 +293,10 @@ Repeated invocations toggle between the two most recently open buffers."
   (switch-theme 'wheatgrass 'adwaita "#EDEDED"))
 (enable-light-theme)
 
+
+(setq safe-local-variable-values
+      '((projectile-project-compilation-cmd . "./build/Main.hs")))
+
 ;;; various stuff that I just always want to have open
 
 (when (daemonp)
