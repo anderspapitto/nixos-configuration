@@ -67,7 +67,7 @@ in {
             switch-to-jack
           '';
       };
-      wantedBy = [ "suspend.target" ];
+      wantedBy = [ "suspend.target" "graphical.target" ];
     };
   };
 
