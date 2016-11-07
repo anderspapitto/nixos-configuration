@@ -85,9 +85,6 @@
   (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package ivy
-;;  :bind (:map ivy-minibuffer-map
-;;              ("<tab>" . ivy-next-line)
-;;              ("<backtab>" . ivy-previous-line))
   :config
   (ivy-mode 1))
 
@@ -99,6 +96,11 @@
   (setq magit-diff-use-overlays nil)
   (setq magit-revert-buffers t)
   (setq magit-use-overlays nil))
+
+(use-package man
+  :init
+  (setq Man-width 72)
+  (setq Man-notify-method 'pushy))
 
 (use-package markdown-mode
   :init
@@ -218,32 +220,34 @@
 
 (use-package whitespace
   :init
+  (setq-default indent-tabs-mode nil)
   (setq whitespace-style '(face tabs))
   (add-hook 'prog-mode-hook 'whitespace-mode)
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
 (use-package yaml-mode)
 
-
 ;;; Miscellaneous
 
 (global-set-key "\C-z" nil)
-(global-set-key (kbd "M-o") 'mode-line-other-buffer)
-(setenv "MANWIDTH" "72")
-(setq Man-notify-method 'pushy)
 (setq auto-save-file-name-transforms '((".*" "/tmp/" t)))
 (setq backup-directory-alist '((".*" . "/tmp/")))
+(setq dired-auto-revert-buffer t)
 (setq gdb-display-io-nopopup t)
-(setq-default indent-tabs-mode nil)
 (setq kill-do-not-save-duplicates t)
 (setq recenter-positions '(bottom middle top))
 (setq select-enable-clipboard nil)
 (setq select-enable-primary t)
 (setq view-read-only t)
-(setq dired-auto-revert-buffer t)
 
 ;;; Window management
 
+(defun switch-to-previous-buffer ()
+  "Switch to previously open buffer.
+Repeated invocations toggle between the two most recently open buffers."
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+(global-set-key "\M-o" 'switch-to-previous-buffer)
 (setq frame-auto-hide-function 'delete-frame)
 (setq display-buffer-alist
       '(("*shell*" (display-buffer-same-window) ())
