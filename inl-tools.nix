@@ -83,7 +83,7 @@
             jack_control start
         done
 
-        pactl set-sink-volume jack_out 100%
+        pactl set-sink-volume jack_out 50%
 
         pacmd set-default-sink jack_out
         for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
