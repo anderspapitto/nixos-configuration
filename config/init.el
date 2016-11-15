@@ -231,11 +231,15 @@
 (setq backup-directory-alist '((".*" . "/tmp/")))
 (setq dired-auto-revert-buffer t)
 (setq gdb-display-io-nopopup t)
-(setq kill-do-not-save-duplicates t)
 (setq recenter-positions '(bottom middle top))
+(setq view-read-only t)
+
+;;; copy/paste
+
+(setq kill-do-not-save-duplicates t)
+(setq save-interprogram-paste-before-kill t)
 (setq select-enable-clipboard nil)
 (setq select-enable-primary t)
-(setq view-read-only t)
 
 ;;; Window management
 

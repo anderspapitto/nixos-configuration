@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 { hardware.sane = {
-    enable = true;
+    # enable = true;
     extraBackends = [ pkgs.hplipWithPlugin ];
   };
   services.printing = {

@@ -27,7 +27,7 @@
     wineStaging
     xdotool
     xlibs.xev
-    xsane
+#    xsane
     xsel
     youtube-dl
     zathura
