@@ -24,7 +24,7 @@ in {
         RemainAfterExit = "yes";
       };
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
     };
 

@@ -299,7 +299,7 @@ Repeated invocations toggle between the two most recently open buffers."
 
 
 (setq safe-local-variable-values
-      '((projectile-project-compilation-cmd . "./build/Main.hs")))
+      '((projectile-project-compilation-cmd . "./build/Build.hs")))
 
 ;;; various stuff that I just always want to have open
 

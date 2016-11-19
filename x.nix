@@ -69,7 +69,7 @@ in {
         User = "anders";
         ExecStart = "${pkgs.redshift}/bin/redshift -l 37.7:133.4 -t 5500:2500 -b 1:1";
       };
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
     };
 
@@ -97,7 +97,7 @@ in {
           exec ${pkgs.dunst}/bin/dunst -config ${dunstrc}
         '';
       };
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
     };
 
@@ -109,7 +109,7 @@ in {
         User = "anders";
         ExecStart = "${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image}";
       };
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
     };
   };
