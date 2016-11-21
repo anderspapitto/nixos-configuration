@@ -25,10 +25,13 @@ bindsym $mod+Shift+grave exec global-toggle-invert
 bindsym $mod+s exec rofi -show run
 
 # change focus
-bindsym $mod+n focus left
-bindsym $mod+e focus down
-bindsym $mod+i focus up
-bindsym $mod+o focus right
+bindsym $mod+n exec i3-focus left
+bindsym $mod+e exec i3-focus down
+bindsym $mod+i exec i3-focus up
+bindsym $mod+o exec i3-focus right
+
+bindsym $mod+, focus left
+bindsym $mod+. focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
