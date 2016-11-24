@@ -30,8 +30,8 @@ bindsym $mod+e exec i3-focus down
 bindsym $mod+i exec i3-focus up
 bindsym $mod+o exec i3-focus right
 
-bindsym $mod+, focus left
-bindsym $mod+. focus right
+bindsym $mod+comma  focus left
+bindsym $mod+period focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left

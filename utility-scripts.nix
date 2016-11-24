@@ -3,8 +3,8 @@
 let utility-scripts-src = pkgs.fetchFromGitHub {
       owner = "anderspapitto";
       repo = "utility-scripts";
-      rev = "31015d2b61cba4dca2385eb983909b4249c3dff9";
-      sha256 = "1mzhl3vdi6bvhx5wr83bzqamhx7qd9a4fk1lj8h48jr2swar1vqh";
+      rev = "9c56f2ebb60329ff108d9a9606423fc410635c6e";
+      sha256 = "0lsbw3ywirgk6gdmprqfjgf10418s8dz7a9agg6l0kaf0l0kf1zg";
     };
 in {
     environment.systemPackages = [

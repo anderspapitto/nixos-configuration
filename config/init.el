@@ -68,19 +68,20 @@
    (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
    (setq flycheck-emacs-lisp-load-path 'inherit)
    (setq flycheck-display-errors-function 'nil)
-   (setq flycheck-standard-error-navigation 'nil)
-   :config
-   (global-flycheck-mode))
-
-(use-package flycheck-elm
-   :init
-   (add-hook 'flycheck-mode-hook 'flycheck-elm-setup))
+   (setq flycheck-standard-error-navigation 'nil))
 
 (use-package haskell-mode)
 
 (use-package intero
   :init
-  (add-hook 'haskell-mode-hook 'intero-mode))
+  (defun intero-mode-unless-global-project ()
+    "Run intero-mode iff we're in a project with a stack.yaml"
+    (interactive)
+    (unless (string-match-p
+             (regexp-quote "global")
+             (shell-command-to-string "stack path --project-root --verbosity silent"))
+      (intero-mode)))
+  (add-hook 'haskell-mode-hook 'intero-mode-unless-global-project))
 
 (use-package ivy
   :config
