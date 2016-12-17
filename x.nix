@@ -68,6 +68,8 @@ in {
         Type = "simple";
         User = "anders";
         ExecStart = "${pkgs.redshift}/bin/redshift -l 37.7:133.4 -t 5500:2500 -b 1:1";
+        RestartSec = 3;
+        Restart = "always";
       };
       wantedBy = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
@@ -80,6 +82,8 @@ in {
         Type = "simple";
         User = "anders";
         ExecStart = "${pkgs.xbanish}/bin/xbanish";
+        RestartSec = 3;
+        Restart = "always";
       };
       wantedBy = [ "graphical.target" ];
       after = [ "display-manager.service" ];
@@ -96,6 +100,8 @@ in {
           . ${config.system.build.setEnvironment}
           exec ${pkgs.dunst}/bin/dunst -config ${dunstrc}
         '';
+        RestartSec = 3;
+        Restart = "always";
       };
       wantedBy = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
@@ -108,6 +114,8 @@ in {
         Type = "oneshot";
         User = "anders";
         ExecStart = "${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image}";
+        RestartSec = 3;
+        Restart = "always";
       };
       wantedBy = [ "display-manager.service" ];
       after = [ "display-manager.service" ];

@@ -22,6 +22,8 @@ in {
         User = "anders";
         ExecStart = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout us -variant colemak";
         RemainAfterExit = "yes";
+        RestartSec = 3;
+        Restart = "always";
       };
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
       wantedBy = [ "display-manager.service" ];
