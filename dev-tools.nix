@@ -42,7 +42,7 @@
             author-name: Anders Papitto
             github-username: anderspapitto
         nix:
-          enable: true
+          enable: false
       '';
     };
 

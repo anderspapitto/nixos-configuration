@@ -16,6 +16,11 @@ let dunstrc = builtins.toFile "dunstrc" (pkgs.lib.readFile ./config/dunstrc);
       installPhase = ''cp -R . "$out"'';
     };
 in {
+  environment.etc = {
+    "i3/config".source = ./config/i3;
+    "i3/status".source = ./config/i3status;
+  };
+
   services = {
     xserver = {
       enable = true;
@@ -26,31 +31,26 @@ in {
       xkbVariant = "colemak";
       displayManager.slim.theme = solarized-theme;
       windowManager = {
-        i3-gaps = {
+        i3 = {
           enable = true;
+          package = pkgs.i3-gaps;
           extraSessionCommands = ''
             ${pkgs.gnupg}/bin/gpg-connect-agent /bye
             export GPG_TTY=$(tty)
             xrdb ${builtins.toFile "Xresources" (builtins.readFile ./config/xresources)}
 
-	    # bit of a hack. I don't want to have it pulled in by
-	    # display-manager, or it will get restarted everytime if
-	    # i'm toggled to dark mode
-	    systemctl start compton
+            # bit of a hack. I don't want to have it pulled in by
+            # display-manager, or it will get restarted everytime if
+            # i'm toggled to dark mode
+            systemctl start compton
 
-	    # these two are obviously hacks
+            # these two are obviously hacks
             ${pkgs.clipit}/bin/clipit &
-	    systemctl start openvpn-thufir &
+            systemctl start openvpn-thufir &
           '';
-          configFile = let
-            i3status-conf = builtins.unsafeDiscardStringContext (builtins.toFile
-              "i3status-conf" (builtins.readFile ./config/i3status));
-          in builtins.toFile "i3-config" (pkgs.lib.replaceStrings
-              [ "i3status.conf" ]
-              [ "${i3status-conf}" ]
-              (builtins.readFile ./config/i3));
+          configFile = "/etc/i3/config";
         };
-        default = "i3-gaps";
+        default = "i3";
       };
       desktopManager.xterm.enable = false;
       synaptics = {

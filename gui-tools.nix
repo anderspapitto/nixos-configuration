@@ -23,6 +23,7 @@
     rofi-pass
     rxvt_unicode_with-plugins
     samba # providse ntlm_auth, which wine stuff needs
+    spotify
     vlc
     wineStaging
     xdotool
