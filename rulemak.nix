@@ -18,9 +18,9 @@ in {
     colemak = {
       description = "Colemak layout";
       serviceConfig = {
-        Type = "oneshot";
+        Type = "simple";
         User = "anders";
-        ExecStart = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout us -variant colemak";
+        ExecStart = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout us -variant colemak && ${pkgs.coreutils}/bin/sleep infinity";
         RemainAfterExit = "yes";
         RestartSec = 3;
         Restart = "always";
@@ -33,13 +33,14 @@ in {
     rulemak = {
       description = "Rulemak layout";
       serviceConfig = {
-        Type = "oneshot";
+        Type = "simple";
         User = "anders";
         ExecStart = pkgs.writeScript "rulemak" ''
             #! ${pkgs.bash}/bin/bash
             set -xe
             ${pkgs.xorg.setxkbmap}/bin/setxkbmap -I${rulemak} rulemak -print |
                 ${pkgs.xorg.xkbcomp}/bin/xkbcomp -I${rulemak} - :0.0
+            sleep infinity
           '';
         RemainAfterExit = "yes";
       };

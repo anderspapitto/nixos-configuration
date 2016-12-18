@@ -5,12 +5,20 @@ let
   startEmacs = pkgs.writeScript "emacs" ''
       #!${pkgs.bash}/bin/bash
       . ${config.system.build.setEnvironment}
-      exec ${emacs}/bin/emacs -q -l ${init-el} -l ${my-compile-el} "$@"
+      exec ${emacs}/bin/emacs -q -l /etc/emacs/init.el -l /etc/emacs/my-compile.el "$@"
     '';
-  init-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/init.el);
-  my-compile-el = builtins.toFile "init.el" (pkgs.lib.readFile ./config/my-compile.el);
 in {
-  environment.systemPackages = [ emacs ];
+  environment = {
+    etc = [
+      { target = "emacs/init.el";
+        source = ./config/init.el;
+      }
+      { target = "emacs/my-compile.el";
+        source = ./config/my-compile.el;
+      }
+    ];
+    systemPackages = [ emacs ];
+  };
   systemd.services.emacs = {
     description = "Emacs: the extensible, self-documenting text editor";
     environment = {

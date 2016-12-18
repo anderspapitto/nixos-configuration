@@ -217,11 +217,15 @@
   (vimish-fold-global-mode 1))
 
 (use-package whitespace
+  :bind ("C-x C-s" . save-with-delete-trailing-whitespace)
   :init
   (setq-default indent-tabs-mode nil)
   (setq whitespace-style '(face tabs))
   (add-hook 'prog-mode-hook 'whitespace-mode)
-  (add-hook 'before-save-hook 'delete-trailing-whitespace))
+  (defun save-with-delete-trailing-whitespace ()
+    (interactive)
+    (delete-trailing-whitespace)
+    (save-buffer)))
 
 (use-package yaml-mode)
 

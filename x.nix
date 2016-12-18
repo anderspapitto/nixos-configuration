@@ -111,9 +111,9 @@ in {
       description = "Set background";
       environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
       serviceConfig = {
-        Type = "oneshot";
+        Type = "simple";
         User = "anders";
-        ExecStart = "${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image}";
+        ExecStart = "${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image} && sleep infinity";
         RestartSec = 3;
         Restart = "always";
       };
