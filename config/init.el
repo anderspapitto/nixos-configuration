@@ -74,14 +74,14 @@
 
 (use-package intero
   :init
-  (defun intero-mode-unless-global-project ()
+  (defun anders-intero-mode-unless-global-project ()
     "Run intero-mode iff we're in a project with a stack.yaml"
     (interactive)
     (unless (string-match-p
              (regexp-quote "global")
              (shell-command-to-string "stack path --project-root --verbosity silent"))
       (intero-mode)))
-  (add-hook 'haskell-mode-hook 'intero-mode-unless-global-project))
+  (add-hook 'haskell-mode-hook 'anders-intero-mode-unless-global-project))
 
 (use-package ivy
   :config
@@ -118,7 +118,7 @@
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c c" . org-capture)
-         ("C-c a" . org-agenda)
+         ("C-c a" . anders-org-agenda)
          ("C-c b" . org-iswitchb))
   :init
   (setq org-default-notes-file "~org/notes.org")
@@ -167,7 +167,11 @@
   (setq org-todo-keywords
         '((sequence "TODO(t!)" "|" "DEFERRED(f!)" "CANCELLED(c!)" "DONE(d!)")
           (sequence "INVESTIGATE(i!)" "APPLY(a!)" "SENT(s!)" "IN-PROGRESS(p!)"
-                    "|" "REJECTED(r!)" "OFFER(o!)"))))
+                    "|" "REJECTED(r!)" "OFFER(o!)")))
+  (defun anders-org-agenda ()
+    (interactive)
+    (org-agenda)
+    (org-agenda-day-view)))
 
 (use-package prodigy)
 
@@ -289,17 +293,17 @@ Repeated invocations toggle between the two most recently open buffers."
 (set-face-attribute 'default nil :height 105)
 (set-face-attribute 'default nil :family "Inconsolata")
 
-(defun switch-theme (from-theme to-theme org-hide-face)
+(defun anders-switch-theme (from-theme to-theme org-hide-face)
   (progn
     (disable-theme from-theme)
     (load-theme to-theme t)
     (set-face-foreground 'org-hide org-hide-face)))
 (defun enable-dark-theme ()
   (interactive)
-  (switch-theme 'adwaita 'wheatgrass "#000000"))
+  (anders-switch-theme 'adwaita 'wheatgrass "#000000"))
 (defun enable-light-theme ()
   (interactive)
-  (switch-theme 'wheatgrass 'adwaita "#EDEDED"))
+  (anders-switch-theme 'wheatgrass 'adwaita "#EDEDED"))
 (enable-light-theme)
 
 

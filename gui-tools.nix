@@ -2,6 +2,8 @@
 
 { environment.systemPackages = with pkgs; [
     arandr
+    aria2
+    # calibre
     chromium
     clerk
     clipit
@@ -15,6 +17,7 @@
     jmtpfs
     quasselClient
     libnotify
+    mcomix
     ncmpcpp
     pass
     pavucontrol
