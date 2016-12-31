@@ -96,10 +96,10 @@ in {
         Type = "simple";
         User = "anders";
         ExecStart = pkgs.writeScript "dunst" ''
-          #!${pkgs.bash}/bin/bash
-          . ${config.system.build.setEnvironment}
-          exec ${pkgs.dunst}/bin/dunst -config ${dunstrc}
-        '';
+            #! ${pkgs.bash}/bin/bash
+            . ${config.system.build.setEnvironment}
+            exec ${pkgs.dunst}/bin/dunst -config ${dunstrc}
+          '';
         RestartSec = 3;
         Restart = "always";
       };
@@ -113,7 +113,12 @@ in {
       serviceConfig = {
         Type = "simple";
         User = "anders";
-        ExecStart = "${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image} && sleep infinity";
+        ExecStart = pkgs.writeScript "feh" ''
+            #! ${pkgs.bash}/bin/bash
+            . ${config.system.build.setEnvironment}
+            ${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image}
+            exec sleep infinity
+          '';
         RestartSec = 3;
         Restart = "always";
       };

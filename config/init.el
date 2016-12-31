@@ -121,6 +121,7 @@
          ("C-c a" . anders-org-agenda)
          ("C-c b" . org-iswitchb))
   :init
+  (setq org-agenda-include-diary t)
   (setq org-default-notes-file "~org/notes.org")
   (setq org-agenda-files
         '("~/org/todo.org"
@@ -161,6 +162,13 @@
           org-mhe
           org-rmail
           org-w3m))
+  (setq org-habit-graph-column 80)
+  (setq org-habit-show-habits-only-for-today nil)
+  (setq org-agenda-sorting-strategy
+        '((agenda time-up habit-down priority-down category-keep)
+         (todo priority-down category-keep)
+         (tags priority-down category-keep)
+         (search category-keep)))
   (setq org-read-date-popup-calendar nil)
   (setq org-refile-targets
         '(("todo.org" :maxlevel . 1)))
@@ -235,13 +243,14 @@
 
 ;;; Miscellaneous
 
-(global-set-key "\C-z" nil)
+(global-set-key "C-z" nil)
 (setq auto-save-file-name-transforms '((".*" "/tmp/" t)))
 (setq backup-directory-alist '((".*" . "/tmp/")))
 (setq dired-auto-revert-buffer t)
 (setq gdb-display-io-nopopup t)
 (setq recenter-positions '(bottom middle top))
 (setq view-read-only t)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 ;;; copy/paste
 

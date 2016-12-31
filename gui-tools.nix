@@ -3,7 +3,6 @@
 { environment.systemPackages = with pkgs; [
     arandr
     aria2
-    # calibre
     chromium
     clerk
     clipit
@@ -27,6 +26,7 @@
     rxvt_unicode_with-plugins
     samba # providse ntlm_auth, which wine stuff needs
     spotify
+    unrar # needed by mcomix for .cbr
     vlc
     wineStaging
     xdotool

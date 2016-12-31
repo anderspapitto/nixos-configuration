@@ -115,7 +115,7 @@
         done
 
 
-        pactl set-sink-volume $TARGET_SINK 30%
+        pactl set-sink-volume $TARGET_SINK 50%
         pacmd set-default-sink $TARGET_SINK
         for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
         do

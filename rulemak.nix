@@ -20,7 +20,12 @@ in {
       serviceConfig = {
         Type = "simple";
         User = "anders";
-        ExecStart = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout us -variant colemak && ${pkgs.coreutils}/bin/sleep infinity";
+        ExecStart = pkgs.writeScript "colemak" ''
+            #! ${pkgs.bash}/bin/bash
+            set -xe
+            ${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout us -variant colemak
+            exec sleep infinity
+          '';
         RemainAfterExit = "yes";
         RestartSec = 3;
         Restart = "always";
@@ -40,7 +45,7 @@ in {
             set -xe
             ${pkgs.xorg.setxkbmap}/bin/setxkbmap -I${rulemak} rulemak -print |
                 ${pkgs.xorg.xkbcomp}/bin/xkbcomp -I${rulemak} - :0.0
-            sleep infinity
+            exec sleep infinity
           '';
         RemainAfterExit = "yes";
       };
