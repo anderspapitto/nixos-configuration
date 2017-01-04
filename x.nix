@@ -55,6 +55,7 @@ in {
       desktopManager.xterm.enable = false;
       synaptics = {
         enable = true;
+        tapButtons = false;
         twoFingerScroll = true;
       };
     };

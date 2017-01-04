@@ -243,7 +243,7 @@
 
 ;;; Miscellaneous
 
-(global-set-key "C-z" nil)
+(global-set-key (kbd "C-z") nil)
 (setq auto-save-file-name-transforms '((".*" "/tmp/" t)))
 (setq backup-directory-alist '((".*" . "/tmp/")))
 (setq dired-auto-revert-buffer t)
@@ -251,6 +251,8 @@
 (setq recenter-positions '(bottom middle top))
 (setq view-read-only t)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "<f12>") 'browse-url-at-point)
+(global-set-key (kbd "<XF86Explorer>") 'browse-url-at-point)
 
 ;;; copy/paste
 
