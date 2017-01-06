@@ -11,6 +11,9 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;;; load private lisp
+(add-to-list 'load-path "~/.emacs.d/lisp")
+
 ;;; Actual packages
 
 (use-package avy
@@ -21,14 +24,6 @@
                (number-sequence ?A ?Z)
                (number-sequence ?1 ?9)
                '(?0))))
-
-(use-package calfw
-  :init
-  (setq org-gcal-down-days 30)
-  (setq org-gcal-up-days 7)
-  :config
-  (require 'calfw-org)
-  (use-package org-gcal))
 
 (use-package column-marker
   :init
@@ -125,7 +120,7 @@
   (setq org-default-notes-file "~org/notes.org")
   (setq org-agenda-files
         '("~/org/todo.org"
-          "~/org/schedule.org"
+          "~/org/gcal.org"
           "~/org/orgzly.org"))
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-start-on-weekday nil)
@@ -180,6 +175,10 @@
     (interactive)
     (org-agenda)
     (org-agenda-day-view)))
+
+(use-package org-gcal
+  :init
+  (setq org-gcal-file-alist '(("anderspapitto@gmail.com" . "~/org/gcal.org"))))
 
 (use-package prodigy)
 
