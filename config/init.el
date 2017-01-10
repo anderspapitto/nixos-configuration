@@ -11,8 +11,8 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;;; load private lisp
-(add-to-list 'load-path "~/.emacs.d/lisp")
+;;; load secrets
+(load-file "~/.emacs.d/lisp/secrets.el")
 
 ;;; Actual packages
 
@@ -168,9 +168,7 @@
   (setq org-refile-targets
         '(("todo.org" :maxlevel . 1)))
   (setq org-todo-keywords
-        '((sequence "TODO(t!)" "|" "DEFERRED(f!)" "CANCELLED(c!)" "DONE(d!)")
-          (sequence "INVESTIGATE(i!)" "APPLY(a!)" "SENT(s!)" "IN-PROGRESS(p!)"
-                    "|" "REJECTED(r!)" "OFFER(o!)")))
+        '((sequence "TODO(t!)" "|" "DEFERRED(f!)" "CANCELLED(c!)" "DONE(d!)")))
   (defun anders-org-agenda ()
     (interactive)
     (org-agenda)
@@ -178,7 +176,9 @@
 
 (use-package org-gcal
   :init
-  (setq org-gcal-file-alist '(("anderspapitto@gmail.com" . "~/org/gcal.org"))))
+  (setq org-gcal-file-alist '(("anderspapitto@gmail.com" . "~/org/gcal.org")))
+  (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) )))
 
 (use-package prodigy)
 
@@ -330,5 +330,4 @@ Repeated invocations toggle between the two most recently open buffers."
       (process-send-string nil command))
     (spawn-shell "*sudo*" "echo; exec sudo -i\n")
     (find-file-noselect "/etc/nixos/configuration/config/init.el")
-    (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")
-    (cfw:open-org-calendar)))
+    (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")))

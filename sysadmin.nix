@@ -1,9 +1,9 @@
 { config, pkgs, ... }:
 
 {
-  boot = {
-    extraModulePackages = with config.boot.kernelPackages; [ sysdig ];
-  };
+  # boot = {
+  #   extraModulePackages = with config.boot.kernelPackages; [ sysdig ];
+  # };
 
   environment.systemPackages = with pkgs; [
     bind # provides `dig`
@@ -23,7 +23,7 @@
     nftables
     pciutils
     psmisc
-    sysdig
+    # sysdig
     tcpdump
     tmux
     tree
@@ -34,13 +34,6 @@
   ];
 
   security.setuidPrograms = [
-    "csysdig"
-    "iftop"
-    "iotop"
-    "mtr"
-    "netstat"
-    "sysdig"
     "systemctl"
-    "tcpdump"
   ];
 }
