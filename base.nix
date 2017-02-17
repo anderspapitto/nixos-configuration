@@ -3,7 +3,14 @@
 { boot = {
     cleanTmpDir = true;
     kernelPackages = pkgs.linuxPackages_latest;
-  };
+    kernel.sysctl = {
+        "net.ipv4.ip_forward" = 1;
+        "vm.overcommit_memory" = 1;
+      };
+      kernelParams = [
+        "transparent_hugepage=never"
+      ];
+    };
 
   environment.variables = { EDITOR = "emacsclient -c"; };
 
@@ -35,6 +42,9 @@
 
   security = {
     sudo.wheelNeedsPassword = false;
+    pam.loginLimits =
+      [ { domain = "*"; item = "nofile"; type = "-"; value = "999999"; }
+    ];
   };
 
   time.timeZone = "America/Los_Angeles";

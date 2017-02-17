@@ -16,6 +16,7 @@
     ./nix.nix
     ./nixpkgs.nix
     ./printing.nix
+    ./redis.nix
     ./rulemak.nix
     ./sysadmin.nix
     ./uefi.nix

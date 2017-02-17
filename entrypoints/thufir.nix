@@ -11,9 +11,6 @@ in {
     ];
 
   boot = {
-    kernel.sysctl = {
-      "net.ipv4.ip_forward" = 1;
-    };
     loader.grub = {
       enable = true;
       version = 2;

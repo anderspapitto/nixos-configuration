@@ -25,6 +25,8 @@
                (number-sequence ?1 ?9)
                '(?0))))
 
+(use-package cargo)
+
 (use-package column-marker
   :init
   (add-hook 'prog-mode-hook (lambda () (column-marker-1 79))))
@@ -129,6 +131,9 @@
         '(("t" "Todo" entry
            (file+headline "~/org/todo.org" "Tasks")
            "* TODO %?\n  %i")
+          ("m" "Meeting" entry
+           (file+headline "~/org/todo.org" "People")
+           "* MEET %?\n  %i")
           ("h" "Habit" entry
            (file+headline "~/org/todo.org" "Tasks")
            "* TODO %?\n  %i\n  SCHEDULED:\n  :PROPERTIES:\n    :STYLE: habit\n  :END:")
@@ -199,6 +204,8 @@
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package real-auto-save)
+
+(use-package rust-mode)
 
 (use-package shackle
   :init

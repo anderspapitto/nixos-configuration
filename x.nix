@@ -99,6 +99,8 @@ in {
         ExecStart = pkgs.writeScript "dunst" ''
             #! ${pkgs.bash}/bin/bash
             . ${config.system.build.setEnvironment}
+            set -xe
+
             exec ${pkgs.dunst}/bin/dunst -config ${dunstrc}
           '';
         RestartSec = 3;
@@ -117,6 +119,8 @@ in {
         ExecStart = pkgs.writeScript "feh" ''
             #! ${pkgs.bash}/bin/bash
             . ${config.system.build.setEnvironment}
+            set -xe
+
             ${pkgs.feh}/bin/feh --bg-fill --no-fehbg ${background-image}
             exec sleep infinity
           '';
