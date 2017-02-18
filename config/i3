@@ -117,9 +117,9 @@ bindsym $mod+Shift+minus move scratchpad
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%    && killall -SIGUSR1 i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%    && killall -SIGUSR1 i3status
-bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status
+bindsym F3 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%    && killall -SIGUSR1 i3status
+bindsym F2 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%    && killall -SIGUSR1 i3status
+bindsym F1 exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status
 
 for_window [class="qjackctl"] floating enable
 

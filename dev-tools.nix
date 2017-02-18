@@ -2,6 +2,7 @@
 
 { environment.systemPackages = with pkgs; [
     (python.buildEnv.override { extraLibs = [ pythonPackages.ipython ]; })
+    android-studio
     cabal2nix
     cmake
     gcc

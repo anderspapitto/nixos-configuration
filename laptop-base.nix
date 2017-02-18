@@ -34,6 +34,6 @@
   users.extraUsers.anders = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "audio" "docker" "redis" ];
+    extraGroups = [ "wheel" "audio" "docker" "redis" "adbusers" ];
   };
 }

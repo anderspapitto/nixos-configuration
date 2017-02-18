@@ -91,12 +91,43 @@
             pacmd move-sink-input $index jack_out
         done
       '')
-    (writeScriptBin "switch-to-bluetooth" ''
+    (writeScriptBin "switch-to-headphones" ''
         #! ${bash}/bin/bash
 
         set -x
 
-        DEVICE=$(bluetoothctl <<< devices | egrep '^Device' | awk '{ print $2 }')
+        DEVICE=$(bluetoothctl <<< devices | egrep '^Mixcder ShareMe 7' | awk '{ print $2 }')
+        until bluetoothctl <<< show | grep -q 'Powered: yes'
+        do
+            bluetoothctl <<< 'power on'
+        done
+        until pacmd list-sinks | egrep -q 'name:.*bluez_sink'
+        do
+            bluetoothctl <<< "connect $DEVICE"
+        done
+
+        TARGET_CARD=$(pacmd list-cards | grep 'name:' | egrep -o 'bluez.*[^>]')
+        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
+
+        until pacmd list-cards | egrep -q 'active profile: <a2dp_sink>'
+        do
+            pacmd set-card-profile $TARGET_CARD a2dp_sink
+        done
+
+
+        pactl set-sink-volume $TARGET_SINK 50%
+        pacmd set-default-sink $TARGET_SINK
+        for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
+        do
+            pacmd move-sink-input $index $TARGET_SINK
+        done
+      '')
+    (writeScriptBin "switch-to-earbuds" ''
+        #! ${bash}/bin/bash
+
+        set -x
+
+        DEVICE=$(bluetoothctl <<< devices | egrep '^QY7' | awk '{ print $2 }')
         until bluetoothctl <<< show | grep -q 'Powered: yes'
         do
             bluetoothctl <<< 'power on'

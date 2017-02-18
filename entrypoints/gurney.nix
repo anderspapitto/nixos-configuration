@@ -2,6 +2,7 @@
 
 { imports = [
     ./audio.nix
+    ./android.nix
     ./base.nix
     ./compton.nix
     ./dev-tools.nix
