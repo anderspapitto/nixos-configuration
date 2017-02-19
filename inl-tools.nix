@@ -96,7 +96,7 @@
 
         set -x
 
-        DEVICE=$(bluetoothctl <<< devices | egrep '^Mixcder ShareMe 7' | awk '{ print $2 }')
+        DEVICE=$(bluetoothctl <<< devices | egrep '^Device.*Mixcder ShareMe 7' | awk '{ print $2 }')
         until bluetoothctl <<< show | grep -q 'Powered: yes'
         do
             bluetoothctl <<< 'power on'
@@ -127,7 +127,7 @@
 
         set -x
 
-        DEVICE=$(bluetoothctl <<< devices | egrep '^QY7' | awk '{ print $2 }')
+        DEVICE=$(bluetoothctl <<< devices | egrep '^Device.*QY7' | awk '{ print $2 }')
         until bluetoothctl <<< show | grep -q 'Powered: yes'
         do
             bluetoothctl <<< 'power on'

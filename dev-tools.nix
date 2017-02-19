@@ -2,6 +2,7 @@
 
 { environment.systemPackages = with pkgs; [
     (python.buildEnv.override { extraLibs = [ pythonPackages.ipython ]; })
+    (haskellPackages.ghcWithPackages (p: with p; [ turtle ]))
     android-studio
     cabal2nix
     cmake
