@@ -1,7 +1,8 @@
 general {
-        output_format = i3bar
+        output_format = dzen2
         colors = true
         interval = 3
+        color_separator = "#00FF00"
 }
 
 order += "volume pulse"

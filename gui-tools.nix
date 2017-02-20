@@ -5,7 +5,6 @@
     aria2
     # chromium
     clerk
-    clipit
     dmenu
     firefox
     ghostscriptX

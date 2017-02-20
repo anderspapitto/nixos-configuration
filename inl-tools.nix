@@ -23,10 +23,10 @@
 
         if systemctl is-active compton-night > /dev/null
         then
-            systemctl start compton
+            sudo systemctl start compton
             ${emacs}/bin/emacsclient -e '(enable-light-theme)'
         else
-            systemctl start compton-night
+            sudo systemctl start compton-night
             ${emacs}/bin/emacsclient -e '(enable-dark-theme)'
         fi
       '')

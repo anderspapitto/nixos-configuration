@@ -12,6 +12,7 @@ in {
         User = "anders";
         ExecStart = "${pkgs.compton}/bin/compton -cCG --config ${compton-noninverted}";
       };
+      wantedBy = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
     };
 
