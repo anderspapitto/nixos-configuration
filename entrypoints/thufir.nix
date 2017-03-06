@@ -73,5 +73,10 @@ in {
       enable = true;
       interfaces = [ "0.0.0.0" ];
     };
+    syncthing = {
+      enable = true;
+      useInotify = true;
+      openDefaultPorts = true;
+    };
   };
 }

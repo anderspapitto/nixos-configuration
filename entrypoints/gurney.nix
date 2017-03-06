@@ -5,7 +5,6 @@
     ./android.nix
     ./base.nix
     ./dev-tools.nix
-    ./dropbox.nix
     ./emacs.nix
     ./fonts.nix
     ./gui-tools.nix
@@ -18,6 +17,7 @@
     ./printing.nix
     ./redis.nix
     ./rulemak.nix
+    ./syncthing.nix
     ./sysadmin.nix
     ./uefi.nix
     ./utility-scripts.nix
