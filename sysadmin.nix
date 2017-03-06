@@ -2,7 +2,7 @@
 
 {
   boot = {
-    extraModulePackages = with pkgs.linuxPackages; [ sysdig ];
+    # extraModulePackages = with pkgs.linuxPackages; [ sysdig ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -23,7 +23,7 @@
     nftables
     pciutils
     psmisc
-    sysdig
+    # sysdig
     tcpdump
     tmux
     tree

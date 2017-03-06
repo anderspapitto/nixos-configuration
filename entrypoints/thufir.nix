@@ -4,10 +4,10 @@ let gurney-pubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCt6axfh25SwAPkrTQlIJK
 in {
   imports =
     [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
       ./base.nix
       ./sysadmin.nix
       ./nix.nix
-      ./hardware-configuration.nix
     ];
 
   boot = {
