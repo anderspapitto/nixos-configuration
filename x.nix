@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
-let background-image = pkgs.fetchurl {
+let dunstrc = builtins.toFile "dunstrc" (pkgs.lib.readFile ./config/dunstrc);
+    background-image = pkgs.fetchurl {
       url = "http://orig01.deviantart.net/1810/f/2012/116/a/4/tranquility_by_andreewallin-d4xjtd0.jpg";
       sha256 = "17jcvy268aqcix7hb8acn9m9x7dh8ymb07w4f7s9apcklimz63bq";
     };
@@ -36,9 +37,8 @@ in {
       "compton/inverted"          .source = ./config/compton-inverted;
       "compton/noninverted"       .source = ./config/compton-noninverted;
       "dunst/dunstrc"             .source = ./config/dunstrc;
+      "i3/config"                 .source = ./config/i3;
       "i3/status"                 .source = ./config/i3status;
-      "xdg/herbstluftwm/autostart".source = ./config/herbstluftwm;
-      "xdg/herbstluftwm/panel.sh" .source = ./config/panel.sh;
       "X11/xresources"            .source = ./config/xresources;
     };
     systemPackages = with pkgs; [ dzen2 gnupg ];
@@ -50,11 +50,18 @@ in {
       desktopManager.xterm.enable = false;
       displayManager.slim.theme = solarized-theme;
       windowManager = {
-        herbstluftwm = {
+        i3 = {
           enable = true;
-          configFile = "/etc/xdg/herbstluftwm/autostart";
+          package = pkgs.i3-gaps;
+          extraSessionCommands = ''
+            ${pkgs.gnupg}/bin/gpg-connect-agent /bye
+            export GPG_TTY=$(tty)
+
+            systemctl start openvpn-thufir &
+          '';
+          configFile = "/etc/i3/config";
         };
-        default = "herbstluftwm";
+        default = "i3";
       };
       synaptics = {
         enable = true;
@@ -106,5 +113,11 @@ in {
       "clipboard manager"
       "exec ${pkgs.clipit}/bin/clipit"
       ;
+    xrdb = simpleXService "xrdb"
+      "set X resources"
+      ''
+        ${pkgs.xorg.xrdb}/bin/xrdb /etc/X11/xresources
+        exec sleep infinity
+      '';
   };
 }
