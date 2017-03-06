@@ -2,7 +2,6 @@
 
 { environment.systemPackages = with pkgs; [
     arandr
-    aria2
     # chromium
     clerk
     clipit

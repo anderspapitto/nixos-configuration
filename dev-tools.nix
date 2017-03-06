@@ -4,6 +4,7 @@
     (python.buildEnv.override { extraLibs = [ pythonPackages.ipython ]; })
     (haskellPackages.ghcWithPackages (p: with p; [ turtle ]))
     android-studio
+    aria2
     cabal2nix
     cmake
     gcc
