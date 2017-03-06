@@ -2,7 +2,7 @@
 
 {
   boot = {
-    extraModulePackages = with config.boot.kernelPackages; [ sysdig ];
+    extraModulePackages = with pkgs.linuxPackages; [ sysdig ];
   };
 
   environment.systemPackages = with pkgs; [

@@ -114,6 +114,8 @@
             pacmd set-card-profile $TARGET_CARD a2dp_sink
         done
 
+        # name of sink may be changed by setting the profile
+        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
 
         pactl set-sink-volume $TARGET_SINK 50%
         pacmd set-default-sink $TARGET_SINK
@@ -148,6 +150,10 @@
 
         pactl set-sink-volume $TARGET_SINK 50%
         pacmd set-default-sink $TARGET_SINK
+
+        # name of sink may be changed by setting the profile
+        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
+
         for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
         do
             pacmd move-sink-input $index $TARGET_SINK

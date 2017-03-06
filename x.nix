@@ -52,7 +52,7 @@ in {
       windowManager = {
         herbstluftwm = {
           enable = true;
-          configFile = "/etc/xdg/herbsluftwm/autostart";
+          configFile = "/etc/xdg/herbstluftwm/autostart";
         };
         default = "herbstluftwm";
       };
