@@ -20,6 +20,8 @@ in {
 
   networking = {
     hostName = "thufir";
+    enableIPv6 = false;
+    nameservers = [ "8.8.8.8" "8.8.4.4" ];
     firewall = {
       enable = true;
       extraCommands = ''
