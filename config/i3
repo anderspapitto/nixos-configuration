@@ -121,6 +121,8 @@ bindsym F3 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%    && k
 bindsym F2 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%    && killall -SIGUSR1 i3status
 bindsym F1 exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status
 
+bindsym F9 exec --no-startup-id browser
+
 for_window [class="qjackctl"] floating enable
 
 no_focus [class="Chromium"]

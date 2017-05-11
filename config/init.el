@@ -34,7 +34,12 @@
 (use-package company
   :init
   (setq company-global-modes '(not shell-mode gud-mode))
+  (setq company-dabbrev-downcase nil)
   :config
+  (define-key company-active-map (kbd "TAB") nil)
+  (define-key company-active-map [tab] nil)
+  (define-key company-active-map (kbd "RET") nil)
+  (define-key company-active-map [return] nil)
   (global-company-mode))
 
 (use-package compile
@@ -68,6 +73,11 @@
    (setq flycheck-standard-error-navigation 'nil))
 
 (use-package haskell-mode)
+
+(use-package hledger-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.journal\\'" . hledger-mode))
+  (add-to-list 'company-backends 'hledger-company))
 
 (use-package intero
   :init
@@ -118,8 +128,10 @@
          ("C-c a" . anders-org-agenda)
          ("C-c b" . org-iswitchb))
   :init
+  (setq org-read-date-force-compatible-dates nil)
   (setq org-agenda-include-diary t)
   (setq org-default-notes-file "~org/notes.org")
+  (setq org-archive-location "~/org/archive.org::")
   (setq org-agenda-files
         '("~/org/todo.org"
           "~/org/gcal.org"

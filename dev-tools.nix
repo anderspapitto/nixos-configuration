@@ -7,6 +7,7 @@
     aria2
     cabal2nix
     cmake
+    coq
     gcc
     gdb
     go

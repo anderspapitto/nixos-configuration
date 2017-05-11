@@ -6,10 +6,14 @@
     daemonNiceLevel = 10;
     maxJobs = 8;
     extraOptions = ''
-      auto-optimise-store = true
-      gc-keep-outputs = true
-    '';
-    nixPath = [ "/etc/nixos" "nixos-config=/etc/nixos/configuration" ];
+        auto-optimise-store = true
+        gc-keep-outputs = true
+      '';
+    nixPath = [
+        "/etc/nixos"
+        "nixos-config=/etc/nixos/configuration"
+        "nixpkgs-overlays=/etc/nixos/overlays"
+      ];
     useSandbox = true;
     binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
     binaryCachePublicKeys =

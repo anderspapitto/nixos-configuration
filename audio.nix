@@ -51,26 +51,26 @@ in {
       '';
   };
 
-  systemd.services = {
-    switch-to-stereo-for-bluetooth-exit = {
-      description = "Move all sink-inputs to stereo sink before suspend";
-      environment = {
-        DISPLAY = ":${toString config.services.xserver.display}";
-        PULSE_RUNTIME_PATH = "/run/user/1000/pulse";
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        User = "anders";
-        ExecStart = pkgs.writeScript "switch-to-stereo-for-bluetooth-exit" ''
-            #!${pkgs.bash}/bin/bash --login
-            . ${config.system.build.setEnvironment}
-            switch-to-stereo-no-stop-jack
-          '';
-      };
-      wantedBy = [ "sleep.target" "suspend.target" ];
-      before = [ "sleep.target" "suspend.target" ];
-    };
-  };
+#  systemd.services = {
+#    switch-to-stereo-for-bluetooth-exit = {
+#      description = "Move all sink-inputs to stereo sink before suspend";
+#      environment = {
+#        DISPLAY = ":${toString config.services.xserver.display}";
+#        PULSE_RUNTIME_PATH = "/run/user/1000/pulse";
+#      };
+#      serviceConfig = {
+#        Type = "oneshot";
+#        User = "anders";
+#        ExecStart = pkgs.writeScript "switch-to-stereo-for-bluetooth-exit" ''
+#            #!${pkgs.bash}/bin/bash --login
+#            . ${config.system.build.setEnvironment}
+#            switch-to-stereo-no-stop-jack
+#          '';
+#      };
+#      wantedBy = [ "sleep.target" "suspend.target" ];
+#      before = [ "sleep.target" "suspend.target" ];
+#    };
+#  };
 
   environment.etc = [
     { target = "jackdrc";
@@ -79,8 +79,11 @@ in {
   ];
 
   environment.systemPackages = with pkgs; [
+    a2jmidid
     ardour
     hydrogen
     jack2Full
+    patchage
+    (import ./reaper.nix pkgs)
   ];
 }
