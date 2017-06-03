@@ -47,5 +47,5 @@
     ];
   };
 
-  time.timeZone = "Europe/London";
+  time.timeZone = "America/Los_Angeles";
 }

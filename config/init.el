@@ -33,7 +33,7 @@
 
 (use-package company
   :init
-  (setq company-global-modes '(not shell-mode gud-mode))
+  (setq company-global-modes '(not gud-mode))
   (setq company-dabbrev-downcase nil)
   :config
   (define-key company-active-map (kbd "TAB") nil)
@@ -222,6 +222,10 @@
 (use-package shackle
   :init
   (setq shackle-rules '(("\\*input/output of.*\\*" :regexp t :ignore t))))
+
+(use-package shell
+  :config
+  (define-key shell-mode-map (kbd "TAB") 'company-manual-begin))
 
 (use-package subword
   :config

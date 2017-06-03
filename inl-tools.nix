@@ -73,24 +73,6 @@
         jack_control start
         switch-to-jack
       '')
-    (writeScriptBin "switch-to-jack" ''
-        #! ${bash}/bin/bash
-
-        set -x
-
-        until pacmd list-sinks | egrep -q 'jack_out'
-        do
-            jack_control start
-        done
-
-        pactl set-sink-volume jack_out 50%
-
-        pacmd set-default-sink jack_out
-        for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
-        do
-            pacmd move-sink-input $index jack_out
-        done
-      '')
     (writeScriptBin "switch-to-headphones" ''
         #! ${bash}/bin/bash
 

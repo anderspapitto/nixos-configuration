@@ -31,7 +31,7 @@
     tuxguitar
     unrar # needed by mcomix for .cbr
     vlc
-    wineStaging
+    (wine.override { wineRelease = "staging"; wineBuild = "wineWow"; })
     xdotool
     xlibs.xev
 #    xsane

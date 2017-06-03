@@ -124,6 +124,7 @@ bindsym F1 exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle && k
 bindsym F9 exec --no-startup-id browser
 
 for_window [class="qjackctl"] floating enable
+for_window [class="reaper"] floating enable
 
 no_focus [class="Chromium"]
 focus_on_window_activation focus
