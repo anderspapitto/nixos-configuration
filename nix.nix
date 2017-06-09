@@ -12,7 +12,6 @@
     nixPath = [
         "/etc/nixos"
         "nixos-config=/etc/nixos/configuration"
-        "nixpkgs-overlays=/etc/nixos/overlays"
       ];
     useSandbox = true;
     binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];

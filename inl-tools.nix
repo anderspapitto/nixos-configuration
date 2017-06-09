@@ -75,94 +75,13 @@
       '')
     (writeScriptBin "switch-to-headphones" ''
         #! ${bash}/bin/bash
-
         set -x
-
-        DEVICE=$(bluetoothctl <<< devices | egrep '^Device.*Mixcder ShareMe 7' | awk '{ print $2 }')
-        until bluetoothctl <<< show | grep -q 'Powered: yes'
-        do
-            bluetoothctl <<< 'power on'
-        done
-        until pacmd list-sinks | egrep -q 'name:.*bluez_sink'
-        do
-            bluetoothctl <<< "connect $DEVICE"
-        done
-
-        TARGET_CARD=$(pacmd list-cards | grep 'name:' | egrep -o 'bluez.*[^>]')
-        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
-
-        until pacmd list-cards | egrep -q 'active profile: <a2dp_sink>'
-        do
-            pacmd set-card-profile $TARGET_CARD a2dp_sink
-        done
-
-        # name of sink may be changed by setting the profile
-        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
-
-        pactl set-sink-volume $TARGET_SINK 50%
-        pacmd set-default-sink $TARGET_SINK
-        for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
-        do
-            pacmd move-sink-input $index $TARGET_SINK
-        done
+        pacmd set-sink-port alsa_output.pci-0000_00_1b.0.analog-stereo analog-output-headphones
       '')
-    (writeScriptBin "switch-to-earbuds" ''
+    (writeScriptBin "switch-to-speakers" ''
         #! ${bash}/bin/bash
-
         set -x
-
-        DEVICE=$(bluetoothctl <<< devices | egrep '^Device.*QY7' | awk '{ print $2 }')
-        until bluetoothctl <<< show | grep -q 'Powered: yes'
-        do
-            bluetoothctl <<< 'power on'
-        done
-        until pacmd list-sinks | egrep -q 'name:.*bluez_sink'
-        do
-            bluetoothctl <<< "connect $DEVICE"
-        done
-
-        TARGET_CARD=$(pacmd list-cards | grep 'name:' | egrep -o 'bluez.*[^>]')
-        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
-
-        until pacmd list-cards | egrep -q 'active profile: <a2dp_sink>'
-        do
-            pacmd set-card-profile $TARGET_CARD a2dp_sink
-        done
-
-
-        pactl set-sink-volume $TARGET_SINK 50%
-        pacmd set-default-sink $TARGET_SINK
-
-        # name of sink may be changed by setting the profile
-        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
-
-        for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
-        do
-            pacmd move-sink-input $index $TARGET_SINK
-        done
-      '')
-    (writeScriptBin "switch-to-stereo" ''
-        #! ${bash}/bin/bash
-
-        set -x
-
-        switch-to-stereo-no-stop-jack
-        jack_control stop
-      '')
-    (writeScriptBin "switch-to-stereo-no-stop-jack" ''
-        #! ${bash}/bin/bash
-
-        set -x
-
-        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'alsa.*analog-stereo')
-
-        pactl set-sink-volume $TARGET_SINK 50%
-
-        pacmd set-default-sink $TARGET_SINK
-        for index in $(pacmd list-sink-inputs | grep index | awk '{ print $2 }')
-        do
-            pacmd move-sink-input $index $TARGET_SINK
-        done
+        pacmd set-sink-port alsa_output.pci-0000_00_1b.0.analog-stereo analog-output-speaker
       '')
     (writeScriptBin "toggle-suspend-audio" ''
         #! ${bash}/bin/bash
