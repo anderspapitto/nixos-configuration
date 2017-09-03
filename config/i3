@@ -198,7 +198,6 @@ force_focus_wrapping yes
 
 bindsym XF86Tools exec --no-startup-id toggle-layout
 
-assign [title="^card-game$"] 6
 assign [class="^Steam"] 10
 assign [class="^Civ5xP$"] 10
 

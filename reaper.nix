@@ -5,8 +5,8 @@ let steam-run = (pkgs.steam.override { nativeOnly = true; newStdcpp = true; }).r
       src = pkgs.fetchFromGitHub {
         owner = "justinfrankel";
         repo = "WDL";
-        rev = "9470b9c44d7e6fbfb3316c385891cedb66203199";
-        sha256 = "1nm9v4gnmy966byahzxq25h4fa8a42dp0b6hd675i2nl6f822b24";
+        rev = "5ece71b296ac0282487b927774ca3246f749d9a1";
+        sha256 = "1y515a3bifsn4l6si02ach0r6kdfc6gxpx8m0dnk6azhpiwjxfks";
       };
 
       buildInputs = [ pkgs.pkgconfig pkgs.gtk3 pkgs.xorg.libX11 ];
@@ -28,13 +28,14 @@ let steam-run = (pkgs.steam.override { nativeOnly = true; newStdcpp = true; }).r
     };
     reaper = pkgs.stdenv.mkDerivation rec {
       name = "reaper";
-      version = "540";
+      version = "550rc6";
       src = pkgs.fetchurl {
         url = "http://www.landoleet.org/dev/reaper_${version}_developer_linux_x86_64.tar.xz";
-        sha256 = "1v8qyxxms0dm8ldvxb6xn6bnzkvc654bpilawrlbsmisvmj3mkmm";
+        sha256 = "0i2bp6g5vl8lqy4qrmyv4947vmpamglc1zw1vlkbdixb3ljyn6xl";
       };
 
       buildPhase = ''
+        rm REAPER/libSwell.so
         ln -s ${libSwell}/lib/libSwell.so REAPER/
       '';
 

@@ -13,10 +13,11 @@
     file
     git
     gptfdisk
+    gnupg20 # emacs wants the gpg2 binary?
     htop
     iftop
     iotop
-    linuxPackages.perf
+    # linuxPackages.perf
     lshw
     lsof
     mtr

@@ -182,10 +182,15 @@ in {
     a2jmidid
     # ardour
     drumgizmo
-#    hydrogen
+    hydrogen
     jack2Full
+    # linVst
     patchage
     zynaddsubfx
     (import ./reaper.nix pkgs)
+  ];
+
+  nixpkgs.overlays = [
+    (import /etc/nixos/overlays/lin-vst/default.nix)
   ];
 }

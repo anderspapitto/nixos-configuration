@@ -49,5 +49,5 @@
       '';
     };
 
-  # imports = [ ./rust-nightly.nix ];
+  # imports = [ ./rust-overlay.nix ];
 }

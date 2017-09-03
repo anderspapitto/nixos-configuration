@@ -134,8 +134,10 @@
   (setq org-archive-location "~/org/archive.org::")
   (setq org-agenda-files
         '("~/org/todo.org"
-          "~/org/gcal.org"
-          "~/org/orgzly.org"))
+          "~/org/aa-orgzly.org"
+          "~/org/jobs.org"
+          "~/org/messages.org"
+          "~/org/dev-env.org"))
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-start-on-weekday nil)
   (setq org-agenda-window-setup 'current-window)
@@ -190,12 +192,6 @@
     (interactive)
     (org-agenda)
     (org-agenda-day-view)))
-
-(use-package org-gcal
-  :init
-  (setq org-gcal-file-alist '(("anderspapitto@gmail.com" . "~/org/gcal.org")))
-  (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
-  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) )))
 
 (use-package prodigy)
 
@@ -329,8 +325,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (defun anders-switch-theme (from-theme to-theme org-hide-face)
   (progn
     (disable-theme from-theme)
-    (load-theme to-theme t)
-    (set-face-foreground 'org-hide org-hide-face)))
+    (load-theme to-theme t)))
 (defun enable-dark-theme ()
   (interactive)
   (anders-switch-theme 'adwaita 'wheatgrass "#000000"))
