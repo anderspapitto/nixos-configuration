@@ -3,6 +3,7 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("orgmode" . "http://orgmode.org/elpa/"))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -12,7 +13,7 @@
 (setq use-package-always-ensure t)
 
 ;;; load secrets
-(load-file "~/.emacs.d/lisp/secrets.el")
+(load "~/.emacs.d/lisp/secrets.el")
 
 ;;; Actual packages
 
@@ -45,7 +46,9 @@
 (use-package compile
   :init
   (setq compilation-always-kill t)
-  (setq compilation-ask-about-save nil))
+  (setq compilation-ask-about-save nil)
+  :config
+  (load "/etc/emacs/my-compile.el"))
 
 (use-package counsel)
 
@@ -94,6 +97,8 @@
   :config
   (ivy-mode 1))
 
+(use-package load-relative)
+
 (use-package magit
   :init
   (setq magit-commit-show-diff nil)
@@ -123,51 +128,89 @@
 (use-package nix-mode)
 
 (use-package org
+  :ensure org-plus-contrib
   :bind (("C-c l" . org-store-link)
-         ("C-c c" . org-capture)
-         ("C-c a" . anders-org-agenda)
+         ("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb))
   :init
-  (setq org-read-date-force-compatible-dates nil)
+  (add-hook 'org-capture-after-finalize-hook 'delete-frame)
+  (setq org-agenda-block-separator
+        "=============================================================")
+  (setq org-agenda-compact-blocks nil)
+  (setq org-agenda-custom-commands
+        '(("a" "Agenda"
+           ((agenda ""
+                    ((org-super-agenda-groups
+                      '((:discard (:tag "agenda_ignore"))
+                        (:name "Important"
+                               :priority "A")
+                        (:name "Appointments"
+                               :time-grid t)
+                        (:name "Established Habits"
+                               :and (:habit t :tag "established"))
+                        (:name "Developing Habits"
+                               :and (:habit t)
+                               :order 2)
+                        (:name "Tasks"
+                               :scheduled t)
+                        ))))
+            (tags-todo "project"
+                  ((org-agenda-overriding-header "Project Next Tasks")
+                   (org-agenda-skip-function 'my-next-task-skip-function)))
+            (tags-todo "-project-habit-capture-agenda_ignore"
+                       ((org-agenda-overriding-header "Standalone Tasks")
+                        (org-agenda-tags-todo-honor-ignore-options t)
+                        (org-agenda-todo-ignore-scheduled 'all)))
+            ))
+          ("c" "Captures"
+           ((tags "capture"
+                  ((org-agenda-overriding-header "Capture")))))
+          ))
+
+  (setq org-agenda-files '("~/org" "~/org/dev"))
   (setq org-agenda-include-diary t)
-  (setq org-default-notes-file "~org/notes.org")
-  (setq org-archive-location "~/org/archive.org::")
-  (setq org-agenda-files
-        '("~/org/todo.org"
-          "~/org/aa-orgzly.org"
-          "~/org/jobs.org"
-          "~/org/messages.org"
-          "~/org/dev-env.org"))
-  (setq org-agenda-skip-scheduled-if-done t)
-  (setq org-agenda-start-on-weekday nil)
+  (setq org-agenda-skip-function-global
+        (lambda ()
+          (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+            (if (re-search-forward ":agenda_ignore:" subtree-end t)
+                subtree-end ; tag found, continue after end of subtree
+              nil))))       ; tag not found, do not skip
+  (setq org-agenda-span 'day)
+  (setq org-agenda-time-grid
+        '((daily today require-timed)
+          ()
+          "......"
+          "----------------"))
   (setq org-agenda-window-setup 'current-window)
   (setq org-capture-templates
         '(("t" "Todo" entry
-           (file+headline "~/org/todo.org" "Tasks")
+           (file "~/org/capture.org")
            "* TODO %?\n  %i")
-          ("m" "Meeting" entry
-           (file+headline "~/org/todo.org" "People")
-           "* MEET %?\n  %i")
-          ("h" "Habit" entry
-           (file+headline "~/org/todo.org" "Tasks")
-           "* TODO %?\n  %i\n  SCHEDULED:\n  :PROPERTIES:\n    :STYLE: habit\n  :END:")
+          ("a" "Appointment" entry
+           (file "~/org/appts.org")
+           "* %? :appointment:\n  %^T")
           ("j" "Journal" entry
            (file+datetree "~/org/journal.org")
            "* %?\nEntered on %U\n  %i")
           ("n" "Note" entry
            (file+datetree "~/org/notes.org")
            "* %U %?")))
+  (setq org-archive-location "~/org/silent/archive.org::")
   (setq org-default-notes-file "~org/notes.org")
   (setq org-enforce-todo-dependencies t)
   (setq org-fast-tag-selection-single-key t)
   (setq org-from-is-user-regexp nil)
+  (setq org-habit-graph-column 80)
+  (setq org-habit-preceding-days 42)
   (setq org-hide-leading-stars t)
   (setq org-journal-dir "~/org/journal")
+  (setq org-link-search-must-match-exact-headline nil)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
   (setq org-modules
         '(org-bbdb
           org-bibtex
+          org-checkboxes
           org-docview
           org-gnus
           org-habit
@@ -176,22 +219,26 @@
           org-mhe
           org-rmail
           org-w3m))
-  (setq org-habit-graph-column 80)
-  (setq org-habit-show-habits-only-for-today nil)
-  (setq org-agenda-sorting-strategy
-        '((agenda time-up habit-down priority-down category-keep)
-         (todo priority-down category-keep)
-         (tags priority-down category-keep)
-         (search category-keep)))
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-read-date-force-compatible-dates nil)
   (setq org-read-date-popup-calendar nil)
-  (setq org-refile-targets
-        '(("todo.org" :maxlevel . 1)))
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+  (setq org-refile-target-verify-function
+        (lambda ()
+          (not (member (nth 2 (org-heading-components)) org-done-keywords))))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 9)))
+  (setq org-refile-use-outline-path 'file)
+  (setq org-tags-exclude-from-inheritance  '("refile"))
   (setq org-todo-keywords
-        '((sequence "TODO(t!)" "|" "DEFERRED(f!)" "CANCELLED(c!)" "DONE(d!)")))
-  (defun anders-org-agenda ()
-    (interactive)
-    (org-agenda)
-    (org-agenda-day-view)))
+        '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)"
+                    "|"
+                    "CANCELLED(c)" "DONE(d)")))
+  :config
+  (load "/etc/emacs/my-org"))
+
+(use-package org-super-agenda
+  :config
+  (org-super-agenda-mode))
 
 (use-package prodigy)
 

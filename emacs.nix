@@ -5,7 +5,7 @@ let
   startEmacs = pkgs.writeScript "emacs" ''
       #!${pkgs.bash}/bin/bash
       . ${config.system.build.setEnvironment}
-      exec ${emacs}/bin/emacs -q -l /etc/emacs/init.el -l /etc/emacs/my-compile.el "$@"
+      exec ${emacs}/bin/emacs -q -l /etc/emacs/init.el "$@"
     '';
 in {
   environment = {
@@ -15,6 +15,9 @@ in {
       }
       { target = "emacs/my-compile.el";
         source = ./config/my-compile.el;
+      }
+      { target = "emacs/my-org.el";
+        source = ./config/my-org.el;
       }
     ];
     systemPackages = [ emacs ];

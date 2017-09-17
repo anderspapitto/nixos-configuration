@@ -3,7 +3,7 @@
 { environment.systemPackages = with pkgs; [
     anki
     arandr
-    # chromium
+    chromium
     clerk
     clipit
     dmenu

@@ -11,6 +11,13 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec emacsclient -c -e '(shell)'
+bindsym F10 exec emacsclient -c -e '(org-capture)'
+
+bindsym F11 exec i3-rename
+bindsym F12 exec i3-switch
+
+bindsym $mod+Left  workspace prev
+bindsym $mod+Right workspace next
 
 # start a real terminal
 bindsym $mod+Shift+Return exec i3-sensible-terminal
@@ -32,12 +39,6 @@ bindsym $mod+o exec i3-focus right
 
 bindsym $mod+comma  focus left
 bindsym $mod+period focus right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
 
 # move focused window
 bindsym $mod+Shift+n move left
@@ -123,11 +124,10 @@ bindsym F1 exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle && k
 
 bindsym F9 exec --no-startup-id browser
 
-for_window [class="qjackctl"] floating enable
-for_window [class="reaper"] floating enable
-
 no_focus [class="Chromium"]
 focus_on_window_activation focus
+
+for_window [title="Org Select"] floating enable
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -195,8 +195,6 @@ bar {
 new_window none
 hide_edge_borders both
 force_focus_wrapping yes
-
-bindsym XF86Tools exec --no-startup-id toggle-layout
 
 assign [class="^Steam"] 10
 assign [class="^Civ5xP$"] 10

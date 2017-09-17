@@ -1,6 +1,28 @@
 { config, pkgs, ... }:
 
 { environment.systemPackages = with pkgs; [
+    (writeScriptBin "i3-switch" ''
+        #! ${bash}/bin/bash
+
+        set -e
+
+        list_workspaces() {
+          ${i3}/bin/i3-msg -t get_workspaces | ${jq}/bin/jq -r '.[] | .name'
+        }
+
+        WORKSPACE=$( list_workspaces | rofi -dmenu -p "switch to workspace " )
+
+        i3-msg workspace "$WORKSPACE"
+      '')
+    (writeScriptBin "i3-rename" ''
+        #! ${bash}/bin/bash
+
+        set -e
+
+        NAME=$( rofi -dmenu -p "rename workspace to " )
+
+        i3-msg "rename workspace to $NAME"
+      '')
     (writeScriptBin "browser" ''
         #! ${bash}/bin/bash
         firefox "$@"
@@ -65,13 +87,6 @@
         else
           exec less -R "$@"
         fi
-      '')
-    (writeScriptBin "restart-jack" ''
-        #! ${bash}/bin/bash
-        jack_control exit
-        sleep 0.5
-        jack_control start
-        switch-to-jack
       '')
     (writeScriptBin "switch-to-headphones" ''
         #! ${bash}/bin/bash
