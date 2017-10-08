@@ -258,7 +258,10 @@
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package real-auto-save)
+(use-package real-auto-save
+  :init
+  (add-hook 'org-mode-hook 'real-auto-save-mode)
+  (setq real-auto-save-interval 30))
 
 (use-package rust-mode)
 

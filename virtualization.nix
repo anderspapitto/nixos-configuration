@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
-{ environment.systemPackages = with pkgs; [ docker ];
+{ environment.systemPackages = with pkgs; [
+    # docker
+  ];
 
   networking.nat = {
     enable = true;
@@ -9,6 +11,6 @@
   };
 
   virtualisation = {
-    docker.enable = true;
+    # docker.enable = true;
   };
 }
