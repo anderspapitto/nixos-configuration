@@ -73,7 +73,7 @@
    (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
    (setq flycheck-emacs-lisp-load-path 'inherit)
    (setq flycheck-display-errors-function 'nil)
-   (setq flycheck-standard-error-navigation 'nil))
+   (setq flycheck-standard-error-navigation t))
 
 (use-package haskell-mode)
 

@@ -57,7 +57,7 @@ in {
             ${pkgs.gnupg}/bin/gpg-connect-agent /bye
             export GPG_TTY=$(tty)
 
-            systemctl start openvpn-thufir &
+            sudo systemctl start openvpn-thufir &
           '';
           configFile = "/etc/i3/config";
         };
@@ -120,8 +120,7 @@ in {
               add Control = Control_L
 
               clear Mod5
-              keycode 66 = Hyper_L
-              add Mod5 = ISO_Level3_Shift
+              keycode 66 = ISO_Level3_Shift
             '';
       in simpleXService "xmodmap"
         "Fuck setxkbmap"
