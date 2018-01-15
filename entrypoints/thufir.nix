@@ -28,7 +28,7 @@ in {
         iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o ens3 -j MASQUERADE
       '';
       extraStopCommands = ''
-        iptables -t nat -D POSTROUTING -s 10.8.0.0/24 -o ens3P -j MASQUERADE
+        iptables -t nat -D POSTROUTING -s 10.8.0.0/24 -o ens3 -j MASQUERADE
       '';
       allowedUDPPortRanges = [
         { from =  1194; to =  1195; } # openvpn
@@ -54,22 +54,36 @@ in {
     };
     openvpn = {
       servers = {
-        for-laptop = {
+        laptop = {
           config = ''
-            dev tun0
             ifconfig 10.8.0.1 10.8.0.2
-            secret /root/static.key
+            dev tun0
+            proto udp
             port 1194
-            comp-lzo
+
+            tls-server
+            dh /root/pki/dh.pem
+
+            ca /root/pki/ca.crt
+            cert /root/pki/issued/server.crt
+            key /root/pki/private/server.key
           '';
         };
-        for-phone = {
+        phone = {
           config = ''
+            push "dhcp-option DNS 8.8.8.8"
+
+            ifconfig 10.8.0.3 10.8.0.4
             dev tun1
-            ifconfig 10.8.0.1 10.8.0.3
-            secret /root/phone-static.key
+            proto udp
             port 1195
-            comp-lzo
+
+            tls-server
+            dh /root/pki/dh.pem
+
+            ca /root/pki/ca.crt
+            cert /root/pki/issued/server.crt
+            key /root/pki/private/server.key
           '';
         };
       };

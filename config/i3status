@@ -8,7 +8,7 @@ order += "volume pulse"
 order += "disk /"
 order += "disk /nix/store"
 order += "disk /home"
-order += "wireless wlp4s0"
+order += "wireless wlan0"
 order += "path_exists VPN"
 order += "battery 0"
 order += "tztime local"
@@ -19,7 +19,7 @@ volume pulse {
         device = "pulse"
 }
 
-wireless wlp4s0 {
+wireless wlan0 {
         format_up = "W: (%quality at %essid) %ip"
         format_down = "W: down"
 }

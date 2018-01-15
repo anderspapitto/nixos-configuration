@@ -18,13 +18,7 @@
 ;;; Actual packages
 
 (use-package avy
-  :bind ("C-t" . avy-goto-char)
-  :init
-  (setq avy-keys
-        (nconc (number-sequence ?a ?z)
-               (number-sequence ?A ?Z)
-               (number-sequence ?1 ?9)
-               '(?0))))
+  :bind ("C-t" . avy-goto-char))
 
 (use-package cargo)
 
@@ -50,14 +44,6 @@
   :config
   (load "/etc/emacs/my-compile.el"))
 
-(use-package counsel)
-
-(use-package dirtrack
-  :init
-  (setq dirtrack-list '(".*?:\(.*?\)]" 1))
-  :config
-  (dirtrack-mode 1))
-
 (use-package elm-mode
   :init
   (setq elm-sort-imports-on-save t)
@@ -76,11 +62,6 @@
    (setq flycheck-standard-error-navigation t))
 
 (use-package haskell-mode)
-
-(use-package hledger-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.journal\\'" . hledger-mode))
-  (add-to-list 'company-backends 'hledger-company))
 
 (use-package intero
   :init
@@ -133,6 +114,8 @@
          ("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb))
   :init
+  (add-hook 'org-mode-hook 'real-auto-save-mode)
+  (add-hook 'org-mode-hook 'auto-revert-mode)
   (add-hook 'org-capture-after-finalize-hook 'delete-frame)
   (setq org-agenda-block-separator
         "=============================================================")
@@ -146,21 +129,16 @@
                                :priority "A")
                         (:name "Appointments"
                                :time-grid t)
-                        (:name "Established Habits"
-                               :and (:habit t :tag "established"))
-                        (:name "Developing Habits"
-                               :and (:habit t)
-                               :order 2)
                         (:name "Tasks"
                                :scheduled t)
                         ))))
-            (tags-todo "project"
-                  ((org-agenda-overriding-header "Project Next Tasks")
-                   (org-agenda-skip-function 'my-next-task-skip-function)))
+            (tags-todo "project&current"
+                       ((org-agenda-overriding-header "Current Project Tasks")))
             (tags-todo "-project-habit-capture-agenda_ignore"
                        ((org-agenda-overriding-header "Standalone Tasks")
                         (org-agenda-tags-todo-honor-ignore-options t)
                         (org-agenda-todo-ignore-scheduled 'all)))
+
             ))
           ("c" "Captures"
            ((tags "capture"
@@ -188,7 +166,7 @@
            "* TODO %?\n  %i")
           ("a" "Appointment" entry
            (file "~/org/appts.org")
-           "* %? :appointment:\n  %^T")
+           "* %? :appointment:\n  SCHEDULED %^t")
           ("u" "Urgent" entry
            (file "~/org/capture.org")
            "* TODO %?\n  SCHEDULED: %t\n  %i")
@@ -213,7 +191,6 @@
   (setq org-modules
         '(org-bbdb
           org-bibtex
-          org-checkboxes
           org-docview
           org-gnus
           org-habit
@@ -230,7 +207,7 @@
         (lambda ()
           (not (member (nth 2 (org-heading-components)) org-done-keywords))))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 9)))
-  (setq org-refile-use-outline-path 'file)
+  (setq org-refile-use-outline-path 't)
   (setq org-tags-exclude-from-inheritance  '("refile"))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)"
@@ -242,8 +219,6 @@
 (use-package org-super-agenda
   :config
   (org-super-agenda-mode))
-
-(use-package prodigy)
 
 (use-package projectile
   :init
@@ -263,7 +238,6 @@
 
 (use-package real-auto-save
   :init
-  (add-hook 'org-mode-hook 'real-auto-save-mode)
   (setq real-auto-save-interval 30))
 
 (use-package rust-mode)
@@ -272,21 +246,33 @@
   :init
   (setq shackle-rules '(("\\*input/output of.*\\*" :regexp t :ignore t))))
 
-(use-package shell
-  :config
-  (define-key shell-mode-map (kbd "TAB") 'company-manual-begin))
-
 (use-package subword
   :config
   (global-subword-mode))
-
-(use-package swiper)
 
 (use-package term
   :init
   (defun get-term ()
     (interactive)
-    (term "bash")))
+    (term "bash"))
+  :config
+  (defun expose-global-binding-in-term (binding)
+    (define-key term-raw-map binding
+      (lookup-key (current-global-map) binding)))
+  (expose-global-binding-in-term (kbd "M-x"))
+  (expose-global-binding-in-term (kbd "C-x"))
+  (expose-global-binding-in-term (kbd "C-c a"))
+
+  (defun my/term-toggle-mode ()
+    "Toggles term between line mode and char mode"
+    (interactive)
+    (if (term-in-line-mode)
+        (term-char-mode)
+      (term-line-mode)))
+  (define-key term-mode-map (kbd "M-i") 'my/term-toggle-mode)
+  (define-key term-raw-map (kbd "M-i") 'my/term-toggle-mode)
+
+  (define-key term-raw-map (kbd "C-y") 'term-paste))
 
 (use-package tramp
   :init
@@ -300,10 +286,6 @@
   (setq undo-tree-history-directory-alist '(("." . "/tmp/undo-tree")))
   :config
   (global-undo-tree-mode))
-
-(use-package vimish-fold
-  :config
-  (vimish-fold-global-mode 1))
 
 (use-package whitespace
   :bind ("C-x C-s" . save-with-delete-trailing-whitespace)
@@ -328,8 +310,6 @@
 (setq recenter-positions '(bottom middle top))
 (setq view-read-only t)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
-(global-set-key (kbd "<f12>") 'browse-url-at-point)
-(global-set-key (kbd "<XF86Explorer>") 'browse-url-at-point)
 
 ;;; copy/paste
 
@@ -387,10 +367,5 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (when (daemonp)
   (progn
-    (defun spawn-term (name command)
-      (get-term)
-      (rename-buffer name)
-      (comint-send-string (get-buffer-process name) command))
-    (spawn-term "*sudo*" "exec sudo -i\n")
     (find-file-noselect "/etc/nixos/configuration/config/init.el")
     (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")))

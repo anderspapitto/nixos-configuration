@@ -13,7 +13,7 @@
     file
     git
     gptfdisk
-    gnupg20 # emacs wants the gpg2 binary?
+    gnupg # emacs wants the gpg2 binary?
     htop
     iftop
     iotop
