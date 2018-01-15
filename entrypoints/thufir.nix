@@ -30,8 +30,10 @@ in {
       extraStopCommands = ''
         iptables -t nat -D POSTROUTING -s 10.8.0.0/24 -o enp0s3 -j MASQUERADE
       '';
-      allowedUDPPorts = [ 1194 1195 ]; # openvpn
-      allowedUDPPortRanges = [ { from = 60000; to = 61000; } ]; # mosh
+      allowedUDPPortRanges = [
+        { from =  1194; to =  1195; } # openvpn
+        { from = 60000; to = 61000; } # mosh
+      ];
       allowedTCPPorts = [ 4242 ]; # quassel
       trustedInterfaces = [ "tun0" "tun1" ];
     };
