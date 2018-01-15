@@ -28,7 +28,7 @@ in {
         iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o ens3 -j MASQUERADE
       '';
       extraStopCommands = ''
-        iptables -t nat -D POSTROUTING -s 10.8.0.0/24 -o ens3 -j MASQUERADE
+        iptables -t nat -D POSTROUTING -s 10.8.0.0/24 -o ens3P -j MASQUERADE
       '';
       allowedUDPPortRanges = [
         { from =  1194; to =  1195; } # openvpn
