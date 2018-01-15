@@ -20,6 +20,7 @@
     # linuxPackages.perf
     lshw
     lsof
+    mosh
     mtr
     nftables
     openssl
