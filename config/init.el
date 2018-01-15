@@ -119,39 +119,6 @@
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
-(use-package multi-term
-  :init
-  (add-to-list 'term-unbind-key-list  "M-f")
-  (add-to-list 'term-unbind-key-list  "M-b")
-  (add-to-list 'term-unbind-key-list  "C-f")
-  (add-to-list 'term-unbind-key-list  "C-b")
-  (add-to-list 'term-unbind-key-list  "C-t")
-  (add-to-list 'term-unbind-key-list  "C-s")
-  (add-to-list 'term-unbind-key-list  "C-r")
-  (setq term-bind-key-alist
-        '(
-          ("C-c C-c" . term-interrupt-subjob)
-          ("C-c C-e" . term-send-esc)
-          ("M-p" . term-send-up)
-          ("M-n" . term-send-down)
-          ("<M-backspace>" . term-send-backward-kill-word)
-          ("<C-backspace>" . term-send-backward-kill-word)
-          ("M-r" . term-send-reverse-search-history)
-          ("M-d" . term-send-delete-word)))
-  (defun last-term-buffer (l)
-    "Return most recently used term buffer."
-    (when l
-      (if (eq 'term-mode (with-current-buffer (car l) major-mode))
-          (car l) (last-term-buffer (cdr l)))))
-  (defun get-term ()
-    "Switch to the term buffer last used, or create a new one if
-    none exists, or if the current buffer is already a term."
-    (interactive)
-    (let ((b (last-term-buffer (buffer-list))))
-      (if (or (not b) (eq 'term-mode major-mode))
-          (multi-term)
-        (switch-to-buffer b)))))
-
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
@@ -315,6 +282,12 @@
 
 (use-package swiper)
 
+(use-package term
+  :init
+  (defun get-term ()
+    (interactive)
+    (term "bash")))
+
 (use-package tramp
   :init
   (add-to-list 'tramp-remote-path "/run/current-system/sw/bin")
@@ -408,29 +381,14 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (set-face-attribute 'default nil :height 105)
 (set-face-attribute 'default nil :family "Inconsolata")
-
-(defun anders-switch-theme (from-theme to-theme org-hide-face)
-  (progn
-    (disable-theme from-theme)
-    (load-theme to-theme t)))
-(defun enable-dark-theme ()
-  (interactive)
-  (anders-switch-theme 'adwaita 'wheatgrass "#000000"))
-(defun enable-light-theme ()
-  (interactive)
-  (anders-switch-theme 'wheatgrass 'adwaita "#EDEDED"))
-(enable-light-theme)
-
-
-(setq safe-local-variable-values
-      '((projectile-project-compilation-cmd . "./build/Build.hs")))
+(load-theme 'deeper-blue)
 
 ;;; various stuff that I just always want to have open
 
 (when (daemonp)
   (progn
     (defun spawn-term (name command)
-      (multi-term)
+      (get-term)
       (rename-buffer name)
       (comint-send-string (get-buffer-process name) command))
     (spawn-term "*sudo*" "exec sudo -i\n")

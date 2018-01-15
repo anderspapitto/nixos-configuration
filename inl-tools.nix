@@ -46,10 +46,8 @@
         if systemctl is-active compton-night > /dev/null
         then
             sudo systemctl start compton
-            ${emacs}/bin/emacsclient -e '(enable-light-theme)'
         else
             sudo systemctl start compton-night
-            ${emacs}/bin/emacsclient -e '(enable-dark-theme)'
         fi
       '')
     (writeScriptBin "external-drive-mount" ''
