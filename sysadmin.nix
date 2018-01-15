@@ -22,6 +22,7 @@
     lsof
     mtr
     nftables
+    openssl
     pciutils
     psmisc
     sysdig

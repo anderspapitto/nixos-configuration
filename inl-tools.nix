@@ -88,26 +88,101 @@
           exec less -R "$@"
         fi
       '')
-    (writeScriptBin "switch-to-headphones" ''
+    (writeScriptBin "disable-bluetooth" ''
         #! ${bash}/bin/bash
         set -x
-        pacmd set-sink-port alsa_output.pci-0000_00_1b.0.analog-stereo analog-output-headphones
+
+        export XDG_RUNTIME_DIR=/run/user/$UID
+
+        bluetoothctl <<< 'power off'
       '')
-    (writeScriptBin "switch-to-speakers" ''
+    (writeScriptBin "audio-bluetooth" ''
         #! ${bash}/bin/bash
         set -x
-        pacmd set-sink-port alsa_output.pci-0000_00_1b.0.analog-stereo analog-output-speaker
+
+        export XDG_RUNTIME_DIR=/run/user/$UID
+
+        TRIES=0
+        until (bluetoothctl <<< show | grep -q 'Powered: yes')
+        do
+          bluetoothctl <<< 'power on'
+          [[ $((TRIES++)) -eq 20 ]] && exit 1
+          sleep 0.1
+        done
+
+        TRIES=0
+        until [ -n "$DEVICE" ]
+        do
+          DEVICE=$(bluetoothctl <<< devices | egrep '^Device.*OontZ' | awk '{ print $2 }')
+          [[ $((TRIES++)) -eq 20 ]] && exit 1
+          sleep 0.1
+        done
+
+        TRIES=0
+        until bluetoothctl <<< "connect $DEVICE"
+        do
+          [[ $((TRIES++)) -eq 20 ]] && exit 1
+          sleep 0.1
+        done
+
+        TRIES=0
+        until [ -n "$TARGET_CARD" ]
+        do
+          TARGET_CARD=$(pacmd list-cards | grep 'name:' | egrep -o 'bluez.*[^>]')
+          [[ $((TRIES++)) -eq 20 ]] && exit 1
+          sleep 0.1
+        done
+
+        TRIES=0
+        until pacmd list-cards | egrep -q 'active profile: <a2dp_sink>'
+        do
+          pacmd set-card-profile $TARGET_CARD a2dp_sink
+          [[ $((TRIES++)) -eq 20 ]] && exit 1
+          sleep 0.1
+        done
+
+        TRIES=0
+        until [ -n "$TARGET_SINK" ]
+        do
+          TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
+          [[ $((TRIES++)) -eq 20 ]] && exit 1
+          sleep 0.1
+        done
+
+        pactl set-sink-volume $TARGET_SINK 50%
+        pacmd set-default-sink $TARGET_SINK
+
+        for index in $(pacmd list-sink-inputs $TARGET_SINK | grep index | awk '{ print $2 }')
+        do
+            pacmd move-sink-input $index $TARGET_SINK
+        done
       '')
-    (writeScriptBin "toggle-suspend-audio" ''
+    (writeScriptBin "bluetooth-off" ''
         #! ${bash}/bin/bash
-        pacmd list-sinks | grep state: | grep -v -q SUSPENDED
-        if [[ $? -eq 0 ]]
-        then
-            pacmd suspend 1
-        else
-            pacmd suspend 0
-        fi
+        set -x
+        bluetoothctl <<< 'power off'
       '')
+
+#     (writeScriptBin "switch-to-headphones" ''
+#         #! ${bash}/bin/bash
+#         set -x
+#         pacmd set-sink-port alsa_output.pci-0000_00_1b.0.analog-stereo analog-output-headphones
+#       '')
+#     (writeScriptBin "switch-to-speakers" ''
+#         #! ${bash}/bin/bash
+#         set -x
+#         pacmd set-sink-port alsa_output.pci-0000_00_1b.0.analog-stereo analog-output-speaker
+#       '')
+#     (writeScriptBin "toggle-suspend-audio" ''
+#         #! ${bash}/bin/bash
+#         pacmd list-sinks | grep state: | grep -v -q SUSPENDED
+#         if [[ $? -eq 0 ]]
+#         then
+#             pacmd suspend 1
+#         else
+#             pacmd suspend 0
+#         fi
+#       '')
   ];
 
   environment.variables = { PAGER = "my-pager"; };

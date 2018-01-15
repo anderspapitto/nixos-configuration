@@ -119,6 +119,39 @@
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
+(use-package multi-term
+  :init
+  (add-to-list 'term-unbind-key-list  "M-f")
+  (add-to-list 'term-unbind-key-list  "M-b")
+  (add-to-list 'term-unbind-key-list  "C-f")
+  (add-to-list 'term-unbind-key-list  "C-b")
+  (add-to-list 'term-unbind-key-list  "C-t")
+  (add-to-list 'term-unbind-key-list  "C-s")
+  (add-to-list 'term-unbind-key-list  "C-r")
+  (setq term-bind-key-alist
+        '(
+          ("C-c C-c" . term-interrupt-subjob)
+          ("C-c C-e" . term-send-esc)
+          ("M-p" . term-send-up)
+          ("M-n" . term-send-down)
+          ("<M-backspace>" . term-send-backward-kill-word)
+          ("<C-backspace>" . term-send-backward-kill-word)
+          ("M-r" . term-send-reverse-search-history)
+          ("M-d" . term-send-delete-word)))
+  (defun last-term-buffer (l)
+    "Return most recently used term buffer."
+    (when l
+      (if (eq 'term-mode (with-current-buffer (car l) major-mode))
+          (car l) (last-term-buffer (cdr l)))))
+  (defun get-term ()
+    "Switch to the term buffer last used, or create a new one if
+    none exists, or if the current buffer is already a term."
+    (interactive)
+    (let ((b (last-term-buffer (buffer-list))))
+      (if (or (not b) (eq 'term-mode major-mode))
+          (multi-term)
+        (switch-to-buffer b)))))
+
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
@@ -189,6 +222,9 @@
           ("a" "Appointment" entry
            (file "~/org/appts.org")
            "* %? :appointment:\n  %^T")
+          ("u" "Urgent" entry
+           (file "~/org/capture.org")
+           "* TODO %?\n  SCHEDULED: %t\n  %i")
           ("j" "Journal" entry
            (file+datetree "~/org/journal.org")
            "* %?\nEntered on %U\n  %i")
@@ -340,6 +376,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (setq frame-auto-hide-function 'delete-frame)
 (setq display-buffer-alist
       '(("*shell*" (display-buffer-same-window) ())
+        ("*term*" (display-buffer-same-window) ())
         (".*" (display-buffer-reuse-window
                display-buffer-same-window
                display-buffer-pop-up-frame)
@@ -392,10 +429,10 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (when (daemonp)
   (progn
-    (defun spawn-shell (name command)
-      (pop-to-buffer (get-buffer-create name))
-      (shell (current-buffer))
-      (process-send-string nil command))
-    (spawn-shell "*sudo*" "echo; exec sudo -i\n")
+    (defun spawn-term (name command)
+      (multi-term)
+      (rename-buffer name)
+      (comint-send-string (get-buffer-process name) command))
+    (spawn-term "*sudo*" "exec sudo -i\n")
     (find-file-noselect "/etc/nixos/configuration/config/init.el")
     (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")))

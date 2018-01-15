@@ -112,20 +112,26 @@ in {
       "clipboard manager"
       "exec ${pkgs.clipit}/bin/clipit"
       ;
-    xmodmap =
+    xkeys =
       let config = pkgs.writeText "xmodmap-config"
             ''
               clear Lock
+              clear Control
+              clear Mod1
+
               keycode 108 = Control_L
               add Control = Control_L
+              add Mod1 = Alt_L
 
               clear Mod5
               keycode 66 = ISO_Level3_Shift
             '';
-      in simpleXService "xmodmap"
+      in simpleXService "xkeys"
         "Fuck setxkbmap"
+        # the version of xcape in nixpkgs doesn't support -f
         ''
           ${pkgs.xorg.xmodmap}/bin/xmodmap ${config}
+          ${pkgs.xcape}/bin/xcape -e 'Control_L=Return;Alt_L=BackSpace'
           exec sleep infinity
         ''
       ;
@@ -134,6 +140,15 @@ in {
       ''
         ${pkgs.xorg.xrdb}/bin/xrdb /etc/X11/xresources
         exec sleep infinity
+      '';
+    breaktime = simpleXService "breaktime"
+      "reminder to take break"
+      ''
+        while true
+        do
+          ${pkgs.libnotify}/bin/notify-send "take a break"
+          sleep $((60 * 30))
+        done
       '';
   };
 }

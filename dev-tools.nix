@@ -5,6 +5,7 @@
     (haskellPackages.ghcWithPackages (p: with p; [ turtle ]))
     android-studio
     aria2
+    awscli
     cmake
     coq
     gcc
@@ -16,7 +17,6 @@
     nixops
     nodePackages.coffee-script
     patchelf
-    s3cmd
     sqlite
     valgrind
     z3
