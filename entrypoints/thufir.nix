@@ -58,32 +58,16 @@ in {
           config = ''
             ifconfig 10.8.0.1 10.8.0.2
             dev tun0
-            proto udp
             port 1194
-
-            tls-server
-            dh /root/pki/dh.pem
-
-            ca /root/pki/ca.crt
-            cert /root/pki/issued/server.crt
-            key /root/pki/private/server.key
+            secret /root/static.key
           '';
         };
         phone = {
           config = ''
-            push "dhcp-option DNS 8.8.8.8"
-
-            ifconfig 10.8.0.3 10.8.0.4
+            ifconfig 10.8.0.1 10.8.0.3
             dev tun1
-            proto udp
             port 1195
-
-            tls-server
-            dh /root/pki/dh.pem
-
-            ca /root/pki/ca.crt
-            cert /root/pki/issued/server.crt
-            key /root/pki/private/server.key
+            secret /root/static.key
           '';
         };
       };
