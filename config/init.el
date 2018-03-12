@@ -166,7 +166,7 @@
            "* TODO %?\n  %i")
           ("a" "Appointment" entry
            (file "~/org/appts.org")
-           "* %? :appointment:\n  SCHEDULED %^t")
+           "* %? :appointment:\n  SCHEDULED: %^t")
           ("u" "Urgent" entry
            (file "~/org/capture.org")
            "* TODO %?\n  SCHEDULED: %t\n  %i")

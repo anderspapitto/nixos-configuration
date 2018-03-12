@@ -3,8 +3,8 @@
 { nixpkgs.config = {
     allowUnfree = true;
 
-    chromium = {
-      enablePepperFlash = true;
-    };
+#    chromium = {
+#      enablePepperFlash = true;
+#    };
   };
 }
