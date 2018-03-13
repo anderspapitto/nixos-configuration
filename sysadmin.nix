@@ -22,6 +22,8 @@
     lsof
     mosh
     mtr
+    neovim
+    neovim-qt
     nftables
     openssl
     pciutils

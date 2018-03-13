@@ -14,9 +14,9 @@
         "nixos-config=/etc/nixos/configuration"
       ];
     useSandbox = true;
-    binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
-    binaryCachePublicKeys =
-      [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
+    # binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
+    # binaryCachePublicKeys =
+    #   [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
   };
 
   system.stateVersion = "16.09";
