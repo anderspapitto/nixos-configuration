@@ -100,8 +100,8 @@ colorscheme solarized
 "------  Vim Config Stuff  ------"
 
 " Set swp files to go to a central location
-set backupdir=$HOME/.config/nvim/swp//,/tmp//,.
-set directory=$HOME/.config/nvim/swp//,/tmp//,.
+set backupdir=$HOME/.cache/nvim/swp//,/tmp//,.
+set directory=$HOME/.cache/nvim/swp//,/tmp//,.
 
 " Share clipboard
 set clipboard+=unnamedplus

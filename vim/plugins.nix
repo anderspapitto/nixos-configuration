@@ -140,28 +140,6 @@ in {
 
   };
 
-  nrun-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "nrun-vim-2017-10-19";
-    src = fetchgit {
-      url = "https://github.com/jaawerth/nrun.vim";
-      rev = "847dd4887eded123314896caf50b1c9a8502e599";
-      sha256 = "1cqpkd2czj9llx27psnn5zi9q874lv1bdsmq14f4rmrhi2kwmmqh";
-    };
-    dependencies = [];
-
-  };
-
-  tagbar = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "tagbar-2017-12-17";
-    src = fetchgit {
-      url = "https://github.com/majutsushi/tagbar";
-      rev = "387bbadda98e1376ff3871aa461b1f0abd4ece70";
-      sha256 = "0srmslg0v1a7zhzz0wgzgv7jyr0j3q9m766qzb7zimkkb32fcbx9";
-    };
-    dependencies = [];
-
-  };
-
   undotree = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "undotree-2017-10-26";
     src = fetchgit {
@@ -346,7 +324,7 @@ in {
       sha256 = "0rfxzryccrq3dnjgb9aljzrmfjk7p8l2qdjkl8ar4bh2hmz8vn5y";
     };
     dependencies = [];
-    buildInputs = [ python3 ]; 
+    buildInputs = [ python3 ];
     buildPhase = ''
       pushd ./rplugin/python3/deoplete/ujson
       python3 setup.py build --build-base=$PWD/build --build-lib=$PWD/build

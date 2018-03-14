@@ -10,8 +10,6 @@
 "github:fatih/vim-go"
 "github:hashivim/vim-terraform"
 "github:hdima/python-syntax"
-"github:jaawerth/nrun.vim"
-"github:majutsushi/tagbar"
 "github:mbbill/undotree"
 "github:mhinz/vim-grepper"
 "github:mxw/vim-jsx"
