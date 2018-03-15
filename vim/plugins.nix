@@ -1,5 +1,5 @@
 { pkgs, fetchFromGitHub, fetchgit,
-  python3, stdenv, cmake, boost, icu, readline
+  python3, stdenv, cmake, boost, icu, readline, ncurses
 }:
 
 let
@@ -187,6 +187,7 @@ in {
       cmake
       boost
       icu
+      ncurses
     ];
     buildPhase = ''
       patchShebangs .
@@ -218,11 +219,11 @@ in {
   };
 
   nerdtree = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "nerdtree-2018-03-06";
+    name = "nerdtree-2018-03-13";
     src = fetchgit {
       url = "https://github.com/scrooloose/nerdtree";
-      rev = "ed446e5cbe0733a8f98befc88d33e42edebb67d2";
-      sha256 = "0i5qy8lb8w5ri30905i7411754g2vzj4jlccak5lj852vyzgdp56";
+      rev = "a172d7cfcb4fe9b927dcc24184204fc89d826301";
+      sha256 = "1nfk1j2n2jgrdhcahva1kq3qjj4fdn1x20xxvgl88v3j3fj62n0f";
     };
     dependencies = [];
 
@@ -334,11 +335,11 @@ in {
   };
 
   deoplete-jedi = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "deoplete-jedi-2018-01-26";
+    name = "deoplete-jedi-2018-03-12";
     src = fetchgit {
       url = "https://github.com/zchee/deoplete-jedi";
-      rev = "f7a0c4ffc53c16a931f761819240f60eafec9604";
-      sha256 = "1i1hxvqff8c0n8gasfq97aszchh6709w4s1qj1h809ikaqdil7xr";
+      rev = "a4bec4bddcf597b572180c775087f8ae19de6789";
+      sha256 = "1rypbbl86x6xvrvxx8p97niixy3vh9dscc43aw6117q737i9vq6c";
     };
     dependencies = [];
 
@@ -354,4 +355,5 @@ in {
     dependencies = [];
 
   };
+
 }
