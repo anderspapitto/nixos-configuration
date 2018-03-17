@@ -131,7 +131,6 @@ in {
         # the version of xcape in nixpkgs doesn't support -f
         ''
           ${pkgs.xorg.xmodmap}/bin/xmodmap ${config}
-          ${pkgs.xcape}/bin/xcape -e 'Control_L=Return;Alt_L=BackSpace'
           exec sleep infinity
         ''
       ;

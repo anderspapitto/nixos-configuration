@@ -2,6 +2,9 @@
 
 let
   emacs = pkgs.emacs25;
+  editor = pkgs.writeScriptBin "editor" ''
+    ${emacs}/bin/emacsclient -c
+  '';
   startEmacs = pkgs.writeScript "emacs" ''
       #!${pkgs.bash}/bin/bash
       . ${config.system.build.setEnvironment}
@@ -20,7 +23,7 @@ in {
         source = ./config/my-org.el;
       }
     ];
-    systemPackages = [ emacs ];
+    systemPackages = [ emacs editor ];
   };
   systemd.services.emacs = {
     description = "Emacs: the extensible, self-documenting text editor";

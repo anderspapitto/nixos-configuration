@@ -22,7 +22,6 @@
     ./uefi.nix
     ./utility-scripts.nix
     ./virtualization.nix
-    ./vim
     ./x.nix
 
     ./private/default.nix

@@ -12,7 +12,7 @@
       ];
     };
 
-  environment.variables = { EDITOR = "emacsclient -c"; };
+  environment.variables = { EDITOR = "editor"; };
 
   networking = {
     firewall = {
