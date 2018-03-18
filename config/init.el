@@ -23,10 +23,12 @@
   :bind ("C-t" . avy-goto-char))
 
 (use-package column-marker
-  :init
-  (add-hook 'prog-mode-hook (lambda () (column-marker-1 79))))
+  :hook (prog-mode-hook . (lambda () (column-marker-1 79))))
 
 (use-package company
+  :bind (:map company-active-map
+              ("RET" . nil)
+              ("M-0" . company-complete-selection))
   :init
   (setq company-global-modes '(not gud-mode))
   (setq company-dabbrev-downcase nil)
@@ -43,17 +45,53 @@
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
+(use-package flymake)
+
+(use-package god-mode
+  :bind (("<escape>" . god-local-mode)
+         :map god-local-mode-map
+         ("i" . god-local-mode)
+         ("." . repeat)
+         :map isearch-mode-map
+         ("<escape>" . god-mode-isearch-activate)
+         :map god-mode-isearch-map
+         ("<escape>" . god-mode-isearch-disable))
+  :init
+  (setq god-mod-alist
+   '((nil . "C-")
+     ("t" . "M-")
+     ("T" . "C-M-")))
+  (defun anders/update-cursor ()
+    (setq cursor-type (if god-local-mode 'box 'bar)))
+  :hook
+  ((god-mode-enabled-hook god-mode-disabled-hook) . anders/update-cursor)
+  :config
+  (require 'god-mode-isearch)
+
+  ;; bugfix for https://github.com/chrisdone/god-mode/issues/110
+  (defun god-mode-upper-p (char)
+    "Is the given char upper case?"
+    (and (>= char ?A)
+         (<= char ?Z)
+         (/= char ?T))))
+
 (use-package ivy
   :config
   (ivy-mode 1))
 
+;; Magit is awesome.
 (use-package magit
   :init
   (setq magit-commit-show-diff nil)
   (setq magit-delete-by-moving-to-trash nil)
   (setq magit-diff-expansion-threshold 2.0)
   (setq magit-diff-use-overlays nil)
-  (setq magit-no-confirm '(stage-all-changes unstage-all-changes))
+  (setq magit-no-confirm
+        '(abort-rebase
+          delete-unmerged-branch
+          drop-stashes
+          stage-all-changes
+          unstage-all-changes))
   (setq magit-revert-buffers t)
   (setq magit-use-overlays nil))
 
@@ -61,21 +99,6 @@
   :init
   (setq Man-width 80)
   (setq Man-notify-method 'pushy))
-
-(use-package god-mode
-  :init
-  (global-set-key (kbd "<escape>") 'god-local-mode)
-  (defun anders/update-cursor ()
-    (setq cursor-type
-          (if (or god-local-mode buffer-read-only) 'box 'bar)))
-  (add-hook 'god-mode-enabled-hook 'anders/update-cursor)
-  (add-hook 'god-mode-disabled-hook 'anders/update-cursor)
-  :config
-  (require 'god-mode-isearch)
-  (define-key isearch-mode-map (kbd "<escape>") 'god-mode-isearch-activate)
-  (define-key god-mode-isearch-map (kbd "<escape>") 'god-mode-isearch-disable)
-  (define-key god-local-mode-map (kbd "i") 'god-local-mode)
-  (define-key god-local-mode-map (kbd ".") 'repeat))
 
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
@@ -85,6 +108,10 @@
 
 (use-package org
   :bind (("C-c a" . anders/org-agenda))
+  :hook
+  ((org-mode-hook) . real-auto-save-mode)
+  ((org-mode-hook) . auto-revert-mode)
+  ((org-capture-after-finalize-hook) . delete-frame)
   :init
   ;; Utility function so that I don't have to fix the set of org files
   ;; statically.
@@ -93,14 +120,6 @@
                (lambda (filename) (s-ends-with-p ".org" filename))
                t))
 
-  ;; Autosave files, and gracefully handle the special case of
-  ;; automatic cross-machine syncing for the files subject to it.
-  (add-hook 'org-mode-hook 'real-auto-save-mode)
-  (add-hook 'org-mode-hook 'auto-revert-mode)
-
-  ;; This is part of my window-management strategy (only use os-level
-  ;; window control)
-  (add-hook 'org-capture-after-finalize-hook 'delete-frame)
   (setq org-agenda-window-setup 'current-window)
 
   ;; Set up the agenda for the particular things I want out of it.
@@ -150,17 +169,21 @@
     (interactive)
     (projectile-dired)
     (ignore-errors (projectile-vc)))
+  (defun anders/ignore-project (project)
+    (string-match-p "/nix/store" project))
   (setq projectile-keymap-prefix (kbd "M-t"))
   (setq projectile-mode-line
         ''(:eval (format "Projectile[%s]" default-directory)))
   (setq projectile-switch-project-action 'anders/vc-or-dired)
   (setq projectile-completion-system 'ivy)
+  (setq projectile-ignored-project-function 'anders/ignore-project)
   :config
   (projectile-global-mode)
-  (ad-deactivate 'compilation-find-file)
-  (define-key projectile-command-map (kbd "s g") 'projectile-ripgrep))
+  (ad-deactivate 'compilation-find-file))
 
-(use-package projectile-ripgrep)
+(use-package projectile-ripgrep
+  :bind ((:map projectile-command-map
+               (("s g" . projectile-ripgrep)))))
 
 (use-package real-auto-save
   :init
@@ -175,7 +198,12 @@
   (global-subword-mode))
 
 (use-package term
-  :bind (("M-RET" . 'anders/get-term))
+  :bind (("M-RET" . anders/get-term)
+         :map term-mode-map
+         (("M-i" . anders/term-toggle-mode))
+         :map term-raw-map
+         (("M-i" . anders/term-toggle-mode)
+          ("C-y" . term-paste)))
   :init
   (defun anders/new-term ()
     (interactive)
@@ -186,23 +214,20 @@
     (if (get-buffer "shell")
         (switch-to-buffer "shell")
       (anders/new-term)))
-  :config
   (defun anders/expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
       (lookup-key (current-global-map) binding)))
-  (anders/expose-global-binding-in-term (kbd "M-x"))
-  (anders/expose-global-binding-in-term (kbd "C-x"))
-  (anders/expose-global-binding-in-term (kbd "C-c a"))
-
   (defun anders/term-toggle-mode ()
     "Toggles term between line mode and char mode"
     (interactive)
     (if (term-in-line-mode)
         (term-char-mode)
       (term-line-mode)))
-  (define-key term-mode-map (kbd "M-i") 'anders/term-toggle-mode)
-  (define-key term-raw-map  (kbd "M-i") 'anders/term-toggle-mode)
-  (define-key term-raw-map (kbd "C-y") 'term-paste))
+  :config
+  (anders/expose-global-binding-in-term (kbd "M-x"))
+  (anders/expose-global-binding-in-term (kbd "C-x"))
+  (anders/expose-global-binding-in-term (kbd "C-c a")))
+
 
 (use-package tramp
   :init
@@ -220,10 +245,10 @@
 
 (use-package whitespace
   :bind ("C-x C-s" . anders/save-with-delete-trailing-whitespace)
+  :hook ((prog-mode-hook . whitespace-mode))
   :init
   (setq-default indent-tabs-mode nil)
   (setq whitespace-style '(face tabs))
-  (add-hook 'prog-mode-hook 'whitespace-mode)
   (defun anders/save-with-delete-trailing-whitespace ()
     (interactive)
     (delete-trailing-whitespace)
@@ -236,9 +261,7 @@
 (use-package elm-mode
   :init
   (setq elm-sort-imports-on-save t)
-  (setq elm-format-on-save t)
-  (add-to-list 'company-backends 'company-elm)
-  (add-hook 'elm-mode-hook 'elm-oracle-setup-completion))
+  (setq elm-format-on-save t))
 
 (use-package haskell-mode)
 
@@ -252,13 +275,12 @@
              (shell-command-to-string
               "stack path --project-root --verbosity silent"))
       (intero-mode)))
-  (add-hook 'haskell-mode-hook 'anders/intero-mode-unless-global-project))
+  :hook ((haskell-mode-hook . anders/intero-mode-unless-global-project)))
 
 (use-package markdown-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+  :mode
+  (("\\.markdown\\'" . markdown-mode)
+   ("\\.md\\'"       . markdown-mode)))
 
 (use-package nix-mode)
 
@@ -319,6 +341,7 @@
 (set-face-attribute 'default nil :family "Inconsolata")
 (load-theme 'deeper-blue)
 (show-paren-mode 1)
+(global-linum-mode)
 
 ;;; Miscellaneous
 
