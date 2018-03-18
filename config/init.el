@@ -23,7 +23,7 @@
   :bind ("C-t" . avy-goto-char))
 
 (use-package column-marker
-  :hook (prog-mode-hook . (lambda () (column-marker-1 79))))
+  :hook (prog-mode . (lambda () (column-marker-1 79))))
 
 (use-package company
   :bind (:map company-active-map
@@ -64,7 +64,7 @@
   (defun anders/update-cursor ()
     (setq cursor-type (if god-local-mode 'box 'bar)))
   :hook
-  ((god-mode-enabled-hook god-mode-disabled-hook) . anders/update-cursor)
+  ((god-mode-enabled god-mode-disabled) . anders/update-cursor)
   :config
   (require 'god-mode-isearch)
 
@@ -109,9 +109,9 @@
 (use-package org
   :bind (("C-c a" . anders/org-agenda))
   :hook
-  ((org-mode-hook) . real-auto-save-mode)
-  ((org-mode-hook) . auto-revert-mode)
-  ((org-capture-after-finalize-hook) . delete-frame)
+  ((org-mode) . real-auto-save-mode)
+  ((org-mode) . auto-revert-mode)
+  ((org-capture-after-finalize) . delete-frame)
   :init
   ;; Utility function so that I don't have to fix the set of org files
   ;; statically.
@@ -245,7 +245,7 @@
 
 (use-package whitespace
   :bind ("C-x C-s" . anders/save-with-delete-trailing-whitespace)
-  :hook ((prog-mode-hook . whitespace-mode))
+  :hook ((prog-mode . whitespace-mode))
   :init
   (setq-default indent-tabs-mode nil)
   (setq whitespace-style '(face tabs))
@@ -275,7 +275,7 @@
              (shell-command-to-string
               "stack path --project-root --verbosity silent"))
       (intero-mode)))
-  :hook ((haskell-mode-hook . anders/intero-mode-unless-global-project)))
+  :hook ((haskell-mode . anders/intero-mode-unless-global-project)))
 
 (use-package markdown-mode
   :mode
