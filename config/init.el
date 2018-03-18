@@ -12,15 +12,15 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;;; load secrets
-(load "~/.emacs.d/lisp/secrets.el")
+;;; Elisp utilities
 
-;;; Actual packages
+(use-package f)
+(use-package s)
+
+;;; Actual packages, except language-specific
 
 (use-package avy
   :bind ("C-t" . avy-goto-char))
-
-(use-package cargo)
 
 (use-package column-marker
   :init
@@ -44,41 +44,12 @@
   :config
   (load "/etc/emacs/my-compile.el"))
 
-(use-package elm-mode
-  :init
-  (setq elm-sort-imports-on-save t)
-  (setq elm-format-on-save t)
-  (add-to-list 'company-backends 'company-elm)
-  (add-hook 'elm-mode-hook 'elm-oracle-setup-completion))
-
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
-
-(use-package flycheck
-   :init
-   (setq flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc))
-   (setq flycheck-emacs-lisp-load-path 'inherit)
-   (setq flycheck-display-errors-function 'nil)
-   (setq flycheck-standard-error-navigation t))
-
-(use-package haskell-mode)
-
-(use-package intero
-  :init
-  (defun anders-intero-mode-unless-global-project ()
-    "Run intero-mode iff we're in a project with a stack.yaml"
-    (interactive)
-    (unless (string-match-p
-             (regexp-quote "global")
-             (shell-command-to-string "stack path --project-root --verbosity silent"))
-      (intero-mode)))
-  (add-hook 'haskell-mode-hook 'anders-intero-mode-unless-global-project))
 
 (use-package ivy
   :config
   (ivy-mode 1))
-
-(use-package load-relative)
 
 (use-package magit
   :init
@@ -94,153 +65,94 @@
   (setq Man-width 80)
   (setq Man-notify-method 'pushy))
 
-(use-package markdown-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
-
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 
-(use-package nix-mode)
-
 (use-package org
-  :ensure org-plus-contrib
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
-         ("C-c b" . org-iswitchb))
+  :bind (("C-c a" . anders/org-agenda))
   :init
+  ;; Utility function so that I don't have to fix the set of org files
+  ;; statically.
+  (defun anders/dynamic-org-files (directory)
+    (f-entries directory
+               (lambda (filename) (s-ends-with-p ".org" filename))
+               t))
+
+  ;; Autosave files, and gracefully handle the special case of
+  ;; automatic cross-machine syncing for the files subject to it.
   (add-hook 'org-mode-hook 'real-auto-save-mode)
   (add-hook 'org-mode-hook 'auto-revert-mode)
+
+  ;; This is part of my window-management strategy (only use os-level
+  ;; window control)
   (add-hook 'org-capture-after-finalize-hook 'delete-frame)
-  (setq org-agenda-block-separator
-        "=============================================================")
-  (setq org-agenda-compact-blocks nil)
-  (setq org-agenda-custom-commands
-        '(("a" "Agenda"
-           ((agenda ""
-                    ((org-super-agenda-groups
-                      '((:discard (:tag "agenda_ignore"))
-                        (:name "Important"
-                               :priority "A")
-                        (:name "Appointments"
-                               :time-grid t)
-                        (:name "Tasks"
-                               :scheduled t)
-                        ))))
-            (tags-todo "project&current"
-                       ((org-agenda-overriding-header "Current Project Tasks")))
-            (tags-todo "-project-habit-capture-agenda_ignore"
-                       ((org-agenda-overriding-header "Standalone Tasks")
-                        (org-agenda-tags-todo-honor-ignore-options t)
-                        (org-agenda-todo-ignore-scheduled 'all)))
-
-            ))
-          ("c" "Captures"
-           ((tags "capture"
-                  ((org-agenda-overriding-header "Capture")))))
-          ))
-
-  (setq org-agenda-files '("~/org" "~/org/dev"))
-  (setq org-agenda-include-diary t)
-  (setq org-agenda-skip-function-global
-        (lambda ()
-          (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-            (if (re-search-forward ":agenda_ignore:" subtree-end t)
-                subtree-end ; tag found, continue after end of subtree
-              nil))))       ; tag not found, do not skip
-  (setq org-agenda-span 'day)
-  (setq org-agenda-time-grid
-        '((daily today require-timed)
-          ()
-          "......"
-          "----------------"))
   (setq org-agenda-window-setup 'current-window)
+
+  ;; Set up the agenda for the particular things I want out of it.
+  (defun anders/org-agenda ()
+    (interactive)
+    (org-agenda nil "custom"))
+  (setq org-agenda-compact-blocks t)
+  (setq org-agenda-custom-commands
+        '(("custom" "Custom Agenda"
+           ((todo ""
+                  ((org-agenda-files
+                    (anders/dynamic-org-files "~/projects/primary"))))
+            (todo ""
+                  ((org-agenda-files
+                    (anders/dynamic-org-files "~/projects/special"))))
+            (tags "project"
+                  ((org-agenda-files
+                    (anders/dynamic-org-files "~/projects/background"))
+                   (org-use-tag-inheritance nil)))))))
   (setq org-capture-templates
         '(("t" "Todo" entry
-           (file "~/org/capture.org")
-           "* TODO %?\n  %i")
-          ("a" "Appointment" entry
-           (file "~/org/appts.org")
-           "* %? :appointment:\n  SCHEDULED: %^t")
-          ("u" "Urgent" entry
-           (file "~/org/capture.org")
-           "* TODO %?\n  SCHEDULED: %t\n  %i")
-          ("j" "Journal" entry
-           (file+datetree "~/org/journal.org")
-           "* %?\nEntered on %U\n  %i")
-          ("n" "Note" entry
-           (file+datetree "~/org/notes.org")
-           "* %U %?")))
-  (setq org-archive-location "~/org/silent/archive.org::")
-  (setq org-default-notes-file "~org/notes.org")
-  (setq org-enforce-todo-dependencies t)
+           (file "~/projects/special/capture/capture.org")
+           "* TODO %?\n  %i")))
+
+  ;; I only refile from my capture files to the top (file) level of
+  ;; other org files.
+  ;;
+  ;; Forcing level == 100 is a hack to perfomantly filter out all
+  ;; headings and leave only file names.
+  ;;
+  ;; The argument to org-refile-targets must be a named function.
+  (defun anders/dynamic-all-org-files ()
+    (anders/dynamic-org-files "~/projects"))
+  (setq org-refile-use-outline-path 'file)
+  (setq org-refile-targets '((anders/dynamic-all-org-files :level . 100)))
+
+  ;; Miscellaneous
   (setq org-fast-tag-selection-single-key t)
   (setq org-from-is-user-regexp nil)
-  (setq org-habit-graph-column 80)
-  (setq org-habit-preceding-days 42)
   (setq org-hide-leading-stars t)
-  (setq org-journal-dir "~/org/journal")
-  (setq org-link-search-must-match-exact-headline nil)
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
-  (setq org-modules
-        '(org-bbdb
-          org-bibtex
-          org-docview
-          org-gnus
-          org-habit
-          org-info
-          org-irc
-          org-mhe
-          org-rmail
-          org-w3m))
-  (setq org-outline-path-complete-in-steps nil)
   (setq org-read-date-force-compatible-dates nil)
-  (setq org-read-date-popup-calendar nil)
-  (setq org-refile-allow-creating-parent-nodes 'confirm)
-  (setq org-refile-target-verify-function
-        (lambda ()
-          (not (member (nth 2 (org-heading-components)) org-done-keywords))))
-  (setq org-refile-targets '((org-agenda-files :maxlevel . 9)))
-  (setq org-refile-use-outline-path 't)
-  (setq org-tags-exclude-from-inheritance  '("refile"))
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)"
-                    "|"
-                    "CANCELLED(c)" "DONE(d)")))
-  :config
-  (load "/etc/emacs/my-org"))
-
-(use-package org-super-agenda
-  :config
-  (org-super-agenda-mode))
+  (setq org-read-date-popup-calendar nil))
 
 (use-package projectile
   :init
+  (defun anders/vc-or-dired ()
+    (interactive)
+    (projectile-dired)
+    (ignore-errors (projectile-vc)))
   (setq projectile-keymap-prefix (kbd "M-t"))
   (setq projectile-mode-line
         ''(:eval (format "Projectile[%s]" default-directory)))
-  (setq projectile-switch-project-action 'projectile-vc)
-  (setq projectile-use-git-grep t)
+  (setq projectile-switch-project-action 'anders/vc-or-dired)
   (setq projectile-completion-system 'ivy)
+  (define-key projectile-command-map (kbd "s g") 'projectile-ripgrep)
   :config
   (projectile-global-mode)
   (ad-deactivate 'compilation-find-file))
 
-(use-package rainbow-delimiters
-  :init
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+(use-package projectile-ripgrep)
 
 (use-package real-auto-save
   :init
   (setq real-auto-save-interval 30))
-
-(use-package rust-mode)
 
 (use-package shackle
   :init
@@ -252,26 +164,25 @@
 
 (use-package term
   :init
-  (defun get-term ()
+  (defun anders/get-term ()
     (interactive)
     (term "bash"))
   :config
-  (defun expose-global-binding-in-term (binding)
+  (defun anders/expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
       (lookup-key (current-global-map) binding)))
-  (expose-global-binding-in-term (kbd "M-x"))
-  (expose-global-binding-in-term (kbd "C-x"))
-  (expose-global-binding-in-term (kbd "C-c a"))
+  (anders/expose-global-binding-in-term (kbd "M-x"))
+  (anders/expose-global-binding-in-term (kbd "C-x"))
+  (anders/expose-global-binding-in-term (kbd "C-c a"))
 
-  (defun my/term-toggle-mode ()
+  (defun anders/term-toggle-mode ()
     "Toggles term between line mode and char mode"
     (interactive)
     (if (term-in-line-mode)
         (term-char-mode)
       (term-line-mode)))
-  (define-key term-mode-map (kbd "M-i") 'my/term-toggle-mode)
-  (define-key term-raw-map (kbd "M-i") 'my/term-toggle-mode)
-
+  (define-key term-mode-map (kbd "M-i") 'anders/term-toggle-mode)
+  (define-key term-raw-map  (kbd "M-i") 'anders/term-toggle-mode)
   (define-key term-raw-map (kbd "C-y") 'term-paste))
 
 (use-package tramp
@@ -288,30 +199,54 @@
   (global-undo-tree-mode))
 
 (use-package whitespace
-  :bind ("C-x C-s" . save-with-delete-trailing-whitespace)
+  :bind ("C-x C-s" . anders/save-with-delete-trailing-whitespace)
   :init
   (setq-default indent-tabs-mode nil)
   (setq whitespace-style '(face tabs))
   (add-hook 'prog-mode-hook 'whitespace-mode)
-  (defun save-with-delete-trailing-whitespace ()
+  (defun anders/save-with-delete-trailing-whitespace ()
     (interactive)
     (delete-trailing-whitespace)
     (save-buffer)))
 
+;;; Programming-language specific packages
+
+(use-package cargo)
+
+(use-package elm-mode
+  :init
+  (setq elm-sort-imports-on-save t)
+  (setq elm-format-on-save t)
+  (add-to-list 'company-backends 'company-elm)
+  (add-hook 'elm-mode-hook 'elm-oracle-setup-completion))
+
+(use-package haskell-mode)
+
+(use-package intero
+  :init
+  (defun anders/intero-mode-unless-global-project ()
+    "Run intero-mode iff we're in a project with a stack.yaml"
+    (interactive)
+    (unless (string-match-p
+             (regexp-quote "global")
+             (shell-command-to-string
+              "stack path --project-root --verbosity silent"))
+      (intero-mode)))
+  (add-hook 'haskell-mode-hook 'anders/intero-mode-unless-global-project))
+
+(use-package markdown-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+
+(use-package nix-mode)
+
+(use-package rust-mode)
+
 (use-package yaml-mode)
 
-;;; Miscellaneous
-
-(global-set-key (kbd "C-z") nil)
-(setq auto-save-file-name-transforms '((".*" "/tmp/" t)))
-(setq backup-directory-alist '((".*" . "/tmp/")))
-(setq dired-auto-revert-buffer t)
-(setq gdb-display-io-nopopup t)
-(setq recenter-positions '(bottom middle top))
-(setq view-read-only t)
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
-
-;;; copy/paste
+;;; Copy/paste
 
 (setq kill-do-not-save-duplicates t)
 (setq save-interprogram-paste-before-kill t)
@@ -320,12 +255,12 @@
 
 ;;; Window management
 
-(defun switch-to-previous-buffer ()
+(defun anders/switch-to-previous-buffer ()
   "Switch to previously open buffer.
 Repeated invocations toggle between the two most recently open buffers."
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
-(global-set-key "\M-o" 'switch-to-previous-buffer)
+(global-set-key "\M-o" 'anders/switch-to-previous-buffer)
 (setq frame-auto-hide-function 'delete-frame)
 (setq display-buffer-alist
       '(("*shell*" (display-buffer-same-window) ())
@@ -334,11 +269,11 @@ Repeated invocations toggle between the two most recently open buffers."
                display-buffer-same-window
                display-buffer-pop-up-frame)
          (reusable-frames . t))))
-(defun anders-same-window-instead
+(defun anders/same-window-instead
     (orig-fun buffer alist)
   (display-buffer-same-window buffer nil))
-(advice-add 'display-buffer-pop-up-window :around 'anders-same-window-instead)
-(defun anders-do-select-frame (orig-fun buffer &rest args)
+(advice-add 'display-buffer-pop-up-window :around 'anders/same-window-instead)
+(defun anders/do-select-frame (orig-fun buffer &rest args)
   (let* ((old-frame (selected-frame))
          (window (apply orig-fun buffer args))
          (frame (window-frame window)))
@@ -346,7 +281,7 @@ Repeated invocations toggle between the two most recently open buffers."
       (select-frame-set-input-focus frame))
     (select-window window)
     window))
-(advice-add 'display-buffer :around 'anders-do-select-frame)
+(advice-add 'display-buffer :around 'anders/do-select-frame)
 (advice-add 'set-window-dedicated-p :around
             (lambda (orig-fun &rest args) nil))
 
@@ -362,6 +297,18 @@ Repeated invocations toggle between the two most recently open buffers."
 (set-face-attribute 'default nil :height 105)
 (set-face-attribute 'default nil :family "Inconsolata")
 (load-theme 'deeper-blue)
+(show-paren-mode 1)
+
+;;; Miscellaneous
+
+(global-set-key (kbd "C-z") nil)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(setq auto-save-file-name-transforms '((".*" "/tmp/" t)))
+(setq backup-directory-alist '((".*" . "/tmp/")))
+(setq dired-auto-revert-buffer t)
+(setq gdb-display-io-nopopup t)
+(setq recenter-positions '(bottom middle top))
+(setq view-read-only t)
 
 ;;; various stuff that I just always want to have open
 

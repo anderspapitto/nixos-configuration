@@ -2,8 +2,14 @@
 
 let
   emacs = pkgs.emacs25;
-  editor = pkgs.writeScriptBin "editor" ''
+  terminal = pkgs.writeScriptBin "anders-terminal" ''
+    ${emacs}/bin/emacsclient -c -e '(anders/get-term)'
+  '';
+  editor = pkgs.writeScriptBin "anders-editor" ''
     ${emacs}/bin/emacsclient -c
+  '';
+  capture = pkgs.writeScriptBin "anders-capture" ''
+    ${emacs}/bin/emacsclient -c -e '(org-capture nil "t")'
   '';
   startEmacs = pkgs.writeScript "emacs" ''
       #!${pkgs.bash}/bin/bash
@@ -19,11 +25,8 @@ in {
       { target = "emacs/my-compile.el";
         source = ./config/my-compile.el;
       }
-      { target = "emacs/my-org.el";
-        source = ./config/my-org.el;
-      }
     ];
-    systemPackages = [ emacs editor ];
+    systemPackages = [ emacs editor capture terminal ];
   };
   systemd.services.emacs = {
     description = "Emacs: the extensible, self-documenting text editor";

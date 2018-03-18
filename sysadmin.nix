@@ -28,6 +28,7 @@
     openssl
     pciutils
     psmisc
+    ripgrep
     sysdig
     tcpdump
     tmux

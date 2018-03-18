@@ -6,7 +6,7 @@ set $mod Mod4
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:DejaVu Sans Mono 8
 
-bindsym $mod+Return exec editor
+bindsym $mod+Return exec anders-terminal
 bindsym $mod+Shift+Return exec i3-sensible-terminal
 
 bindsym $mod+s exec rofi -show run
@@ -16,7 +16,7 @@ bindsym F2 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%    && k
 bindsym F3 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%    && killall -SIGUSR1 i3status
 
 bindsym F9 exec --no-startup-id browser
-bindsym F10 exec emacsclient -c -e '(org-capture)'
+bindsym F10 exec anders-capture
 
 bindsym F11 exec i3-rename
 bindsym F12 exec i3-switch
@@ -82,6 +82,7 @@ no_focus [class="Chromium"]
 focus_on_window_activation focus
 
 for_window [title="Org Select"] floating enable
+for_window [title="CAPTURE"] floating enable
 
 new_window none
 hide_edge_borders both
