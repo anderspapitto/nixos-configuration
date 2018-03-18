@@ -31,10 +31,6 @@
   (setq company-global-modes '(not gud-mode))
   (setq company-dabbrev-downcase nil)
   :config
-  (define-key company-active-map (kbd "TAB") nil)
-  (define-key company-active-map [tab] nil)
-  (define-key company-active-map (kbd "RET") nil)
-  (define-key company-active-map [return] nil)
   (global-company-mode))
 
 (use-package compile
@@ -57,6 +53,7 @@
   (setq magit-delete-by-moving-to-trash nil)
   (setq magit-diff-expansion-threshold 2.0)
   (setq magit-diff-use-overlays nil)
+  (setq magit-no-confirm '(stage-all-changes unstage-all-changes))
   (setq magit-revert-buffers t)
   (setq magit-use-overlays nil))
 
@@ -64,6 +61,21 @@
   :init
   (setq Man-width 80)
   (setq Man-notify-method 'pushy))
+
+(use-package god-mode
+  :init
+  (global-set-key (kbd "<escape>") 'god-local-mode)
+  (defun anders/update-cursor ()
+    (setq cursor-type
+          (if (or god-local-mode buffer-read-only) 'box 'bar)))
+  (add-hook 'god-mode-enabled-hook 'anders/update-cursor)
+  (add-hook 'god-mode-disabled-hook 'anders/update-cursor)
+  :config
+  (require 'god-mode-isearch)
+  (define-key isearch-mode-map (kbd "<escape>") 'god-mode-isearch-activate)
+  (define-key god-mode-isearch-map (kbd "<escape>") 'god-mode-isearch-disable)
+  (define-key god-local-mode-map (kbd "i") 'god-local-mode)
+  (define-key god-local-mode-map (kbd ".") 'repeat))
 
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
@@ -143,10 +155,10 @@
         ''(:eval (format "Projectile[%s]" default-directory)))
   (setq projectile-switch-project-action 'anders/vc-or-dired)
   (setq projectile-completion-system 'ivy)
-  (define-key projectile-command-map (kbd "s g") 'projectile-ripgrep)
   :config
   (projectile-global-mode)
-  (ad-deactivate 'compilation-find-file))
+  (ad-deactivate 'compilation-find-file)
+  (define-key projectile-command-map (kbd "s g") 'projectile-ripgrep))
 
 (use-package projectile-ripgrep)
 
@@ -163,10 +175,17 @@
   (global-subword-mode))
 
 (use-package term
+  :bind (("M-RET" . 'anders/get-term))
   :init
+  (defun anders/new-term ()
+    (interactive)
+    (term "bash")
+    (rename-buffer "shell" t))
   (defun anders/get-term ()
     (interactive)
-    (term "bash"))
+    (if (get-buffer "shell")
+        (switch-to-buffer "shell")
+      (anders/new-term)))
   :config
   (defun anders/expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
@@ -187,9 +206,10 @@
 
 (use-package tramp
   :init
-  (add-to-list 'tramp-remote-path "/run/current-system/sw/bin")
   (setq tramp-default-method "ssh")
-  (setq tramp-use-ssh-controlmaster-options nil))
+  (setq tramp-use-ssh-controlmaster-options nil)
+  :config
+  (add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
 
 (use-package undo-tree
   :init
@@ -255,24 +275,22 @@
 
 ;;; Window management
 
-(defun anders/switch-to-previous-buffer ()
-  "Switch to previously open buffer.
-Repeated invocations toggle between the two most recently open buffers."
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) 1)))
-(global-set-key "\M-o" 'anders/switch-to-previous-buffer)
+;; gud mode is a bad actor
+(setq gdb-display-io-nopopup t)
+
 (setq frame-auto-hide-function 'delete-frame)
 (setq display-buffer-alist
-      '(("*shell*" (display-buffer-same-window) ())
-        ("*term*" (display-buffer-same-window) ())
+      '(("shell.*" (display-buffer-same-window) ())
         (".*" (display-buffer-reuse-window
                display-buffer-same-window
                display-buffer-pop-up-frame)
          (reusable-frames . t))))
+
 (defun anders/same-window-instead
     (orig-fun buffer alist)
   (display-buffer-same-window buffer nil))
 (advice-add 'display-buffer-pop-up-window :around 'anders/same-window-instead)
+
 (defun anders/do-select-frame (orig-fun buffer &rest args)
   (let* ((old-frame (selected-frame))
          (window (apply orig-fun buffer args))
@@ -282,6 +300,8 @@ Repeated invocations toggle between the two most recently open buffers."
     (select-window window)
     window))
 (advice-add 'display-buffer :around 'anders/do-select-frame)
+
+;; Dedicated windows are evil
 (advice-add 'set-window-dedicated-p :around
             (lambda (orig-fun &rest args) nil))
 
@@ -294,21 +314,29 @@ Repeated invocations toggle between the two most recently open buffers."
 
 ;;; Looks
 
-(set-face-attribute 'default nil :height 105)
+(setq-default truncate-lines t)
+(set-face-attribute 'default nil :height 110)
 (set-face-attribute 'default nil :family "Inconsolata")
 (load-theme 'deeper-blue)
 (show-paren-mode 1)
 
 ;;; Miscellaneous
 
+(defun anders/switch-to-previous-buffer ()
+  "Switch to previously open buffer.
+Repeated invocations toggle between the two most recently open buffers."
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+(global-set-key "\M-o" 'anders/switch-to-previous-buffer)
+
 (global-set-key (kbd "C-z") nil)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 (setq auto-save-file-name-transforms '((".*" "/tmp/" t)))
 (setq backup-directory-alist '((".*" . "/tmp/")))
 (setq dired-auto-revert-buffer t)
-(setq gdb-display-io-nopopup t)
 (setq recenter-positions '(bottom middle top))
 (setq view-read-only t)
+(setq uniquify-buffer-name-style 'post-forward)
 
 ;;; various stuff that I just always want to have open
 

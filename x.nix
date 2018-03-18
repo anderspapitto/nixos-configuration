@@ -71,6 +71,7 @@ in {
       layout = "us";
       # note typo in base.lst, where it says 'ctrl:ctrl_ralt' when it
       # means 'ctrl:ralt_rctrl'
+      xkbOptions = "ctrl:ralt_rctrl, lv3:caps_switch, shift:both_capslock";
       xkbVariant = "colemak";
     };
   };
@@ -111,28 +112,6 @@ in {
     clipit = simpleXService "clipit"
       "clipboard manager"
       "exec ${pkgs.clipit}/bin/clipit"
-      ;
-    xkeys =
-      let config = pkgs.writeText "xmodmap-config"
-            ''
-              clear Lock
-              clear Control
-              clear Mod1
-
-              keycode 108 = Control_L
-              add Control = Control_L
-              add Mod1 = Alt_L
-
-              clear Mod5
-              keycode 66 = ISO_Level3_Shift
-            '';
-      in simpleXService "xkeys"
-        "Fuck setxkbmap"
-        # the version of xcape in nixpkgs doesn't support -f
-        ''
-          ${pkgs.xorg.xmodmap}/bin/xmodmap ${config}
-          exec sleep infinity
-        ''
       ;
     xrdb = simpleXService "xrdb"
       "set X resources"
