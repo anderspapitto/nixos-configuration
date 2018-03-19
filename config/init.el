@@ -342,7 +342,6 @@
 (set-face-attribute 'default nil :family "Inconsolata")
 (load-theme 'deeper-blue)
 (show-paren-mode 1)
-(global-linum-mode)
 
 ;;; Miscellaneous
 
