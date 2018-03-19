@@ -2,7 +2,8 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("orgmode" . "http://orgmode.org/elpa/"))
 (package-initialize)
 
@@ -23,7 +24,7 @@
   :bind ("C-t" . avy-goto-char))
 
 (use-package column-marker
-  :hook (prog-mode . (lambda () (column-marker-1 79))))
+  :hook (prog-mode . (lambda () (column-marker-1 80))))
 
 (use-package company
   :bind (:map company-active-map
@@ -337,7 +338,7 @@
 ;;; Looks
 
 (setq-default truncate-lines t)
-(set-face-attribute 'default nil :height 110)
+(set-face-attribute 'default nil :height 105)
 (set-face-attribute 'default nil :family "Inconsolata")
 (load-theme 'deeper-blue)
 (show-paren-mode 1)
