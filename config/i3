@@ -26,21 +26,21 @@ bindsym $mod+Shift+grave exec global-toggle-invert
 
 bindsym $mod+Shift+q kill
 
-bindsym $mod+Left  workspace prev
-bindsym $mod+Right workspace next
+bindsym $mod+comma  workspace prev
+bindsym $mod+period workspace next
 
-bindsym $mod+a exec i3-focus left
 bindsym $mod+n exec i3-focus down
 bindsym $mod+p exec i3-focus up
-bindsym $mod+e exec i3-focus right
+bindsym $mod+b exec i3-focus left
+bindsym $mod+f exec i3-focus right
 
 bindsym $mod+Shift+Tab  focus left
 bindsym $mod+Tab focus right
 
-bindsym $mod+Shift+a move left
 bindsym $mod+Shift+n move down
 bindsym $mod+Shift+p move up
-bindsym $mod+Shift+e move right
+bindsym $mod+Shift+f move left
+bindsym $mod+Shift+b move right
 
 bindsym $mod+h split h
 bindsym $mod+v split v

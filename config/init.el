@@ -278,6 +278,8 @@
       (intero-mode)))
   :hook ((haskell-mode . anders/intero-mode-unless-global-project)))
 
+(use-package lua-mode)
+
 (use-package markdown-mode
   :mode
   (("\\.markdown\\'" . markdown-mode)
@@ -358,7 +360,6 @@ Repeated invocations toggle between the two most recently open buffers."
 (setq backup-directory-alist '((".*" . "/tmp/")))
 (setq dired-auto-revert-buffer t)
 (setq recenter-positions '(bottom middle top))
-(setq view-read-only t)
 (setq uniquify-buffer-name-style 'post-forward)
 
 ;;; various stuff that I just always want to have open
