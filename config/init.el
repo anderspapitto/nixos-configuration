@@ -41,7 +41,34 @@
   (setq compilation-always-kill t)
   (setq compilation-ask-about-save nil)
   :config
-  (load "/etc/emacs/my-compile.el"))
+  (defun compilation-goto-locus (msg mk end-mk)
+    "Jump to an error corresponding to MSG at MK.
+All arguments are markers.  If END-MK is non-nil, mark is set there
+and overlay is highlighted between MK and END-MK."
+
+    (display-buffer (marker-buffer msg) '(nil (allow-no-window . t)))
+    (with-current-buffer (marker-buffer msg)
+      (goto-char (marker-position msg))
+      (and w (compilation-set-window w msg)))
+
+    (display-buffer (marker-buffer mk))
+
+    (with-current-buffer (marker-buffer mk)
+      (unless (eq (goto-char mk) (point))
+        ;; If narrowing gets in the way of going to the right place, widen.
+        (widen)
+        (if next-error-move-function
+            (funcall next-error-move-function msg mk)
+          (goto-char mk)))
+      (if end-mk
+          (push-mark end-mk t)
+        (if mark-active (setq mark-active)))
+      ;; If hideshow got in the way of
+      ;; seeing the right place, open permanently.
+      (dolist (ov (overlays-at (point)))
+        (when (eq 'hs (overlay-get ov 'invisible))
+          (delete-overlay ov)
+          (goto-char mk))))))
 
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
@@ -287,7 +314,10 @@
 
 (use-package nix-mode)
 
-(use-package rust-mode)
+(use-package rust-mode
+  :config
+  (eval-after-load 'compile
+    (remove-hook 'next-error-hook 'rustc-scroll-down-after-next-error)))
 
 (use-package yaml-mode)
 

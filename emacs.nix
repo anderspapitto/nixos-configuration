@@ -22,9 +22,6 @@ in {
       { target = "emacs/init.el";
         source = ./config/init.el;
       }
-      { target = "emacs/my-compile.el";
-        source = ./config/my-compile.el;
-      }
     ];
     systemPackages = [ emacs editor capture terminal ];
   };
