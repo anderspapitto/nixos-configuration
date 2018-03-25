@@ -19,7 +19,7 @@ volume pulse {
         device = "pulse"
 }
 
-wireless wlan0 {
+wireless wlp4s0 {
         format_up = "W: (%quality at %essid) %ip"
         format_down = "W: down"
 }

@@ -7,7 +7,7 @@
   networking.nat = {
     enable = true;
     internalInterfaces = ["ve-+"];
-    externalInterface = "wlan0";
+    externalInterface = "wlp4s0";
   };
 
   virtualisation = {

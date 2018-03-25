@@ -11,7 +11,7 @@ bindsym $mod+Shift+Return exec i3-sensible-terminal
 
 bindsym $mod+s exec rofi -show run
 
-bindsym F1 exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status
+bindsym F1 exec anders-handle-keybind F1
 bindsym F2 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%    && killall -SIGUSR1 i3status
 bindsym F3 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%    && killall -SIGUSR1 i3status
 
@@ -39,8 +39,8 @@ bindsym $mod+Tab focus right
 
 bindsym $mod+Shift+n move down
 bindsym $mod+Shift+p move up
-bindsym $mod+Shift+f move left
-bindsym $mod+Shift+b move right
+bindsym $mod+Shift+b move left
+bindsym $mod+Shift+f move right
 
 bindsym $mod+h split h
 bindsym $mod+v split v
@@ -49,7 +49,7 @@ bindsym $mod+t fullscreen
 
 bindsym $mod+r layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+f layout toggle split
+# bindsym $mod+f layout toggle split
 
 bindsym $mod+u focus parent
 bindsym $mod+d focus child
@@ -79,12 +79,14 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 no_focus [class="Chromium"]
+no_focus [class="Firefox"]
 focus_on_window_activation focus
+for_window [class="Emacs"] focus_on_window_activation none
 
 for_window [title="Org Select"] floating enable
 for_window [title="CAPTURE"] floating enable
 
-new_window none
+default_border none
 hide_edge_borders both
 force_focus_wrapping yes
 
