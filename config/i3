@@ -1,10 +1,29 @@
-set $mod Mod4
+##########
+# Behavior
+##########
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:DejaVu Sans Mono 8
+workspace_layout tabbed
+
+no_focus [class="Chromium"]
+no_focus [class="Firefox"]
+focus_on_window_activation focus
+
+for_window [title="Org Select"] floating enable
+for_window [title="CAPTURE"] floating enable
+
+new_window none
+hide_edge_borders both
+force_focus_wrapping yes
+
+gaps inner 6
+gaps outer 6
+smart_gaps on
+
+#############
+# Keybindings
+#############
+
+set $mod Mod4
 
 bindsym $mod+Return exec anders-terminal
 bindsym $mod+Shift+Return exec i3-sensible-terminal
@@ -12,14 +31,12 @@ bindsym $mod+Shift+Return exec i3-sensible-terminal
 bindsym $mod+s exec rofi -show run
 
 bindsym F1 exec anders-handle-keybind F1
-bindsym F2 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%    && killall -SIGUSR1 i3status
-bindsym F3 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%    && killall -SIGUSR1 i3status
-
-bindsym F9 exec --no-startup-id browser
-bindsym F10 exec anders-capture
-
-bindsym F11 exec i3-rename
-bindsym F12 exec i3-switch
+bindsym F2 exec anders-handle-keybind F2
+bindsym F3 exec anders-handle-keybind F3
+bindsym F9 exec anders-handle-keybind F9
+bindsym F10 exec anders-handle-keybind F10
+bindsym F11 exec anders-handle-keybind F11
+bindsym F12 exec anders-handle-keybind F12
 
 bindsym $mod+grave exec toggle-invert
 bindsym $mod+Shift+grave exec global-toggle-invert
@@ -46,10 +63,6 @@ bindsym $mod+h split h
 bindsym $mod+v split v
 
 bindsym $mod+t fullscreen
-
-bindsym $mod+r layout stacking
-bindsym $mod+w layout tabbed
-# bindsym $mod+f layout toggle split
 
 bindsym $mod+u focus parent
 bindsym $mod+d focus child
@@ -78,21 +91,15 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
-no_focus [class="Chromium"]
-no_focus [class="Firefox"]
-focus_on_window_activation focus
-for_window [class="Emacs"] focus_on_window_activation none
+#######
+# Looks
+#######
 
-for_window [title="Org Select"] floating enable
-for_window [title="CAPTURE"] floating enable
-
-default_border none
-hide_edge_borders both
-force_focus_wrapping yes
-
-gaps inner 6
-gaps outer 6
-smart_gaps on
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+font pango:DejaVu Sans Mono 8
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)

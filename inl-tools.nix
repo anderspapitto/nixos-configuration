@@ -22,10 +22,13 @@
         ;;
       F10)
         exec anders-capture
+        ;;
       F11)
         exec i3-rename
+        ;;
       F12)
         exec i3-switch
+        ;;
       esac
     '')
   (writeScriptBin "i3-switch" ''
