@@ -23,13 +23,10 @@
 (use-package avy
   :bind ("C-t" . avy-goto-char))
 
-(use-package column-marker
-  :hook (prog-mode . (lambda () (column-marker-1 80))))
-
 (use-package company
   :bind (:map company-active-map
               ("RET" . nil)
-              ("M-0" . company-complete-selection))
+              ("M-1" . company-complete-selection))
   :init
   (setq company-global-modes '(not gud-mode))
   (setq company-dabbrev-downcase nil)
@@ -41,6 +38,10 @@
   (setq compilation-always-kill t)
   (setq compilation-ask-about-save nil)
   :config
+  ;; Do to my particular windowing setup (only window-manager-level
+  ;; splits), I want a drastically simpler version of
+  ;; compilation-goto-locus. It's not really possible to do this from
+  ;; the outside, so just override the function.
   (defun compilation-goto-locus (msg mk end-mk)
     "Jump to an error corresponding to MSG at MK.
 All arguments are markers.  If END-MK is non-nil, mark is set there
@@ -147,6 +148,8 @@ and overlay is highlighted between MK and END-MK."
     (f-entries directory
                (lambda (filename) (s-ends-with-p ".org" filename))
                t))
+  (defun anders/dynamic-all-org-files ()
+    (anders/dynamic-org-files "~/projects"))
 
   (setq org-agenda-window-setup 'current-window)
 
@@ -179,8 +182,6 @@ and overlay is highlighted between MK and END-MK."
   ;; headings and leave only file names.
   ;;
   ;; The argument to org-refile-targets must be a named function.
-  (defun anders/dynamic-all-org-files ()
-    (anders/dynamic-org-files "~/projects"))
   (setq org-refile-use-outline-path 'file)
   (setq org-refile-targets '((anders/dynamic-all-org-files :level . 100)))
 
@@ -216,10 +217,6 @@ and overlay is highlighted between MK and END-MK."
 (use-package real-auto-save
   :init
   (setq real-auto-save-interval 30))
-
-(use-package shackle
-  :init
-  (setq shackle-rules '(("\\*input/output of.*\\*" :regexp t :ignore t))))
 
 (use-package subword
   :config
@@ -315,7 +312,7 @@ and overlay is highlighted between MK and END-MK."
 (use-package nix-mode)
 
 (use-package rust-mode
-  :config
+  :init
   (eval-after-load 'compile
     (remove-hook 'next-error-hook 'rustc-scroll-down-after-next-error)))
 
@@ -397,4 +394,5 @@ Repeated invocations toggle between the two most recently open buffers."
 (when (daemonp)
   (progn
     (find-file-noselect "/etc/nixos/configuration/config/init.el")
-    (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")))
+    (find-file-noselect "/etc/nixos/configuration/private/bad-hosts.nix")
+    (man "configuration.nix")))

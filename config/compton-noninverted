@@ -1,5 +1,8 @@
 backend = "glx"
 vsync = "opengl"
 
-opacity-rule = [ "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ];
+opacity-rule = [
+  "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'",
+  "20:class_g = 'anders-blank'"
+];
 inactive-opacity = 0.7
