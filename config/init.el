@@ -311,6 +311,8 @@ and overlay is highlighted between MK and END-MK."
 
 (use-package nix-mode)
 
+(use-package protobuf-mode)
+
 (use-package rust-mode
   :init
   (eval-after-load 'compile
@@ -367,7 +369,7 @@ and overlay is highlighted between MK and END-MK."
 ;;; Looks
 
 (setq-default truncate-lines t)
-(set-face-attribute 'default nil :height 105)
+(set-face-attribute 'default nil :height 110)
 (set-face-attribute 'default nil :family "Inconsolata")
 (load-theme 'deeper-blue)
 (show-paren-mode 1)

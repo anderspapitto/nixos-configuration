@@ -23,8 +23,8 @@
   environment.etc = {
     gitconfig.text = ''
         [user]
-            email = anderspapitto@gmail.com
-            name = Anders Papitto
+          email = anderspapitto@gmail.com
+          name = Anders Papitto
         [pull]
         	rebase = true
         [color]
@@ -32,7 +32,12 @@
         [push]
         	default = simple
         [merge]
-            conflictstyle = diff3
+          conflictstyle = diff3
+        [core]
+          excludesfile = /etc/gitignore
+      '';
+    gitignore.text = ''
+        *.org
       '';
     "stack/config.yaml".text = ''
         templates:
