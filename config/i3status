@@ -5,9 +5,9 @@ general {
 }
 
 order += "volume pulse"
-order += "disk /"
-order += "disk /nix/store"
-order += "disk /home"
+# order += "disk /"
+# order += "disk /nix/store"
+# order += "disk /home"
 order += "wireless wlp4s0"
 order += "path_exists VPN"
 order += "battery 0"

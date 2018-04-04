@@ -12,7 +12,7 @@
       noipv4ll
     '';
     enableIPv6 = false; # openvpn rules would need to be expanded
-    nameservers = [ "8.8.8.8" "8.8.4.4" ];
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
     wireless.enable = true;  # I directly use wpa_supplicant and dhcpcd
   };
 

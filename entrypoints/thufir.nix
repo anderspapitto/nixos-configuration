@@ -21,7 +21,7 @@ in {
   networking = {
     hostName = "thufir";
     enableIPv6 = false;
-    nameservers = [ "8.8.8.8" "8.8.4.4" ];
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
     firewall = {
       enable = true;
       extraCommands = ''
