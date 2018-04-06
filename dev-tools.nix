@@ -12,6 +12,7 @@
     gdb
     go
     gnumake
+    ispell
     jq
     nix-repl
     patchelf
@@ -38,6 +39,7 @@
       '';
     gitignore.text = ''
         *.org
+        *.org_archive
       '';
     "stack/config.yaml".text = ''
         templates:
