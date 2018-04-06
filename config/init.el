@@ -295,12 +295,14 @@ and overlay is highlighted between MK and END-MK."
   (defun anders/intero-mode-unless-global-project ()
     "Run intero-mode iff we're in a project with a stack.yaml"
     (interactive)
-    (unless (string-match-p
-             (regexp-quote "global")
-             (shell-command-to-string
-              "stack path --project-root --verbosity silent"))
-      (intero-mode)))
+    (let* ((stack-command "stack path --project-root --verbosity silent")
+           (stack-path (ignore-errors (shell-command-to-string stack-command))))
+      (unless (or
+               (string-match-p (regexp-quote "not found") stack-path)
+               (string-match-p (regexp-quote "global") stack-path))
+        (intero-mode))))
   :hook ((haskell-mode . anders/intero-mode-unless-global-project)))
+(setq haskell-mode-hook nil)
 
 (use-package lua-mode)
 
