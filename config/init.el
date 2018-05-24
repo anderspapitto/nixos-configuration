@@ -136,7 +136,6 @@ and overlay is highlighted between MK and END-MK."
          ("C-c C-<" . mc/mark-all-like-this)))
 
 (use-package org
-  :bind (("C-c a" . anders/org-agenda))
   :hook
   ((org-mode) . real-auto-save-mode)
   ((org-mode) . auto-revert-mode)
@@ -154,22 +153,40 @@ and overlay is highlighted between MK and END-MK."
   (setq org-agenda-window-setup 'current-window)
 
   ;; Set up the agenda for the particular things I want out of it.
-  (defun anders/org-agenda ()
-    (interactive)
-    (org-agenda nil "custom"))
   (setq org-agenda-compact-blocks t)
+  (setq org-agenda-span 'day)
+  (setq org-agenda-time-grid
+        '((daily today require-timed)
+          ()
+          "......"))
   (setq org-agenda-custom-commands
-        '(("custom" "Custom Agenda"
-           ((todo ""
+        '(("a" "Agenda"
+           ((agenda ""
+                   ((org-agenda-files
+                     (anders/dynamic-org-files "~/projects"))
+                    (org-super-agenda-groups
+                     '((:discard (:tag "agenda_ignore"))
+                       (:name "Important"
+                              :priority "A")
+                       (:name "Appointments"
+                              :time-grid t)
+                       (:name "Tasks"
+                              :scheduled t)
+                       ))))
+            (tags-todo "+project+active"
                   ((org-agenda-files
-                    (anders/dynamic-org-files "~/projects/primary"))))
-            (todo ""
+                    (anders/dynamic-org-files "~/projects"))))
+            (tags "+project+ongoing"
                   ((org-agenda-files
-                    (anders/dynamic-org-files "~/projects/special"))))
-            (tags "project"
+                    (anders/dynamic-org-files "~/projects"))
+                   (org-use-tag-inheritance nil)))))
+          ("c" "Captures"
+           ((tags-todo "capture"
                   ((org-agenda-files
-                    (anders/dynamic-org-files "~/projects/background"))
-                   (org-use-tag-inheritance nil)))))))
+                    (anders/dynamic-org-files "~/projects/special"))
+                   (org-use-tag-inheritance t)
+                   (org-agenda-overriding-header "Capture")))))))
+
   (setq org-capture-templates
         '(("t" "Todo" entry
            (file "~/projects/special/capture/capture.org")
@@ -182,8 +199,9 @@ and overlay is highlighted between MK and END-MK."
   ;; headings and leave only file names.
   ;;
   ;; The argument to org-refile-targets must be a named function.
-  (setq org-refile-use-outline-path 'file)
-  (setq org-refile-targets '((anders/dynamic-all-org-files :level . 100)))
+  (setq org-refile-use-outline-path 't)
+  (setq org-refile-targets '((anders/dynamic-all-org-files . (:tag . "refile"))))
+  (setq org-outline-path-complete-in-steps nil)
 
   ;; Miscellaneous
   (setq org-fast-tag-selection-single-key t)
@@ -191,6 +209,10 @@ and overlay is highlighted between MK and END-MK."
   (setq org-hide-leading-stars t)
   (setq org-read-date-force-compatible-dates nil)
   (setq org-read-date-popup-calendar nil))
+
+(use-package org-super-agenda
+  :config
+  (org-super-agenda-mode))
 
 (use-package projectile
   :init
