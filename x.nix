@@ -101,10 +101,6 @@ in {
         exec sleep infinity
       ''
       ;
-    redshift = simpleXService "redshift"
-      "Redshift colour temperature adjuster"
-      "exec ${pkgs.redshift}/bin/redshift -l 37.7:133.4 -t 5500:2500 -b 1:1"
-      ;
     xbanish = simpleXService "xbanish"
       "xbanish hides the mouse pointer"
       "exec ${pkgs.xbanish}/bin/xbanish"

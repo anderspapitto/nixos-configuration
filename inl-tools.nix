@@ -199,6 +199,24 @@
       set -x
       bluetoothctl <<< 'power off'
     '')
+  (writeScriptBin "dark-mode" ''
+      #! ${bash}/bin/bash
+      set -x
+      ${redshift}/bin/redshift -O 2000
+      /run/wrappers/bin/sudo ${coreutils}/bin/tee /sys/class/backlight/intel_backlight/brightness <<< 250
+    '')
+  (writeScriptBin "twilight-mode" ''
+      #! ${bash}/bin/bash
+      set -x
+      ${redshift}/bin/redshift -O 2500
+      /run/wrappers/bin/sudo ${coreutils}/bin/tee /sys/class/backlight/intel_backlight/brightness <<< 500
+    '')
+  (writeScriptBin "light-mode" ''
+      #! ${bash}/bin/bash
+      set -x
+      ${redshift}/bin/redshift -x
+      /run/wrappers/bin/sudo ${coreutils}/bin/tee /sys/class/backlight/intel_backlight/brightness <<< 852
+    '')
 
 #     (writeScriptBin "switch-to-headphones" ''
 #         #! ${bash}/bin/bash

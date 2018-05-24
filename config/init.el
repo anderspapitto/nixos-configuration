@@ -395,7 +395,7 @@ and overlay is highlighted between MK and END-MK."
 (setq-default truncate-lines t)
 (set-face-attribute 'default nil :height 110)
 (set-face-attribute 'default nil :family "Inconsolata")
-(load-theme 'deeper-blue)
+;; (load-theme 'deeper-blue)
 (show-paren-mode 1)
 
 ;;; Miscellaneous
