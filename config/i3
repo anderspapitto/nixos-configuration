@@ -33,6 +33,7 @@ bindsym $mod+s exec rofi -show run
 bindsym F1 exec anders-handle-keybind F1
 bindsym F2 exec anders-handle-keybind F2
 bindsym F3 exec anders-handle-keybind F3
+bindsym F7 exec anders-handle-keybind F7
 bindsym F9 exec anders-handle-keybind F9
 bindsym F10 exec anders-handle-keybind F10
 bindsym F11 exec anders-handle-keybind F11

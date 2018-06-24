@@ -17,6 +17,9 @@
         pactl set-sink-volume @DEFAULT_SINK@ +5%
         killall -SIGUSR1 i3status
         ;;
+      F7)
+        exec systemctl suspend
+        ;;
       F9)
         exec browser
         ;;

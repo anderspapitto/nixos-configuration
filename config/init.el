@@ -105,6 +105,8 @@ and overlay is highlighted between MK and END-MK."
          (/= char ?T))))
 
 (use-package ivy
+  :init
+  (setq ivy-initial-inputs-alist '())
   :config
   (ivy-mode 1))
 
@@ -136,6 +138,7 @@ and overlay is highlighted between MK and END-MK."
          ("C-c C-<" . mc/mark-all-like-this)))
 
 (use-package org
+  :bind (("C-c a" . org-agenda))
   :hook
   ((org-mode) . real-auto-save-mode)
   ((org-mode) . auto-revert-mode)
@@ -191,6 +194,8 @@ and overlay is highlighted between MK and END-MK."
         '(("t" "Todo" entry
            (file "~/projects/special/capture/capture.org")
            "* TODO %?\n  %i")))
+
+  (setq org-goto-interface 'outline-path-completion)
 
   ;; I only refile from my capture files to the top (file) level of
   ;; other org files.
