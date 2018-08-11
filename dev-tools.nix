@@ -18,6 +18,7 @@
     patchelf
     sqlite
     valgrind
+    vscode
     z3
   ];
 
