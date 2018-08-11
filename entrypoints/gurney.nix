@@ -7,6 +7,7 @@
     ./dev-tools.nix
     ./emacs.nix
     ./fonts.nix
+    ./games.nix
     ./gui-tools.nix
     ./hardware-configuration.nix
     ./inl-tools.nix
@@ -16,7 +17,6 @@
     ./nixpkgs.nix
     ./printing.nix
     ./redis.nix
-    ./rulemak.nix
     ./syncthing.nix
     ./sysadmin.nix
     ./uefi.nix

@@ -1,6 +1,71 @@
 { config, pkgs, ... }:
 
-{ environment.systemPackages = with pkgs; [
+with pkgs;
+
+let bluetoothScript = scriptName: regexPattern:
+  (writeScriptBin scriptName ''
+      #! ${bash}/bin/bash
+      set -x
+
+      export XDG_RUNTIME_DIR=/run/user/$UID
+
+      TRIES=0
+      until (bluetoothctl <<< show | grep -q 'Powered: yes')
+      do
+        bluetoothctl <<< 'power on'
+        [[ $((TRIES++)) -eq 20 ]] && exit 1
+        sleep 0.1
+      done
+
+      TRIES=0
+      until [ -n "$DEVICE" ]
+      do
+        DEVICE=$(bluetoothctl <<< devices | egrep '^Device.*${regexPattern}' | awk '{ print $2 }')
+        [[ $((TRIES++)) -eq 20 ]] && exit 1
+        sleep 0.1
+      done
+
+      TRIES=0
+      until bluetoothctl <<< "connect $DEVICE"
+      do
+        [[ $((TRIES++)) -eq 20 ]] && exit 1
+        sleep 0.1
+      done
+
+      TRIES=0
+      until [ -n "$TARGET_CARD" ]
+      do
+        TARGET_CARD=$(pacmd list-cards | grep 'name:' | egrep -o 'bluez.*[^>]')
+        [[ $((TRIES++)) -eq 20 ]] && exit 1
+        sleep 0.1
+      done
+
+      TRIES=0
+      until pacmd list-cards | egrep -q 'active profile: <a2dp_sink>'
+      do
+        pacmd set-card-profile $TARGET_CARD a2dp_sink
+        [[ $((TRIES++)) -eq 20 ]] && exit 1
+        sleep 0.1
+      done
+
+      TRIES=0
+      until [ -n "$TARGET_SINK" ]
+      do
+        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
+        [[ $((TRIES++)) -eq 20 ]] && exit 1
+        sleep 0.1
+      done
+
+      pactl set-sink-volume $TARGET_SINK 50%
+      pacmd set-default-sink $TARGET_SINK
+
+      for index in $(pacmd list-sink-inputs $TARGET_SINK | grep index | awk '{ print $2 }')
+      do
+          pacmd move-sink-input $index $TARGET_SINK
+      done
+    '');
+in
+{ environment.systemPackages = [
   (writeScriptBin "anders-handle-keybind" ''
       #! ${bash}/bin/bash
 
@@ -136,72 +201,13 @@
 
       bluetoothctl <<< 'power off'
     '')
-  (writeScriptBin "audio-bluetooth" ''
-      #! ${bash}/bin/bash
-      set -x
-
-      export XDG_RUNTIME_DIR=/run/user/$UID
-
-      TRIES=0
-      until (bluetoothctl <<< show | grep -q 'Powered: yes')
-      do
-        bluetoothctl <<< 'power on'
-        [[ $((TRIES++)) -eq 20 ]] && exit 1
-        sleep 0.1
-      done
-
-      TRIES=0
-      until [ -n "$DEVICE" ]
-      do
-        DEVICE=$(bluetoothctl <<< devices | egrep '^Device.*OontZ' | awk '{ print $2 }')
-        [[ $((TRIES++)) -eq 20 ]] && exit 1
-        sleep 0.1
-      done
-
-      TRIES=0
-      until bluetoothctl <<< "connect $DEVICE"
-      do
-        [[ $((TRIES++)) -eq 20 ]] && exit 1
-        sleep 0.1
-      done
-
-      TRIES=0
-      until [ -n "$TARGET_CARD" ]
-      do
-        TARGET_CARD=$(pacmd list-cards | grep 'name:' | egrep -o 'bluez.*[^>]')
-        [[ $((TRIES++)) -eq 20 ]] && exit 1
-        sleep 0.1
-      done
-
-      TRIES=0
-      until pacmd list-cards | egrep -q 'active profile: <a2dp_sink>'
-      do
-        pacmd set-card-profile $TARGET_CARD a2dp_sink
-        [[ $((TRIES++)) -eq 20 ]] && exit 1
-        sleep 0.1
-      done
-
-      TRIES=0
-      until [ -n "$TARGET_SINK" ]
-      do
-        TARGET_SINK=$(pacmd list-sinks | grep 'name:' | egrep -o 'bluez.*[^>]')
-        [[ $((TRIES++)) -eq 20 ]] && exit 1
-        sleep 0.1
-      done
-
-      pactl set-sink-volume $TARGET_SINK 50%
-      pacmd set-default-sink $TARGET_SINK
-
-      for index in $(pacmd list-sink-inputs $TARGET_SINK | grep index | awk '{ print $2 }')
-      do
-          pacmd move-sink-input $index $TARGET_SINK
-      done
-    '')
   (writeScriptBin "bluetooth-off" ''
       #! ${bash}/bin/bash
       set -x
       bluetoothctl <<< 'power off'
     '')
+  (bluetoothScript "bluetooth-tranya" "T1-L")
+  (bluetoothScript "bluetooth-oontz" "OontZ")
   (writeScriptBin "dark-mode" ''
       #! ${bash}/bin/bash
       set -x
@@ -214,7 +220,7 @@
       ${redshift}/bin/redshift -O 2500
       /run/wrappers/bin/sudo ${coreutils}/bin/tee /sys/class/backlight/intel_backlight/brightness <<< 500
     '')
-  (writeScriptBin "light-mode" ''
+  (writeScriptBin "bright-mode" ''
       #! ${bash}/bin/bash
       set -x
       ${redshift}/bin/redshift -x

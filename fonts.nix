@@ -2,7 +2,7 @@
 
 { i18n = {
     consoleFont = "lat9w-16";
-    consoleKeyMap = "colemak/en-latin9";
+    # consoleKeyMap = "colemak/en-latin9";
     defaultLocale = "en_US.UTF-8";
   };
 

@@ -2,7 +2,7 @@
 
 {
   boot = {
-    extraModulePackages = with config.boot.kernelPackages; [ sysdig ];
+    # extraModulePackages = with config.boot.kernelPackages; [ sysdig ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -29,7 +29,7 @@
     pciutils
     psmisc
     ripgrep
-    sysdig
+    # sysdig
     tcpdump
     tmux
     tree

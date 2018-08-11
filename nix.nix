@@ -19,5 +19,5 @@
     #   [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
   };
 
-  system.stateVersion = "16.09";
+  system.nixos.stateVersion = "16.09";
 }

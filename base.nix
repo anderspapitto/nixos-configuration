@@ -12,6 +12,8 @@
       ];
     };
 
+  documentation.man.enable = true;
+
   environment.variables = { EDITOR = "editor"; };
 
   networking = {
@@ -32,7 +34,6 @@
       shellAliases = { ssh = "TERM=xterm-256color ssh"; };
     };
     ssh.startAgent = false;
-    man.enable = true;
   };
 
   services = {

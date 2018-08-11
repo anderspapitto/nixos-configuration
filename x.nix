@@ -71,8 +71,8 @@ in {
       layout = "us";
       # note typo in base.lst, where it says 'ctrl:ctrl_ralt' when it
       # means 'ctrl:ralt_rctrl'
-      xkbOptions = "ctrl:ralt_rctrl, lv3:caps_switch, shift:both_capslock";
-      xkbVariant = "colemak";
+      xkbOptions = "ctrl:ralt_rctrl, lv3:caps_switch";
+      xkbVariant = "altgr-intl";
     };
   };
 
@@ -114,15 +114,6 @@ in {
       ''
         ${pkgs.xorg.xrdb}/bin/xrdb /etc/X11/xresources
         exec sleep infinity
-      '';
-    breaktime = simpleXService "breaktime"
-      "reminder to take break"
-      ''
-        while true
-        do
-          ${pkgs.libnotify}/bin/notify-send "take a break"
-          sleep $((60 * 30))
-        done
       '';
   };
 }

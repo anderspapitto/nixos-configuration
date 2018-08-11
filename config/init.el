@@ -108,7 +108,7 @@ and overlay is highlighted between MK and END-MK."
   :init
   (setq ivy-initial-inputs-alist '())
   :config
-  (ivy-mode 1))
+  (ivy-mode 0))
 
 ;; Magit is awesome.
 (use-package magit

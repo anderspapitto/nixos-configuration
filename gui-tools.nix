@@ -26,6 +26,7 @@
     pianobar
     rofi
     rxvt_unicode_with-plugins
+    signal-desktop
     spotify
     tuxguitar
     vlc
