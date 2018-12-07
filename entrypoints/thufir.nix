@@ -18,7 +18,23 @@ in {
     };
   };
 
+  environment.systemPackages = with pkgs; [ wireguard ];
+
   networking = {
+    nat = {
+      enable = true;
+      externalInterface = "ens3";
+      internalInferfaces = [ "wg0" ];
+    };
+    wireguard.interfaces = {
+      wg0 = {
+        ips = [ "10.100.0.1/24" ];
+        listenPort = 51820;
+        privateKeyFile = "/root/wireguard-keys/private";
+        peers = [
+        ];
+      };
+    };
     hostName = "thufir";
     enableIPv6 = false;
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
