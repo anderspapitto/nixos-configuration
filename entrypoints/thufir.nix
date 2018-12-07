@@ -52,6 +52,7 @@ in {
       allowedUDPPortRanges = [
         { from =  1194; to =  1195; } # openvpn
         { from = 60000; to = 61000; } # mosh
+        { from = 51820; to = 51820; } # wireguard
       ];
       allowedTCPPorts = [ 4242 ]; # quassel
       trustedInterfaces = [ "tun0" "tun1" ];
