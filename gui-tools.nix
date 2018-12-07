@@ -1,9 +1,10 @@
 { config, pkgs, ... }:
 
 { environment.systemPackages = with pkgs; [
+    alacritty
     anki
     arandr
-    chromium
+    # chromium
     clerk
     clipit
     dmenu
@@ -25,9 +26,11 @@
     pavucontrol
     pianobar
     rofi
-    rxvt_unicode_with-plugins
+    # rxvt_unicode_with-plugins
     signal-desktop
     spotify
+    st
+    tdesktop
     tuxguitar
     vlc
     xdotool

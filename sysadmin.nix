@@ -7,6 +7,7 @@
 
   environment.systemPackages = with pkgs; [
     bind # provides `dig`
+    binutils
     cryptsetup
     dmidecode
     dstat
@@ -17,12 +18,13 @@
     htop
     iftop
     iotop
-    # linuxPackages.perf
+    linuxPackages.perf
     lshw
     lsof
     mosh
     mtr
     neovim
+    neovim-remote
     neovim-qt
     nftables
     openssl

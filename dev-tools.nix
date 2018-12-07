@@ -1,9 +1,10 @@
 { config, pkgs, ... }:
 
 { environment.systemPackages = with pkgs; [
-    (python.buildEnv.override { extraLibs = [ pythonPackages.ipython ]; })
+    (python3.buildEnv.override { extraLibs = [ python3Packages.ipython ]; })
     (haskellPackages.ghcWithPackages (p: with p; [ turtle ]))
     # android-studio
+    aspell
     aria2
     awscli
     cmake
@@ -14,7 +15,6 @@
     gnumake
     ispell
     jq
-    nix-repl
     patchelf
     sqlite
     valgrind

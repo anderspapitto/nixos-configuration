@@ -25,8 +25,8 @@ smart_gaps on
 
 set $mod Mod4
 
-bindsym $mod+Return exec anders-terminal
-bindsym $mod+Shift+Return exec i3-sensible-terminal
+bindsym $mod+Shift+Return exec anders-terminal
+bindsym $mod+Return exec alacritty
 
 bindsym $mod+d exec rofi -show run
 

@@ -14,10 +14,14 @@
         "nixos-config=/etc/nixos/configuration"
       ];
     useSandbox = true;
-    # binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
-    # binaryCachePublicKeys =
-    #   [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
+    binaryCaches = [
+      "https://cache.nixos.org"
+      "https://nixcache.reflex-frp.org"
+      "https://hie-nix.cachix.org"
+    ];
+    binaryCachePublicKeys = [
+      "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+      "hie-nix.cachix.org-1:EjBSHzF6VmDnzqlldGXbi0RM3HdjfTU3yDRi9Pd0jTY="
+    ];
   };
-
-  system.nixos.stateVersion = "16.09";
 }

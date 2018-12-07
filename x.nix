@@ -14,7 +14,7 @@ let dunstrc = builtins.toFile "dunstrc" (pkgs.lib.readFile ./config/dunstrc);
     simpleXService = name: description: execStart: {
       inherit description;
       environment = {
-        DISPLAY = ":${toString config.services.xserver.display}";
+        DISPLAY = ":0";
       };
       serviceConfig = {
         Type = "simple";
