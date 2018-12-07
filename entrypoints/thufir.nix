@@ -78,7 +78,6 @@ in {
     };
     syncthing = {
       enable = true;
-      useInotify = true;
       openDefaultPorts = true;
     };
   };
