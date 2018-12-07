@@ -31,20 +31,27 @@
     hostName = "gurney";
     hostId = "d9ebdbe0";
 
-    wireguard.interfaces = {
-      wg0 = {
-        ips = [ "10.100.0.2/24" ];
-        privateKeyFile = "/root/wireguard-keys/private";
-        peers = [
-          { publicKey = "ghK62ZFGd9zkRPfF6JehK7OMAW6HMdy68RNalq9FVUo=";
-            # allowedIPs = [ "10.100.0.1" ];
-            allowedIPs = [ "0.0.0.0/0" ];
-            endpoint = "thufir:51820";
-            persistentKeepalive = 25;
-          }
-        ];
-      };
-    };
+    # firewall = {
+    #   allowedUDPPortRanges = [
+    #     { from = 51821; to = 51821; } # wireguard
+    #   ];
+    # };
+
+    # wireguard.interfaces = {
+    #   wg0 = {
+    #     ips = [ "10.100.0.2/24" ];
+    #     listenPort = 51821;
+    #     privateKeyFile = "/root/wireguard-keys/private";
+    #     peers = [
+    #       { publicKey = "ghK62ZFGd9zkRPfF6JehK7OMAW6HMdy68RNalq9FVUo=";
+    #         allowedIPs = [ "10.100.0.1" ];
+    #         # allowedIPs = [ "0.0.0.0/0" ];
+    #         endpoint = "thufir:51820";
+    #         persistentKeepalive = 25;
+    #       }
+    #     ];
+    #   };
+    # };
   };
 
   boot.initrd.luks.devices = [
