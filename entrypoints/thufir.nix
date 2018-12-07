@@ -24,7 +24,7 @@ in {
     nat = {
       enable = true;
       externalInterface = "ens3";
-      internalInferfaces = [ "wg0" ];
+      internalInterfaces = [ "wg0" ];
     };
     wireguard.interfaces = {
       wg0 = {
