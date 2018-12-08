@@ -193,6 +193,10 @@ in
         exec less -R "$@"
       fi
     '')
+  (writeScriptBin "editor" ''
+      #! ${bash}/bin/bash
+      exec nvim "$@"
+    '')
   (writeScriptBin "disable-bluetooth" ''
       #! ${bash}/bin/bash
       set -x

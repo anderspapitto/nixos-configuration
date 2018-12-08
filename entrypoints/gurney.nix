@@ -5,7 +5,6 @@
     ./android.nix
     ./base.nix
     ./dev-tools.nix
-    ./emacs.nix
     ./fonts.nix
     ./games.nix
     ./gui-tools.nix
@@ -15,8 +14,6 @@
     ./networking.nix
     ./nix.nix
     ./nixpkgs.nix
-    ./printing.nix
-    ./redis.nix
     ./syncthing.nix
     ./sysadmin.nix
     ./uefi.nix
@@ -30,28 +27,6 @@
   networking = {
     hostName = "gurney";
     hostId = "d9ebdbe0";
-
-    # firewall = {
-    #   allowedUDPPortRanges = [
-    #     { from = 51821; to = 51821; } # wireguard
-    #   ];
-    # };
-
-    # wireguard.interfaces = {
-    #   wg0 = {
-    #     ips = [ "10.100.0.2/24" ];
-    #     listenPort = 51821;
-    #     privateKeyFile = "/root/wireguard-keys/private";
-    #     peers = [
-    #       { publicKey = "ghK62ZFGd9zkRPfF6JehK7OMAW6HMdy68RNalq9FVUo=";
-    #         allowedIPs = [ "10.100.0.1" ];
-    #         # allowedIPs = [ "0.0.0.0/0" ];
-    #         endpoint = "thufir:51820";
-    #         persistentKeepalive = 25;
-    #       }
-    #     ];
-    #   };
-    # };
   };
 
   boot.initrd.luks.devices = [
