@@ -27,6 +27,7 @@
     neovim-remote
     neovim-qt
     nftables
+    numactl
     openssl
     pciutils
     psmisc
