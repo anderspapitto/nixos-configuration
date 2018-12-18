@@ -6,7 +6,7 @@ let
         #! ${pkgs.bash}/bin/bash
         set -x
 
-        if ${pkgs.iproute}/bin/ip netns | ${pkgs.gnugrep}/bin/grep -q physical;
+        if ${pkgs.iproute}/bin/ip link | ${pkgs.gnugrep}/bin/grep -q wgvpn0;
         then
           exec ${pkgs.iproute}/bin/ip netns exec physical ${orig}/bin/${towrap} "$@"
         else
@@ -75,6 +75,8 @@ in {
         ExecStart = "${pkgs.iproute}/bin/ip netns add physical";
         ExecStop = "${pkgs.iproute}/bin/ip netns del physical";
       };
+      wantedBy = [ "default.target" ];
+      before = [ "display-manager.service" ];
     };
     wg0 = {
       description = "Wireguard interface, and vpn";
