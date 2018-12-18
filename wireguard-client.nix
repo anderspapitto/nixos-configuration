@@ -67,15 +67,22 @@ in {
   networking.wireless.interfaces = [ "wlp4s0" ];
 
   systemd.services = {
+    physical-netns = {
+      description = "physical namespace, for use with wireguard";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.iproute}/bin/ip netns add physical";
+        ExecStop = "${pkgs.iproute}/bin/ip netns del physical";
+      };
+    };
     wg0 = {
-      description = "Wireguard namespace, interface, and vpn";
+      description = "Wireguard interface, and vpn";
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
         ExecStart = pkgs.writeScript "wgup" ''
           #! ${pkgs.bash}/bin/bash
-
-          ${pkgs.iproute}/bin/ip netns add physical
 
           ${pkgs.iproute}/bin/ip -n physical link add wgvpn0 type wireguard
           ${pkgs.iproute}/bin/ip -n physical link set wgvpn0 netns 1
@@ -102,12 +109,12 @@ in {
           ${pkgs.iproute}/bin/ip netns exec physical ${pkgs.iw}/bin/iw phy phy0 set netns 1
 
           ${pkgs.iproute}/bin/ip link del wgvpn0
-          ${pkgs.iproute}/bin/ip netns del physical
 
           ${pkgs.systemd}/bin/systemctl restart --no-block wpa_supplicant dhcpcd
         '';
-
       };
+    requires = [ "physical-netns.service" ];
+    after = [ "physical-netns.service" ];
     };
 
   };
