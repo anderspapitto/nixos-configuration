@@ -1,12 +1,11 @@
 general {
         output_format = i3bar
         colors = true
-        interval = 3
+        interval = 1
 }
 
-order += "volume pulse"
 order += "wireless wlp4s0"
-order += "path_exists VPN"
+order += "volume pulse"
 order += "battery 0"
 order += "tztime local"
 
@@ -19,11 +18,6 @@ volume pulse {
         format = "♪: %volume"
         format_muted = "♪: muted (%volume)"
         device = "pulse"
-}
-
-path_exists VPN {
-        path = "/sys/class/net/wgvpn0"
-        # path = "/proc/sys/net/ipv4/conf/tun0"
 }
 
 disk "/" {

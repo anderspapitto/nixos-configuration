@@ -36,8 +36,28 @@ let
                    "$@"
     '';
   anders-i3status = pkgs.writeScriptBin "anders-i3status" ''
-      #! ${pkgs.bash}/bin/bash
-      paste -d" | " <(i3status -c /etc/i3status) <(physexec i3status -c /etc/i3status-netns)
+      #! ${pkgs.python3}/bin/python -u
+
+      import os
+      import signal
+      import subprocess
+
+      # https://stackoverflow.com/questions/320232/ensuring-subprocesses-are-dead-on-exiting-python-program
+      os.setpgrp() # create new process group, become its leader
+      try:
+        p1 = subprocess.Popen(['physexec', 'i3status', '-c', '/etc/i3/status-netns'], stdout=subprocess.PIPE)
+        p2 = subprocess.Popen([            'i3status', '-c', '/etc/i3/status'], stdout=subprocess.PIPE)
+
+        for i in range(2):
+          line1 = p1.stdout.readline().decode('utf-8').strip()
+          line2 = p2.stdout.readline().decode('utf-8').strip()
+          print(line1)
+        while True:
+          line1 = p1.stdout.readline().decode('utf-8').strip()
+          line2 = p2.stdout.readline().decode('utf-8').strip()
+          print(line1.split(']')[0] + ', ' + line2.split('[')[1])
+      finally:
+        os.killpg(0, signal.SIGKILL) # kill all processes in my group
     '';
 in {
   environment.systemPackages = [ pkgs.wireguard physexec anders-i3status ];

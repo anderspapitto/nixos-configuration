@@ -1,7 +1,7 @@
 general {
         output_format = i3bar
         colors = true
-        interval = 3
+        interval = 1
 }
 
 order += "wireless wlp4s0"
