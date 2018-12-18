@@ -39,6 +39,7 @@ in {
       "dunst/dunstrc"             .source = ./config/dunstrc;
       "i3/config"                 .source = ./config/i3;
       "i3/status"                 .source = ./config/i3status;
+      "i3/status-netns"           .source = ./config/i3status-netns;
       "X11/xresources"            .source = ./config/xresources;
     };
     systemPackages = with pkgs; [ dzen2 gnupg ];

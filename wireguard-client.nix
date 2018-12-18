@@ -22,22 +22,25 @@ let
         ln -s ${wrapper} $out/bin/${towrap}
       '';
     };
-      # TODO wrap sbin/dhcpcd
   netns-overlay = self: super: {
     # modifying these programs via an overlay means that the systemd services
     # which are built on top of them automatically gain netns awareness
     wpa_supplicant = wrap-with-netns self super.wpa_supplicant "wpa_supplicant";
     dhcpcd = wrap-with-netns self super.dhcpcd "dhcpcd";
   };
-  physexec = pkgs.writeScriptBin "phsyexec" ''
+  physexec = pkgs.writeScriptBin "physexec" ''
       #! ${pkgs.bash}/bin/bash
       exec sudo -E ${pkgs.iproute}/bin/ip netns exec physical \
            sudo -E -u \#$(${pkgs.coreutils}/bin/id -u) \
                    -g \#$(${pkgs.coreutils}/bin/id -g) \
                    "$@"
     '';
+  anders-i3status = pkgs.writeScriptBin "anders-i3status" ''
+      #! ${pkgs.bash}/bin/bash
+      paste -d" | " <(i3status -c /etc/i3status) <(physexec i3status -c /etc/i3status-netns)
+    '';
 in {
-  environment.systemPackages = [ pkgs.wireguard physexec ];
+  environment.systemPackages = [ pkgs.wireguard physexec anders-i3status ];
 
   nixpkgs.overlays = [ netns-overlay ];
 
@@ -70,8 +73,7 @@ in {
           ${pkgs.iproute}/bin/ip link set enp0s25 netns physical
           ${pkgs.iw}/bin/iw phy phy0 set netns name physical
 
-          ${pkgs.systemd}/bin/systemctl restart wpa_supplicant dhcpcd
-          # TODO dhcpcd is setuid so wrapper didn't work
+          ${pkgs.systemd}/bin/systemctl restart --no-block wpa_supplicant dhcpcd
         '';
         ExecStop =  pkgs.writeScript "wgdown" ''
           #! ${pkgs.bash}/bin/bash
@@ -82,7 +84,7 @@ in {
           ${pkgs.iproute}/bin/ip link del wgvpn0
           ${pkgs.iproute}/bin/ip netns del physical
 
-          ${pkgs.systemd}/bin/systemctl restart wpa_supplicant dhcpcd
+          ${pkgs.systemd}/bin/systemctl restart --no-block wpa_supplicant dhcpcd
         '';
 
       };

@@ -1,0 +1,12 @@
+general {
+        output_format = i3bar
+        colors = true
+        interval = 3
+}
+
+order += "wireless wlp4s0"
+
+wireless wlp4s0 {
+        format_up = "W: (%quality at %essid) %ip"
+        format_down = "W: down"
+}

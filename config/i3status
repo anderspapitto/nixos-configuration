@@ -5,13 +5,15 @@ general {
 }
 
 order += "volume pulse"
-# order += "disk /"
-# order += "disk /nix/store"
-# order += "disk /home"
 order += "wireless wlp4s0"
 order += "path_exists VPN"
 order += "battery 0"
 order += "tztime local"
+
+wireless wlp4s0 {
+        format_up = "W: (%quality at %essid) %ip"
+        format_down = "W: down"
+}
 
 volume pulse {
         format = "♪: %volume"
@@ -19,13 +21,9 @@ volume pulse {
         device = "pulse"
 }
 
-wireless wlp4s0 {
-        format_up = "W: (%quality at %essid) %ip"
-        format_down = "W: down"
-}
-
 path_exists VPN {
-        path = "/proc/sys/net/ipv4/conf/tun0"
+        path = "/sys/class/net/wgvpn0"
+        # path = "/proc/sys/net/ipv4/conf/tun0"
 }
 
 disk "/" {

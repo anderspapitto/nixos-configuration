@@ -101,7 +101,7 @@ font pango:DejaVu Sans Mono 11
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-  status_command i3status -c /etc/i3/status
+  status_command anders-i3status
 
   colors {
         background          $bg
