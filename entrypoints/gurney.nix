@@ -19,6 +19,7 @@
     ./uefi.nix
     ./utility-scripts.nix
     ./virtualization.nix
+    ./wireguard-client.nix
     ./x.nix
 
     ./private/default.nix
