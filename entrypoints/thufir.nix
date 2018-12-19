@@ -35,6 +35,9 @@ in {
           { publicKey = "qFE4Q7ieGRqUyEr2MDAd6rRhZkrJD3M3/dqSwwo+VTc=";
             allowedIPs = [ "0.0.0.0/0" ];
           }
+          { publicKey = "ouX/+4ozC49/9xWJ5OuuhSB8zy4298XVrwUoIgLrQV8=";
+            allowedIPs = [ "0.0.0.0/0" ];
+          }
         ];
       };
     };
