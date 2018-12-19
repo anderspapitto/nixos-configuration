@@ -1,33 +1,6 @@
 { config, pkgs, ... }:
 
 let
-  wrap-with-netns = pkgs: orig: towrap:
-  let wrapper = pkgs.writeScript towrap ''
-        #! ${pkgs.bash}/bin/bash
-        set -x
-
-        if ${pkgs.iproute}/bin/ip link | ${pkgs.gnugrep}/bin/grep -q wgvpn0;
-        then
-          exec ${pkgs.iproute}/bin/ip netns exec physical ${orig}/bin/${towrap} "$@"
-        else
-          exec ${orig}/bin/${towrap} "$@"
-        fi
-      '';
-    in pkgs.symlinkJoin {
-      inherit (orig) name;
-      paths = [ orig ];
-      postBuild = ''
-        # the specific binary we're try to wrap
-        rm $out/bin/${towrap}
-        ln -s ${wrapper} $out/bin/${towrap}
-      '';
-    };
-  netns-overlay = self: super: {
-    # modifying these programs via an overlay means that the systemd services
-    # which are built on top of them automatically gain netns awareness
-    wpa_supplicant = wrap-with-netns self super.wpa_supplicant "wpa_supplicant";
-    dhcpcd = wrap-with-netns self super.dhcpcd "dhcpcd";
-  };
   physexec = pkgs.writeScriptBin "physexec" ''
       #! ${pkgs.bash}/bin/bash
       exec sudo -E ${pkgs.iproute}/bin/ip netns exec physical \
@@ -45,8 +18,10 @@ let
       # https://stackoverflow.com/questions/320232/ensuring-subprocesses-are-dead-on-exiting-python-program
       os.setpgrp() # create new process group, become its leader
       try:
-        p1 = subprocess.Popen(['physexec', 'i3status', '-c', '/etc/i3/status-netns'], stdout=subprocess.PIPE)
-        p2 = subprocess.Popen([            'i3status', '-c', '/etc/i3/status'], stdout=subprocess.PIPE)
+        p1 = subprocess.Popen(['physexec', 'i3status', '-c', '/etc/i3/status-netns'],
+                              stdout=subprocess.PIPE)
+        p2 = subprocess.Popen([            'i3status', '-c', '/etc/i3/status'],
+                              stdout=subprocess.PIPE)
 
         for i in range(2):
           line1 = p1.stdout.readline().decode('utf-8').strip()
@@ -60,9 +35,18 @@ let
         os.killpg(0, signal.SIGKILL) # kill all processes in my group
     '';
 in {
-  environment.systemPackages = [ pkgs.wireguard physexec anders-i3status ];
+  # There's not really a better way to do this. Override these two services to
+  # be wg-aware
+  imports = [
+    ./copied/dhcpcd.nix
+    ./copied/wpa_supplicant.nix
+  ];
+  disabledModules = [
+    "services/networking/dhcpcd.nix"
+    "services/networking/wpa_supplicant.nix"
+  ];
 
-  nixpkgs.overlays = [ netns-overlay ];
+  environment.systemPackages = [ pkgs.wireguard physexec anders-i3status ];
 
   networking.wireless.interfaces = [ "wlp4s0" ];
 
