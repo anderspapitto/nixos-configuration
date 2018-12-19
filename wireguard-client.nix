@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   wrap-with-netns = pkgs: orig: towrap:
@@ -69,17 +69,19 @@ in {
   systemd.services = {
     physical-netns = {
       description = "physical namespace, for use with wireguard";
+      wantedBy = [ "default.target" ];
+      before = [ "display-manager.service" "network.target" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
         ExecStart = "${pkgs.iproute}/bin/ip netns add physical";
         ExecStop = "${pkgs.iproute}/bin/ip netns del physical";
       };
-      wantedBy = [ "default.target" ];
-      before = [ "display-manager.service" ];
     };
     wg0 = {
       description = "Wireguard interface, and vpn";
+      requires = [ "physical-netns.service" ];
+      after = [ "physical-netns.service" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -115,8 +117,6 @@ in {
           ${pkgs.systemd}/bin/systemctl restart --no-block wpa_supplicant dhcpcd
         '';
       };
-    requires = [ "physical-netns.service" ];
-    after = [ "physical-netns.service" ];
     };
 
   };
